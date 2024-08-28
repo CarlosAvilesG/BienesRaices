@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Str; // Add this line to import the Str class
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,41 +14,48 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'curp' => 'AIGC060683HDFVRS01', // Único
-                'email' => 'ing.josecarlos@gmail.com',
-                'foto_url' => 'https://via.placeholder.com/150',
-                'paterno' => 'Garcia',
-                'materno' => 'Garcia',
-                'nombre' => 'Jose Carlos',
-                'password' => Hash::make('password'),
-                'paterno' => 'Aviles',
-                'rol' => 'admin',
-                'telefono' => '5555555555',
+                'name' => 'Juan Perez',
+                'paterno' => 'Perez',
+                'materno' => 'Gomez',
+                'nombre' => 'Juan',
+                'email' => 'juan.perez@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'), // Puedes usar Hash::make() para encriptar la contraseña
+                'remember_token' => Str::random(10),
+                'current_team_id' => null,
+                'profile_photo_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'curp' => 'BMXG720213HDFTRS08', // Único
-                'email' => 'garza@gmail.com',
-                'foto_url' => 'https://via.placeholder.com/151',
-                'paterno' => 'lopez',
-                'materno' => 'Garcia',
-                'nombre' => 'Sandra',
-                'password' => Hash::make('password'),
-                'paterno' => 'Garza',
-                'rol' => 'admin',
-                'telefono' => '5555555555',
+                'name' => 'Maria Rodriguez',
+                'paterno' => 'Rodriguez',
+                'materno' => 'Lopez',
+                'nombre' => 'Maria',
+                'email' => 'maria.rodriguez@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'),
+                'remember_token' => Str::random(10),
+                'current_team_id' => null,
+                'profile_photo_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'curp' => 'ZXYG850724HDFTRF01', // Único
-                'email' => 'goku@gmail.com',
-                'foto_url' => 'https://via.placeholder.com/153',
-                'paterno' => 'vegeta',
-                'materno' => 'Sayayin',
-                'nombre' => 'Daniel',
-                'password' => Hash::make('password'),
-                'paterno' => 'Goku',
-                'rol' => 'admin',
-                'telefono' => '5555555555',
+                'name' => 'Pedro Martinez',
+                'paterno' => 'Martinez',
+                'materno' => 'Hernandez',
+                'nombre' => 'Pedro',
+                'email' => 'Pedro.Martinez@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'),
+                'remember_token' => Str::random(10),
+                'current_team_id' => null,
+                'profile_photo_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
+            // Puedes agregar más usuarios aquí
         ]);
     }
 }

@@ -42,7 +42,7 @@ return new class extends Migration
             $table->timestamp('ultima_actualizacion_morosidad')->nullable(); // Última fecha en que se actualizó la morosidad
 
             $table->unsignedBigInteger('idUsuario');
-            $table->foreign('idUsuario')->references('id')->on('users');
+            $table->foreign('idUsuario')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes(); // Eliminación lógica
         });
