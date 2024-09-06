@@ -11,10 +11,10 @@ class ConceptoEgreso extends Model
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo
-    protected $table = 'concepto_egreso';
+    //protected $table = 'concepto_egreso';
 
     // Definir la clave primaria si no es 'id'
-    protected $primaryKey = 'idConcepto';
+   // protected $primaryKey = 'idConcepto';
 
     // Permitir asignación masiva para estos campos
     protected $fillable = [
@@ -28,5 +28,5 @@ class ConceptoEgreso extends Model
         'gastoCorriente' => 'boolean',
         'requiereDevolucion' => 'boolean',
     ];
-    
+
 }

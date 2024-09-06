@@ -11,7 +11,7 @@ class PagoLote extends Model
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo
-    protected $table = 'pagos_lote';
+   // protected $table = 'pagos_lote';
 
     // Permitir asignación masiva para estos campos
     protected $fillable = [

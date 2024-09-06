@@ -11,10 +11,10 @@ class Cliente extends Model
     use HasFactory, SoftDeletes;
 
     // Especificar la tabla si es diferente a la convención plural de Laravel
-    protected $table = 'clientes';
+  //  protected $table = 'clientes';
 
     // Especificar la clave primaria si es diferente de 'id'
-    protected $primaryKey = 'idCliente';
+   // protected $primaryKey = 'idCliente';
 
     // Definir los campos que pueden ser asignados en masa
     protected $fillable = [
@@ -32,7 +32,7 @@ class Cliente extends Model
     // Relación con el modelo Morosos
     public function morosos()
     {
-        return $this->hasMany(Moroso::class, 'idCliente');
+        return $this->hasMany(Moroso::class, 'id');
     }
 
 }

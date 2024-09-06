@@ -11,7 +11,7 @@ class CorteCajaDetalle extends Model
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo
-    protected $table = 'corte_caja_detalle';
+    //protected $table = 'corte_caja_detalle';
 
     // Permitir asignación masiva para estos campos
     protected $fillable = [
@@ -40,5 +40,5 @@ class CorteCajaDetalle extends Model
         return $this->belongsTo(Egreso::class, 'idEgreso');
     }
 
-    
+
 }

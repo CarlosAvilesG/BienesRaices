@@ -9,9 +9,9 @@ class Negocio extends Model
 {
     use HasFactory;
 
-    protected $table = 'negocio';
+  //  protected $table = 'negocio';
 
-    protected $primaryKey = 'idNegocio';
+   // protected $primaryKey = 'idNegocio';
 
     protected $fillable = [
         'razonSocial',
@@ -20,6 +20,6 @@ class Negocio extends Model
         'direccion',
         'propietario',
     ];
-    
+
 
 }

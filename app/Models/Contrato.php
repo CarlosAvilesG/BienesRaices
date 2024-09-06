@@ -9,10 +9,10 @@ class Contrato extends Model
 {
     use HasFactory;
       // Definir el nombre de la tabla si es diferente al plural del modelo
-      protected $table = 'contrato';
+     // protected $table = 'contrato';
 
       // Definir la clave primaria si no es 'id'
-      protected $primaryKey = 'idContrato';
+    //  protected $primaryKey = 'idContrato';
 
       // Permitir asignación masiva para estos campos
       protected $fillable = [
@@ -64,5 +64,5 @@ class Contrato extends Model
       {
           return $this->belongsTo(User::class, 'idUsuCancela');
       }
-      
+
 }

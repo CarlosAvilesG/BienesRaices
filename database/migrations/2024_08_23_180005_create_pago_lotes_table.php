@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pagos_lote', function (Blueprint $table) {
+        Schema::create('pago_lotes', function (Blueprint $table) {
             //$table->id('refPagoInt');
             $table->id();
             $table->unsignedBigInteger('idPredio');
@@ -36,9 +36,9 @@ return new class extends Migration
             $table->timestamps();
 
             // Claves foráneas para mantener la integridad referencial
-            $table->foreign('idPredio')->references('idPredio')->on('predio')->onDelete('cascade');
-            $table->foreign('idLote')->references('idLote')->on('lotes')->onDelete('cascade');
-            $table->foreign('idCliente')->references('idCliente')->on('clientes')->onDelete('cascade');
+            $table->foreign('idPredio')->references('id')->on('predios')->onDelete('cascade');
+            $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
+            $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('idUsuario')->references('id')->on('users');
             $table->foreign('idUsuarioCancela')->references('id')->on('users');
             $table->foreign('idUsuarioValidaPago')->references('id')->on('users');
@@ -56,6 +56,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pagos_lote');
+        Schema::dropIfExists('pago_lotes');
     }
 };

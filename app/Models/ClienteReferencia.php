@@ -9,9 +9,9 @@ class ClienteReferencia extends Model
 {
     use HasFactory;
 
-    protected $table = 'cliente_referencia'; // Nombre de la tabla
+   // protected $table = 'cliente_referencia'; // Nombre de la tabla
 
-    protected $primaryKey = 'idReferencia'; // Clave primaria personalizada
+   // protected $primaryKey = 'idReferencia'; // Clave primaria personalizada
 
     protected $fillable = [
         'idCliente',
@@ -27,7 +27,7 @@ class ClienteReferencia extends Model
     // Relación con el modelo Cliente
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'idCliente');
+        return $this->belongsTo(Cliente::class, 'id');
     }
 
 }

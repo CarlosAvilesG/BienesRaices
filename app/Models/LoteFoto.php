@@ -10,7 +10,7 @@ class LoteFoto extends Model
     use HasFactory;
 
   // Definir el nombre de la tabla si es diferente al plural del modelo
-  protected $table = 'lote_fotos';
+  //protected $table = 'lote_fotos';
 
   // Permitir asignación masiva para estos campos
   protected $fillable = [

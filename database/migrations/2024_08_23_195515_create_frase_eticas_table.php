@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fraseseticas', function (Blueprint $table) {
+        Schema::create('frase_eticas', function (Blueprint $table) {
             $table->id('idFrase'); // Clave primaria de la frase
             $table->text('frase'); // Contenido de la frase
             $table->string('autor', 100)->nullable(); // Autor de la frase
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fraseseticas');
+        Schema::dropIfExists('frase_eticas');
     }
 };

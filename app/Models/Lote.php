@@ -10,10 +10,10 @@ class Lote extends Model
     use HasFactory;
 
        // Definir el nombre de la tabla si es diferente al plural del modelo
-       protected $table = 'lotes';
+     //  protected $table = 'lotes';
 
        // Definir la clave primaria si no es 'id'
-       protected $primaryKey = 'idLote';
+     //  protected $primaryKey = 'idLote';
 
        // Permitir asignación masiva para estos campos
        protected $fillable = [

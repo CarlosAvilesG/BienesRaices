@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('predio', function (Blueprint $table) {
+        Schema::create('predios', function (Blueprint $table) {
             $table->id('idPredio');
             $table->string('nombre', 30);
             $table->string('descripcion', 100);
@@ -24,6 +24,8 @@ return new class extends Migration
             $table->date('fechaInauguracion');
             $table->boolean('activo')->default(true); // 1 para activo, 0 para inactivo
             $table->timestamps();
+
+
         });
     }
 
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('predio');
+        Schema::dropIfExists('predios');
     }
 };

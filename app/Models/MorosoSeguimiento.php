@@ -11,7 +11,7 @@ class MorosoSeguimiento extends Model
 
 
 // Especificar la tabla si es diferente a la convención plural de Laravel
-    protected $table = 'morosos_seguimiento';
+  //  protected $table = 'morosos_seguimiento';
 
     // Definir los campos que pueden ser asignados en masa
     protected $fillable = [

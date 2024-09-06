@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('egresos', function (Blueprint $table) {
-            $table->id('idEgresos'); // Clave primaria del egreso
+            //$table->id('idEgresos'); // Clave primaria del egreso
+            $table->id();
 
             // Relación con el catálogo de conceptos de egreso
             $table->unsignedBigInteger('idConcepto');
@@ -47,7 +48,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Claves foráneas para mantener la integridad referencial
-            $table->foreign('idConcepto')->references('idConcepto')->on('concepto_egreso')->onDelete('cascade');
+            $table->foreign('idConcepto')->references('is')->on('concepto_egresos')->onDelete('cascade');
             $table->foreign('idUsuarioRecibe')->references('id')->on('users');
             $table->foreign('idUsuario')->references('id')->on('users');
             $table->foreign('idUsuSupervisa')->references('id')->on('users');

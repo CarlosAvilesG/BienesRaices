@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('corte_caja_detalle', function (Blueprint $table) {
+        Schema::create('corte_caja_detalles', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idCorteCaja');
             $table->unsignedBigInteger('idPagoLote')->nullable();
@@ -22,17 +22,17 @@ return new class extends Migration
 
             // Foreign key constraints
             $table->foreign('idCorteCaja')
-                ->references('idCorteCaja')
-                ->on('corte_caja')
+                ->references('id')
+                ->on('corte_cajas')
                 ->onDelete('cascade');
 
             $table->foreign('idPagoLote')
                 ->references('id')
-                ->on('pagos_lote')
+                ->on('pago_lotes')
                 ->onDelete('cascade');
 
             $table->foreign('idEgreso')
-                ->references('idEgresos')
+                ->references('id')
                 ->on('egresos')
                 ->onDelete('cascade');
         });
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('corte_caja_detalle');
+        Schema::dropIfExists('corte_caja_detalles');
     }
 };

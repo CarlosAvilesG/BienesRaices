@@ -11,7 +11,7 @@ class Moroso extends Model
     use HasFactory;
 
     // Especificar la tabla si es diferente a la convención plural de Laravel
-    protected $table = 'morosos';
+  //  protected $table = 'morosos';
 
     // Definir los campos que pueden ser asignados en masa
     protected $fillable = [

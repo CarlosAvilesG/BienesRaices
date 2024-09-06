@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('corte_caja', function (Blueprint $table) {
-        $table->id('idCorteCaja');
+        Schema::create('corte_cajas', function (Blueprint $table) {
+        //$table->id('idCorteCaja');
+        $table->id();
         $table->date('fechaInicio'); // Fecha de inicio del periodo del corte
         $table->date('fechaFin'); // Fecha de fin del periodo del corte
         $table->decimal('totalIngresosFisicos', 20, 2)->default(0); // Total de ingresos en efectivo
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('corte_caja');
+        Schema::dropIfExists('corte_cajas');
     }
 };

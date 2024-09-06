@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lotes', function (Blueprint $table) {
-            $table->id('idLote');
+           // $table->id('idLote');
+            $table->id();
             $table->unsignedBigInteger('idPredio');
             $table->integer('manzana');
             $table->integer('lote');
@@ -36,8 +37,8 @@ return new class extends Migration
 
             // Foreign key constraint
             $table->foreign('idPredio')
-                  ->references('idPredio')
-                  ->on('predio')
+                  ->references('id')
+                  ->on('predios')
                   ->onDelete('cascade');
 
             // Índices para optimización de consultas

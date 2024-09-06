@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('concepto_egreso', function (Blueprint $table) {
-            $table->id('idConcepto'); // Clave primaria del concepto de egreso
+        Schema::create('concepto_egresos', function (Blueprint $table) {
+            //$table->id('idConcepto'); // Clave primaria del concepto de egreso
+            $table->id();
             $table->string('descripcion', 50); // Descripción del concepto
             $table->boolean('gastoCorriente')->default(false); // Indicador de si es un gasto corriente
             $table->boolean('requiereDevolucion')->default(false); // Indicador de si el concepto implica devolución (préstamo)
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('concepto_egreso');
+        Schema::dropIfExists('concepto_egresos');
     }
 };

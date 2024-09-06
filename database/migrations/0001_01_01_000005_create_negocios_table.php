@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('negocio', function (Blueprint $table) {
-            $table->id('idNegocio'); // Clave primaria
-
+        Schema::create('negocios', function (Blueprint $table) {
+            //$table->id('idNegocio'); // Clave primaria
+            $table->id();
             // Información del negocio
             $table->string('razonSocial', 100); // Razón social del negocio
             $table->string('telefono1', 50)->nullable(); // Primer teléfono de contacto
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('negocio');
+        Schema::dropIfExists('negocios');
     }
 };

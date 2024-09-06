@@ -11,10 +11,10 @@ class Egreso extends Model
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo
-    protected $table = 'egresos';
+   // protected $table = 'egresos';
 
     // Definir la clave primaria si no es 'id'
-    protected $primaryKey = 'idEgresos';
+   // protected $primaryKey = 'idEgresos';
 
     // Permitir asignación masiva para estos campos
     protected $fillable = [

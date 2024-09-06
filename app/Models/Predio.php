@@ -9,9 +9,9 @@ class Predio extends Model
 {
     use HasFactory;
 
-    protected $table = 'predio';
+   // protected $table = 'predio';
 
-    protected $primaryKey = 'idPredio';
+  //  protected $primaryKey = 'idPredio';
 
     protected $fillable = [
         'nombre',

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cliente_referencia', function (Blueprint $table) {
-            $table->id('idReferencia');
+        Schema::create('cliente_referencias', function (Blueprint $table) {
+            //$table->id('idReferencia');
+            $table->id();
             $table->unsignedBigInteger('idCliente');
             $table->string('paterno', 30);
             $table->string('materno', 30);
@@ -25,7 +26,7 @@ return new class extends Migration
 
             // Foreign key constraint
             $table->foreign('idCliente')
-                  ->references('idCliente')
+                  ->references('id')
                   ->on('clientes')
                   ->onDelete('cascade'); // Elimina las referencias si el cliente es eliminado
         });
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cliente_referencia');
+        Schema::dropIfExists('cliente_referencias');
     }
 };

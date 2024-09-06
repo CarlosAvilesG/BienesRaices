@@ -10,10 +10,10 @@ class CorteCaja extends Model
     use HasFactory;
 
      // Definir el nombre de la tabla si es diferente al plural del modelo
-     protected $table = 'corte_caja';
+     //protected $table = 'corte_caja';
 
      // Definir la clave primaria si no es 'id'
-     protected $primaryKey = 'idCorteCaja';
+     //protected $primaryKey = 'idCorteCaja';
 
      // Permitir asignación masiva para estos campos
      protected $fillable = [
@@ -39,5 +39,5 @@ class CorteCaja extends Model
      {
          return $this->belongsTo(User::class, 'idUsuario');
      }
-     
+
 }

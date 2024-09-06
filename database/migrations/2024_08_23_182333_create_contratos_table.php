@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contrato', function (Blueprint $table) {
-            $table->id('idContrato'); // Clave primaria del contrato
+        Schema::create('contratos', function (Blueprint $table) {
+            //$table->id('idContrato'); // Clave primaria del contrato
+            $table->id();
             $table->unsignedBigInteger('idCliente'); // Referencia al cliente
             $table->unsignedBigInteger('idLote'); // Referencia al lote
 
@@ -49,8 +50,8 @@ return new class extends Migration
             $table->timestamps();
 
             // Claves foráneas para mantener la integridad referencial
-            $table->foreign('idCliente')->references('idCliente')->on('clientes')->onDelete('cascade');
-            $table->foreign('idLote')->references('idLote')->on('lotes')->onDelete('cascade');
+            $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
             $table->foreign('idUsuario')->references('id')->on('users');
             $table->foreign('idUsuCancela')->references('id')->on('users');
 
@@ -66,6 +67,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contrato');
+        Schema::dropIfExists('contratos');
     }
 };

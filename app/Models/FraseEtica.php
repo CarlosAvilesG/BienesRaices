@@ -10,15 +10,15 @@ class FraseEtica extends Model
     use HasFactory;
 
      // Definir el nombre de la tabla si es diferente al plural del modelo
-     protected $table = 'fraseseticas';
+    // protected $table = 'fraseseticas';
 
      // Definir la clave primaria si no es 'id'
-     protected $primaryKey = 'idFrase';
+     //protected $primaryKey = 'idFrase';
 
      // Permitir asignación masiva para estos campos
      protected $fillable = [
          'frase',
          'autor',
      ];
-     
+
 }

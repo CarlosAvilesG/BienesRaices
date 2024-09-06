@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clientes', function (Blueprint $table) {
-            $table->id('idCliente');
+            //$table->id('idCliente');
+            $table->id();
             $table->string('paterno', 30);
             $table->string('materno', 30);
             $table->string('nombre', 30);
@@ -56,12 +57,12 @@ return new class extends Migration
             $table->timestamp('fecha_resolucion')->nullable(); // Fecha en que se resolvió la morosidad
             $table->timestamps();
 
-            $table->foreign('idCliente')->references('idCliente')->on('clientes')->onDelete('cascade');
+            $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
             $table->index('idCliente');
             $table->index('activo');
         });
 
-        Schema::create('morosos_seguimiento', function (Blueprint $table) {
+        Schema::create('moroso_seguimientos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('idMoroso'); // Relación con la tabla morosos
             $table->timestamp('fecha_contacto'); // Fecha y hora del contacto
@@ -84,6 +85,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('clientes');
         Schema::dropIfExists('morosos');
-        Schema::dropIfExists('morosos_seguimiento');
+        Schema::dropIfExists('moroso_seguimientos');
     }
 };

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bitacora', function (Blueprint $table) {
+        Schema::create('bitacoras', function (Blueprint $table) {
             $table->id();
             $table->timestamp('fecha')->useCurrent(); // Fecha y hora del evento
             $table->unsignedBigInteger('usuario'); // ID del usuario que realizó la acción
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bitacora');
+        Schema::dropIfExists('bitacoras');
     }
 };

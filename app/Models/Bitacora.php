@@ -11,7 +11,7 @@ class Bitacora extends Model
 
 
      // Definir el nombre de la tabla si es diferente al plural del modelo
-     protected $table = 'bitacora';
+     //protected $table = 'bitacora';
 
      // Permitir asignación masiva para estos campos
      protected $fillable = [
@@ -30,5 +30,5 @@ class Bitacora extends Model
      {
          return $this->belongsTo(User::class, 'usuario');
      }
-     
+
 }
