@@ -51,7 +51,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idLote');
             $table->string('foto_url'); // Ruta relativa de la foto
-            $table->foreign('idLote')->references('idLote')->on('lotes')->onDelete('cascade');
+            $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
             $table->timestamps();
         });
 

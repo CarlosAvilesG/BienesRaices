@@ -13,7 +13,7 @@ class BitacoraTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('bitacora')->insert([
+        DB::table('bitacoras')->insert([
             [
                 'fecha' => '2024-04-01 10:00:00',
                 'usuario' => 1,

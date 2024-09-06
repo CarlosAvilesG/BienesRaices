@@ -13,7 +13,7 @@ class ContratoTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('contrato')->insert([
+        DB::table('contratos')->insert([
             [
                 'idCliente' => 1,
                 'idLote' => 1,

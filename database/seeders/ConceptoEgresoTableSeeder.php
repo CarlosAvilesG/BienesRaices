@@ -13,7 +13,7 @@ class ConceptoEgresoTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('concepto_egreso')->insert([
+        DB::table('concepto_egresos')->insert([
             [
                 'descripcion' => 'NOMINA',
                 'gastoCorriente' => true,

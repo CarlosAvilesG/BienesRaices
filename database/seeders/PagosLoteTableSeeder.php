@@ -13,7 +13,7 @@ class PagosLoteTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('pagos_lote')->insert([
+        DB::table('pago_lotes')->insert([
             [
                 'idPredio' => 1,
                 'idLote' => 1,

@@ -13,7 +13,7 @@ class FrasesEticasTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('fraseseticas')->insert([
+        DB::table('frase_eticas')->insert([
             ['frase' => 'La ética es saber la diferencia entre lo que tienes derecho de hacer y lo que es correcto hacer.', 'autor' => 'Potter Stewart'],
             ['frase' => 'La moral descansa naturalmente en el sentimiento.', 'autor' => 'Anatole France'],
             ['frase' => 'Trabaja para mantener viva en tu pecho esa pequeña chispa de fuego celeste, la conciencia.', 'autor' => 'George Washington'],

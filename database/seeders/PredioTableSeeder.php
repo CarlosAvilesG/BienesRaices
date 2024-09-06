@@ -13,7 +13,7 @@ class PredioTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('predio')->insert([
+        DB::table('predios')->insert([
             [
                 'nombre' => 'Predio Las Flores',
                 'descripcion' => 'Predio amplio ubicado en zona céntrica.',

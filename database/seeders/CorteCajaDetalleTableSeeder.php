@@ -13,7 +13,7 @@ class CorteCajaDetalleTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('corte_caja_detalle')->insert([
+        DB::table('corte_caja_detalles')->insert([
             [
                 'idCorteCaja' => 1,
                 'idPagoLote' => 1,

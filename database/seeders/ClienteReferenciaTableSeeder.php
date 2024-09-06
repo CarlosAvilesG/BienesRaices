@@ -13,7 +13,7 @@ class ClienteReferenciaTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('cliente_referencia')->insert([
+        DB::table('cliente_referencias')->insert([
             [
                 'idCliente' => 1,
                 'paterno' => 'Ramírez',

@@ -13,7 +13,7 @@ class CorteCajaTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('corte_caja')->insert([
+        DB::table('corte_cajas')->insert([
             [
                 'fechaInicio' => '2024-04-01',
                 'fechaFin' => '2024-04-30',

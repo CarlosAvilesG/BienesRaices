@@ -13,7 +13,7 @@ class NegocioTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('negocio')->insert([
+        DB::table('negocios')->insert([
             [
                 'razonSocial' => 'Negocio Ejemplo S.A. de C.V.',
                 'telefono1' => '555-1234',
@@ -21,7 +21,7 @@ class NegocioTableSeeder extends Seeder
                 'direccion' => 'Calle Falsa 123, Ciudad, País',
                 'propietario' => 'Juan Pérez',
             ],
-           
+
         ]);
     }
 }
