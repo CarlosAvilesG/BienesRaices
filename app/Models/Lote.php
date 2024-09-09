@@ -60,6 +60,12 @@ class Lote extends Model
            return $this->belongsTo(Predio::class, 'idPredio');
        }
 
+        // Relación con PagoLote (Uno a Muchos)
+        public function pagos()
+        {
+            return $this->hasMany(PagoLote::class, 'idLote');
+        }
+
        // Relación con LoteFoto (Uno a Muchos)
        public function fotos()
        {

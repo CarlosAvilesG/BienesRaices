@@ -2,24 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-// Importación de todos los controladores de la carpeta
-use App\Http\Controllers\BitacoraController;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\ClienteReferenciaController;
-use App\Http\Controllers\ConceptoEgresoController;
-use App\Http\Controllers\ContratoController;
-use App\Http\Controllers\CorteCajaController;
-use App\Http\Controllers\CorteCajaDetalleController;
-use App\Http\Controllers\EgresoController;
-use App\Http\Controllers\FraseEticaController;
-use App\Http\Controllers\LoteController;
-use App\Http\Controllers\MorosoController;
-use App\Http\Controllers\MorosoSeguimientoController;
-use App\Http\Controllers\NegocioController;
-use App\Http\Controllers\PagoLoteController;
-use App\Http\Controllers\PredioController;
-
 class Controllers
 {
     public static $bitacoraController = BitacoraController::class;
