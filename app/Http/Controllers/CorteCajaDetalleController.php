@@ -2,70 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\CorteCajaDetalle;
+use App\Repository\CorteCajaDetalleRepositoryInterface;
+use App\Http\Requests\StoreCorteCajaDetalleRequest;
+use App\Http\Requests\UpdateCorteCajaDetalleRequest;
 
 class CorteCajaDetalleController extends Controller
 {
-  // Mostrar una lista de todos los detalles de corte de caja
-  public function index()
-  {
-      $detalles = CorteCajaDetalle::all();
-      return response()->json($detalles);
-  }
+    protected $corteCajaDetalleRepo;
 
-  // Almacenar un nuevo detalle de corte de caja en la base de datos
-  public function store(Request $request)
-  {
-      // Validaciones
-      $validated = $request->validate([
-          'idCorteCaja' => 'required|exists:corte_caja,idCorteCaja',
-          'idPagoLote' => 'nullable|exists:pagos_lote,id',
-          'idEgreso' => 'nullable|exists:egresos,idEgresos',
-          'monto' => 'required|numeric|min:0',
-          'tipoMovimiento' => 'required|string|max:20',
-      ]);
+    public function __construct(CorteCajaDetalleRepositoryInterface $corteCajaDetalleRepo)
+    {
+        $this->corteCajaDetalleRepo = $corteCajaDetalleRepo;
+    }
 
-      // Crear el detalle de corte de caja
-      $detalle = CorteCajaDetalle::create($validated);
+    // Mostrar una lista de todos los detalles de corte de caja
+    public function index()
+    {
+        $detalles = $this->corteCajaDetalleRepo->getAll();
+        return response()->json($detalles);
+    }
 
-      return response()->json($detalle, 201);
-  }
+    // Almacenar un nuevo detalle de corte de caja en la base de datos
+    public function store(StoreCorteCajaDetalleRequest $request)
+    {
+        $detalle = $this->corteCajaDetalleRepo->store($request->validated());
+        return response()->json($detalle, 201);
+    }
 
-  // Mostrar un detalle de corte de caja específico
-  public function show($id)
-  {
-      $detalle = CorteCajaDetalle::findOrFail($id);
-      return response()->json($detalle);
-  }
+    // Mostrar un detalle de corte de caja específico
+    public function show($id)
+    {
+        $detalle = $this->corteCajaDetalleRepo->show($id);
+        return response()->json($detalle);
+    }
 
-  // Actualizar un detalle de corte de caja existente
-  public function update(Request $request, $id)
-  {
-      // Validaciones
-      $validated = $request->validate([
-          'idCorteCaja' => 'required|exists:corte_caja,idCorteCaja',
-          'idPagoLote' => 'nullable|exists:pagos_lote,id',
-          'idEgreso' => 'nullable|exists:egresos,idEgresos',
-          'monto' => 'required|numeric|min:0',
-          'tipoMovimiento' => 'required|string|max:20',
-      ]);
+    // Actualizar un detalle de corte de caja existente
+    public function update(UpdateCorteCajaDetalleRequest $request, $id)
+    {
+        $detalle = $this->corteCajaDetalleRepo->update($request->validated(), $id);
+        return response()->json($detalle);
+    }
 
-      // Encontrar y actualizar el detalle de corte de caja
-      $detalle = CorteCajaDetalle::findOrFail($id);
-      $detalle->update($validated);
-
-      return response()->json($detalle);
-  }
-
-  // Eliminar un detalle de corte de caja
-  public function destroy($id)
-  {
-      $detalle = CorteCajaDetalle::findOrFail($id);
-      $detalle->delete();
-
-      return response()->json(null, 204);
-  }
-
-
+    // Eliminar un detalle de corte de caja
+    public function destroy($id)
+    {
+        $this->corteCajaDetalleRepo->delete($id);
+        return response()->json(null, 204);
+    }
 }

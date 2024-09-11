@@ -2,72 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\CorteCaja;
+use App\Http\Requests\StoreCorteCajaRequest;
+use App\Http\Requests\UpdateCorteCajaRequest;
+use App\Repositories\CorteCajaRepositoryInterface;
 
 class CorteCajaController extends Controller
 {
+    protected $corteCajaRepository;
+
+    public function __construct(CorteCajaRepositoryInterface $corteCajaRepository)
+    {
+        $this->corteCajaRepository = $corteCajaRepository;
+    }
+
     // Mostrar una lista de todos los cortes de caja
     public function index()
     {
-        $cortes = CorteCaja::all();
+        $cortes = $this->corteCajaRepository->getAll();
         return response()->json($cortes);
     }
 
     // Almacenar un nuevo corte de caja en la base de datos
-    public function store(Request $request)
+    public function store(StoreCorteCajaRequest $request)
     {
-        // Validaciones
-        $validated = $request->validate([
-            'fechaInicio' => 'required|date',
-            'fechaFin' => 'required|date',
-            'totalIngresosFisicos' => 'required|numeric|min:0',
-            'totalIngresosBancarios' => 'required|numeric|min:0',
-            'totalEgresos' => 'required|numeric|min:0',
-            'totalPrestamos' => 'required|numeric|min:0',
-            'idUsuario' => 'required|exists:users,id',
-        ]);
-
-        // Crear el corte de caja
-        $corte = CorteCaja::create($validated);
-
+        $corte = $this->corteCajaRepository->create($request->validated());
         return response()->json($corte, 201);
     }
 
     // Mostrar un corte de caja específico
     public function show($id)
     {
-        $corte = CorteCaja::findOrFail($id);
+        $corte = $this->corteCajaRepository->findById($id);
         return response()->json($corte);
     }
 
     // Actualizar un corte de caja existente
-    public function update(Request $request, $id)
+    public function update(UpdateCorteCajaRequest $request, $id)
     {
-        // Validaciones
-        $validated = $request->validate([
-            'fechaInicio' => 'required|date',
-            'fechaFin' => 'required|date',
-            'totalIngresosFisicos' => 'required|numeric|min:0',
-            'totalIngresosBancarios' => 'required|numeric|min:0',
-            'totalEgresos' => 'required|numeric|min:0',
-            'totalPrestamos' => 'required|numeric|min:0',
-            'idUsuario' => 'required|exists:users,id',
-        ]);
-
-        // Encontrar y actualizar el corte de caja
-        $corte = CorteCaja::findOrFail($id);
-        $corte->update($validated);
-
+        $corte = $this->corteCajaRepository->update($id, $request->validated());
         return response()->json($corte);
     }
 
     // Eliminar un corte de caja
     public function destroy($id)
     {
-        $corte = CorteCaja::findOrFail($id);
-        $corte->delete();
-
+        $this->corteCajaRepository->delete($id);
         return response()->json(null, 204);
     }
 }

@@ -2,69 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\FraseEtica;
+use App\Repository\FraseEticaRepositoryInterface;
+use App\Http\Requests\StoreFraseEticaRequest;
+use App\Http\Requests\UpdateFraseEticaRequest;
 
 class FraseEticaController extends Controller
 {
+    protected $fraseEticaRepo;
+
+    public function __construct(FraseEticaRepositoryInterface $fraseEticaRepo)
+    {
+        $this->fraseEticaRepo = $fraseEticaRepo;
+    }
+
     // Mostrar una lista de todas las frases éticas
     public function index()
     {
-        $frases = FraseEtica::all();
+        $frases = $this->fraseEticaRepo->getAll();
         return response()->json($frases);
     }
 
     // Almacenar una nueva frase ética en la base de datos
-    public function store(Request $request)
+    public function store(StoreFraseEticaRequest $request)
     {
-        // Validaciones
-        $validated = $request->validate([
-            'frase' => 'required|string',
-            'autor' => 'nullable|string|max:100',
-        ]);
-
-        // Crear la frase ética
-        $frase = FraseEtica::create($validated);
-
+        $frase = $this->fraseEticaRepo->store($request->validated());
         return response()->json($frase, 201);
     }
 
     // Mostrar una frase ética específica
     public function show($id)
     {
-        $frase = FraseEtica::findOrFail($id);
+        $frase = $this->fraseEticaRepo->show($id);
         return response()->json($frase);
     }
 
     // Actualizar una frase ética existente
-    public function update(Request $request, $id)
+    public function update(UpdateFraseEticaRequest $request, $id)
     {
-        // Validaciones
-        $validated = $request->validate([
-            'frase' => 'required|string',
-            'autor' => 'nullable|string|max:100',
-        ]);
-
-        // Encontrar y actualizar la frase ética
-        $frase = FraseEtica::findOrFail($id);
-        $frase->update($validated);
-
+        $frase = $this->fraseEticaRepo->update($request->validated(), $id);
         return response()->json($frase);
     }
 
     // Eliminar una frase ética
     public function destroy($id)
     {
-        $frase = FraseEtica::findOrFail($id);
-        $frase->delete();
-
+        $this->fraseEticaRepo->delete($id);
         return response()->json(null, 204);
     }
 
     // Obtener una frase ética de manera aleatoria
     public function random()
     {
-        $frase = FraseEtica::inRandomOrder()->first();
+        $frase = $this->fraseEticaRepo->getRandom();
         return response()->json($frase);
     }
 }

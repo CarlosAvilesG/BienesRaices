@@ -44,3 +44,46 @@ Route::middleware([
     Route::delete('/clientes/{cliente}', [Ctrl::$clienteController, 'destroy'])->name('clientes.destroy');
 
 });
+
+// Route::resource('corte-caja-detalles', CorteCajaDetalleController::class);
+//Route::resource('egresos', EgresoController::class);
+/*
+Route::get('frases/random', [FraseEticaController::class, 'random']);
+Route::resource('frases', FraseEticaController::class);
+ */
+
+ /*
+
+Route::get('lotes/{id}/fotos', [LoteController::class, 'getFotos']);
+Route::post('lotes/{id}/fotos', [LoteController::class, 'addFoto']);
+Route::delete('lotes/{id}/fotos/{fotoId}', [LoteController::class, 'deleteFoto']);
+Route::resource('lotes', LoteController::class);
+
+-*/
+/*
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('morosos', MorosoController::class);
+});
+ */
+
+ /* Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('moroso-seguimientos', MorosoSeguimientoController::class);
+});*/
+
+/*Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('negocios', NegocioController::class);
+});
+*/
+
+/*Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('pagos-lote', PagoLoteController::class);
+});
+*/
+
+/*Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::resource('predios', PredioController::class);
+});*/

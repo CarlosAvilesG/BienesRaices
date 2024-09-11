@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClienteReferencia;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreClienteReferenciaRequest;
+use App\Http\Requests\UpdateClienteReferenciaRequest;
 
 class ClienteReferenciaController extends Controller
 {
@@ -15,20 +16,9 @@ class ClienteReferenciaController extends Controller
     }
 
     // Crear una nueva referencia
-    public function store(Request $request)
+    public function store(StoreClienteReferenciaRequest $request)
     {
-        $request->validate([
-            'idCliente' => 'required|exists:clientes,idCliente',
-            'paterno' => 'required|string|max:30',
-            'materno' => 'required|string|max:30',
-            'nombre' => 'required|string|max:30',
-            'telefono' => 'required|string|max:30',
-            'trabajo' => 'required|string|max:50',
-            'trabajoDireccion' => 'required|string|max:100',
-            'trabajoTelefono' => 'required|string|max:30',
-        ]);
-
-        $referencia = ClienteReferencia::create($request->all());
+        $referencia = ClienteReferencia::create($request->validated());
         return response()->json($referencia, 201);
     }
 
@@ -40,20 +30,10 @@ class ClienteReferenciaController extends Controller
     }
 
     // Actualizar una referencia específica
-    public function update(Request $request, $id)
+    public function update(UpdateClienteReferenciaRequest $request, $id)
     {
-        $request->validate([
-            'paterno' => 'sometimes|required|string|max:30',
-            'materno' => 'sometimes|required|string|max:30',
-            'nombre' => 'sometimes|required|string|max:30',
-            'telefono' => 'sometimes|required|string|max:30',
-            'trabajo' => 'sometimes|required|string|max:50',
-            'trabajoDireccion' => 'sometimes|required|string|max:100',
-            'trabajoTelefono' => 'sometimes|required|string|max:30',
-        ]);
-
         $referencia = ClienteReferencia::findOrFail($id);
-        $referencia->update($request->all());
+        $referencia->update($request->validated());
         return response()->json($referencia);
     }
 

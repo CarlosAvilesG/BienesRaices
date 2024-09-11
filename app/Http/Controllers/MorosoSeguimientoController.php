@@ -2,70 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MorosoSeguimiento;
-use Illuminate\Http\Request;
+use App\Repository\MorosoSeguimientoRepositoryInterface;
+use App\Http\Requests\StoreMorosoSeguimientoRequest;
+use App\Http\Requests\UpdateMorosoSeguimientoRequest;
 
 class MorosoSeguimientoController extends Controller
 {
+    protected $seguimientoRepo;
+
+    public function __construct(MorosoSeguimientoRepositoryInterface $seguimientoRepo)
+    {
+        $this->seguimientoRepo = $seguimientoRepo;
+    }
+
     // Mostrar una lista de todos los seguimientos
     public function index()
     {
-        $seguimientos = MorosoSeguimiento::all();
+        $seguimientos = $this->seguimientoRepo->getAll();
         return response()->json($seguimientos);
     }
 
     // Guardar un nuevo seguimiento en la base de datos
-    public function store(Request $request)
+    public function store(StoreMorosoSeguimientoRequest $request)
     {
-        // Validaciones
-        $validatedData = $request->validate([
-            'idMoroso' => 'required|exists:morosos,id',
-            'fecha_contacto' => 'required|date',
-            'medio_contacto' => 'required|string|max:50',
-            'detalle_contacto' => 'nullable|string',
-            'acuerdo' => 'nullable|string',
-            'idUsuario' => 'required|exists:users,id',
-        ]);
-
-        // Crear un nuevo registro
-        $seguimiento = MorosoSeguimiento::create($validatedData);
-
+        $seguimiento = $this->seguimientoRepo->create($request->validated());
         return response()->json($seguimiento, 201);
     }
 
     // Mostrar un seguimiento específico
     public function show($id)
     {
-        $seguimiento = MorosoSeguimiento::findOrFail($id);
+        $seguimiento = $this->seguimientoRepo->findById($id);
         return response()->json($seguimiento);
     }
 
     // Actualizar un seguimiento existente en la base de datos
-    public function update(Request $request, $id)
+    public function update(UpdateMorosoSeguimientoRequest $request, $id)
     {
-        // Validaciones
-        $validatedData = $request->validate([
-            'idMoroso' => 'sometimes|required|exists:morosos,id',
-            'fecha_contacto' => 'sometimes|required|date',
-            'medio_contacto' => 'sometimes|required|string|max:50',
-            'detalle_contacto' => 'nullable|string',
-            'acuerdo' => 'nullable|string',
-            'idUsuario' => 'sometimes|required|exists:users,id',
-        ]);
-
-        // Buscar y actualizar el registro
-        $seguimiento = MorosoSeguimiento::findOrFail($id);
-        $seguimiento->update($validatedData);
-
+        $seguimiento = $this->seguimientoRepo->update($request->validated(), $id);
         return response()->json($seguimiento, 200);
     }
 
     // Eliminar un seguimiento específico de la base de datos
     public function destroy($id)
     {
-        $seguimiento = MorosoSeguimiento::findOrFail($id);
-        $seguimiento->delete();
-
+        $this->seguimientoRepo->delete($id);
         return response()->json(null, 204);
     }
 }

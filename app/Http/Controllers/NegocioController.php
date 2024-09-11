@@ -2,57 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Negocio;
-use Illuminate\Http\Request;
+use App\Repository\NegocioRepositoryInterface;
+use App\Http\Requests\StoreNegocioRequest;
+use App\Http\Requests\UpdateNegocioRequest;
 
 class NegocioController extends Controller
 {
-   // Mostrar una lista de todos los negocios
-   public function index()
-   {
-       $negocios = Negocio::all();
-       return response()->json($negocios);
-   }
+    protected $negocioRepo;
 
-   // Mostrar el formulario para crear un nuevo negocio (usualmente en aplicaciones web)
-   public function create()
-   {
-       //
-   }
+    public function __construct(NegocioRepositoryInterface $negocioRepo)
+    {
+        $this->negocioRepo = $negocioRepo;
+    }
 
-   // Guardar un nuevo negocio en la base de datos
-   public function store(Request $request)
-   {
-       $negocio = Negocio::create($request->all());
-       return response()->json($negocio, 201);
-   }
+    // Mostrar una lista de todos los negocios
+    public function index()
+    {
+        $negocios = $this->negocioRepo->getAll();
+        return response()->json($negocios);
+    }
 
-   // Mostrar un negocio específico
-   public function show($id)
-   {
-       $negocio = Negocio::findOrFail($id);
-       return response()->json($negocio);
-   }
+    // Guardar un nuevo negocio en la base de datos
+    public function store(StoreNegocioRequest $request)
+    {
+        $negocio = $this->negocioRepo->create($request->validated());
+        return response()->json($negocio, 201);
+    }
 
-   // Mostrar el formulario para editar un negocio existente (usualmente en aplicaciones web)
-   public function edit($id)
-   {
-       //
-   }
+    // Mostrar un negocio específico
+    public function show($id)
+    {
+        $negocio = $this->negocioRepo->findById($id);
+        return response()->json($negocio);
+    }
 
-   // Actualizar un negocio existente en la base de datos
-   public function update(Request $request, $id)
-   {
-       $negocio = Negocio::findOrFail($id);
-       $negocio->update($request->all());
-       return response()->json($negocio, 200);
-   }
+    // Actualizar un negocio existente en la base de datos
+    public function update(UpdateNegocioRequest $request, $id)
+    {
+        $negocio = $this->negocioRepo->update($request->validated(), $id);
+        return response()->json($negocio, 200);
+    }
 
-   // Eliminar un negocio específico de la base de datos
-   public function destroy($id)
-   {
-       $negocio = Negocio::findOrFail($id);
-       $negocio->delete();
-       return response()->json(null, 204);
-   }
+    // Eliminar un negocio específico de la base de datos
+    public function destroy($id)
+    {
+        $this->negocioRepo->delete($id);
+        return response()->json(null, 204);
+    }
 }

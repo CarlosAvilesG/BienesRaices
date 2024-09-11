@@ -2,65 +2,51 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Http\Request;
-use App\Models\ConceptoEgreso;
+use App\Repositories\ConceptoEgresoRepositoryInterface;
+use App\Http\Requests\StoreConceptoEgresoRequest;
+use App\Http\Requests\UpdateConceptoEgresoRequest;
 
 class ConceptoEgresoController extends Controller
 {
-     // Mostrar una lista de todos los conceptos de egreso
-     public function index()
-     {
-         $conceptos = ConceptoEgreso::all();
-         return response()->json($conceptos);
-     }
+    protected $conceptoEgresoRepository;
 
-     // Almacenar un nuevo concepto de egreso en la base de datos
-     public function store(Request $request)
-     {
-         // Validaciones
-         $validated = $request->validate([
-             'descripcion' => 'required|string|max:50',
-             'gastoCorriente' => 'boolean',
-             'requiereDevolucion' => 'boolean',
-         ]);
+    public function __construct(ConceptoEgresoRepositoryInterface $conceptoEgresoRepository)
+    {
+        $this->conceptoEgresoRepository = $conceptoEgresoRepository;
+    }
 
-         // Crear el concepto de egreso
-         $concepto = ConceptoEgreso::create($validated);
+    // Mostrar una lista de todos los conceptos de egreso
+    public function index()
+    {
+        $conceptos = $this->conceptoEgresoRepository->getAll();
+        return response()->json($conceptos);
+    }
 
-         return response()->json($concepto, 201);
-     }
+    // Almacenar un nuevo concepto de egreso en la base de datos
+    public function store(StoreConceptoEgresoRequest $request)
+    {
+        $concepto = $this->conceptoEgresoRepository->create($request->validated());
+        return response()->json($concepto, 201);
+    }
 
-     // Mostrar un concepto de egreso específico
-     public function show($id)
-     {
-         $concepto = ConceptoEgreso::findOrFail($id);
-         return response()->json($concepto);
-     }
+    // Mostrar un concepto de egreso específico
+    public function show($id)
+    {
+        $concepto = $this->conceptoEgresoRepository->findById($id);
+        return response()->json($concepto);
+    }
 
-     // Actualizar un concepto de egreso existente
-     public function update(Request $request, $id)
-     {
-         // Validaciones
-         $validated = $request->validate([
-             'descripcion' => 'required|string|max:50',
-             'gastoCorriente' => 'boolean',
-             'requiereDevolucion' => 'boolean',
-         ]);
+    // Actualizar un concepto de egreso existente
+    public function update(UpdateConceptoEgresoRequest $request, $id)
+    {
+        $concepto = $this->conceptoEgresoRepository->update($id, $request->validated());
+        return response()->json($concepto);
+    }
 
-         // Encontrar y actualizar el concepto de egreso
-         $concepto = ConceptoEgreso::findOrFail($id);
-         $concepto->update($validated);
-
-         return response()->json($concepto);
-     }
-
-     // Eliminar un concepto de egreso
-     public function destroy($id)
-     {
-         $concepto = ConceptoEgreso::findOrFail($id);
-         $concepto->delete();
-
-         return response()->json(null, 204);
-     }
+    // Eliminar un concepto de egreso
+    public function destroy($id)
+    {
+        $this->conceptoEgresoRepository->delete($id);
+        return response()->json(null, 204);
+    }
 }
