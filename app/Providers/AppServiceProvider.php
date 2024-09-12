@@ -33,6 +33,8 @@ use App\Repository\PagoLoteRepositoryInterface;
 use App\Repository\PagoLoteRepository;
 use App\Repository\PredioRepositoryInterface;
 use App\Repository\PredioRepository;
+use App\Repository\UserRepositoryInterface;
+use App\Repository\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -61,6 +63,7 @@ class AppServiceProvider extends ServiceProvider
             NegocioRepositoryInterface::class, NegocioRepository::class,
             PagoLoteRepositoryInterface::class, PagoLoteRepository::class,
             PredioRepositoryInterface::class, PredioRepository::class,
+            UserRepositoryInterface::class, UserRepository::class,
 
         );
 

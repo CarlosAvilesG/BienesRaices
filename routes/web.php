@@ -87,3 +87,12 @@ Route::middleware('auth:sanctum')->group(function () {
 ])->group(function () {
     Route::resource('predios', PredioController::class);
 });*/
+/*
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::resource('users', UserController::class);
+});
+ */
