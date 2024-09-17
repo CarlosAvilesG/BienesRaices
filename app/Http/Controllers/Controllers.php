@@ -19,4 +19,5 @@ class Controllers
     public static $negocioController = NegocioController::class;
     public static $pagoLoteController = PagoLoteController::class;
     public static $predioController = PredioController::class;
+    public static $userController = UserController::class;
 }
