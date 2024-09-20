@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateClienteRequest;
 use App\Repositories\ClienteRepositoryInterface;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller; // Ensure this import is present
 
 class ClienteController extends Controller
 {
@@ -14,6 +15,10 @@ class ClienteController extends Controller
 
     public function __construct(ClienteRepositoryInterface $clienteRepository)
     {
+       // $this->middleware('auth:sanctum');
+      //  $this->middleware('role:admin|user'); // Permitir acceso a usuarios con roles 'admin' o 'user'
+        // $this->middleware('permission:manage clients'); // Alternativamente, puedes usar permisos específicos
+     //   $this->middleware('permission:manage clients', ['only' => ['index', 'store', 'show', 'update', 'destroy']]); // O puedes especificar los métodos
         $this->clienteRepository = $clienteRepository;
     }
 
