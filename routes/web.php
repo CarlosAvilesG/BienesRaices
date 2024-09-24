@@ -1,15 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 //use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\Controllers as Ctrl;
 
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Página de bienvenida pública
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/dashboard'); // Si el usuario está autenticado, redirígelo al panel de control (cambia la ruta según lo necesites)
+    }
+
+    return view('guest.welcome'); // Si no está autenticado, muestra la vista de bienvenida
 });
-
-
 
 
 Route::middleware([
@@ -22,6 +30,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::middleware('auth')->get('/terms', function () {
+    return view('terms');
+})->name('terms');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 
@@ -77,6 +88,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // Rutas para Usuarios
     Route::resource('users', Ctrl::$userController);
 });
+
+
 
 // Route::middleware([
 //     'auth:sanctum',

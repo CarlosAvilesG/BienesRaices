@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePredioRequest;
 use App\Http\Requests\UpdatePredioRequest;
-use App\Repository\PredioRepositoryInterface;
+use App\Repositories\PredioRepositoryInterface;
 
 class PredioController extends Controller
 {

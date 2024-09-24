@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\CorteCajaDetalle;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\ClienteRepositoryInterface;
+use App\Repositories\ClienteRepository;
+
 use App\Repositories\ClienteReferenciaRepository;
 use App\Repositories\ClienteReferenciaRepositoryInterface;
-use App\Repositories\ClienteRepository;
-use App\Repositories\ClienteRepositoryInterface;
+// use App\Repositories\ClienteRepository;
+// use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\BitacoraRepository;
 use App\Repositories\BitacoraRepositoryInterface;
 use App\Repositories\ConceptoEgresoRepository;
@@ -15,26 +19,26 @@ use App\Repositories\ContratoRepository;
 use App\Repositories\ContratoRepositoryInterface;
 use App\Repositories\CorteCajaRepository;
 use App\Repositories\CorteCajaRepositoryInterface;
-use App\Repository\CorteCajaDetalleRepositoryInterface;
-use App\Repository\CorteCajaDetalleRepository;
-use App\Repository\EgresoRepositoryInterface;
-use App\Repository\EgresoRepository;
-use App\Repository\FraseEticaRepositoryInterface;
-use App\Repository\FraseEticaRepository;
-use App\Repository\LoteRepositoryInterface;
-use App\Repository\LoteRepository;
-use App\Repository\MorosoRepositoryInterface;
-use App\Repository\MorosoRepository;
-use App\Repository\MorosoSeguimientoRepositoryInterface;
-use App\Repository\MorosoSeguimientoRepository;
-use App\Repository\NegocioRepositoryInterface;
-use App\Repository\NegocioRepository;
-use App\Repository\PagoLoteRepositoryInterface;
-use App\Repository\PagoLoteRepository;
-use App\Repository\PredioRepositoryInterface;
-use App\Repository\PredioRepository;
-use App\Repository\UserRepositoryInterface;
-use App\Repository\UserRepository;
+use App\Repositories\CorteCajaDetalleRepositoryInterface;
+use App\Repositories\CorteCajaDetalleRepository;
+use App\Repositories\EgresoRepositoryInterface;
+use App\Repositories\EgresoRepository;
+use App\Repositories\FraseEticaRepositoryInterface;
+use App\Repositories\FraseEticaRepository;
+use App\Repositories\LoteRepositoryInterface;
+use App\Repositories\LoteRepository;
+use App\Repositories\MorosoRepositoryInterface;
+use App\Repositories\MorosoRepository;
+use App\Repositories\MorosoSeguimientoRepositoryInterface;
+use App\Repositories\MorosoSeguimientoRepository;
+use App\Repositories\NegocioRepositoryInterface;
+use App\Repositories\NegocioRepository;
+use App\Repositories\PagoLoteRepositoryInterface;
+use App\Repositories\PagoLoteRepository;
+use App\Repositories\PredioRepositoryInterface;
+use App\Repositories\PredioRepository;
+use App\Repositories\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,8 +49,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->app->bind(
-            ClienteRepositoryInterface::class,
-            ClienteRepository::class,
+            ClienteRepositoryInterface::class,  ClienteRepository::class,
             ClienteReferenciaRepositoryInterface::class,   ClienteReferenciaRepository::class,
             BitacoraRepositoryInterface::class,
             BitacoraRepository::class,
@@ -54,7 +57,8 @@ class AppServiceProvider extends ServiceProvider
             ContratoRepositoryInterface::class,
             ContratoRepository::class,
             CorteCajaRepositoryInterface::class, CorteCajaRepository::class,
-            CorteCajaDetalleRepositoryInterface::class, CorteCajaDetalleRepository::class,
+
+            CorteCajaDetalleRepositoryInterface ::class, CorteCajaDetalleRepository::class,
             EgresoRepositoryInterface::class, EgresoRepository::class,
             FraseEticaRepositoryInterface::class, FraseEticaRepository::class,
             LoteRepositoryInterface::class, LoteRepository::class,
@@ -64,6 +68,8 @@ class AppServiceProvider extends ServiceProvider
             PagoLoteRepositoryInterface::class, PagoLoteRepository::class,
             PredioRepositoryInterface::class, PredioRepository::class,
             UserRepositoryInterface::class, UserRepository::class,
+
+
 
         );
 

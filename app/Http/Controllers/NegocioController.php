@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\NegocioRepositoryInterface;
+use App\Repositories\NegocioRepositoryInterface;
 use App\Http\Requests\StoreNegocioRequest;
 use App\Http\Requests\UpdateNegocioRequest;
 

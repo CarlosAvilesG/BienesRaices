@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\FraseEticaRepositoryInterface;
+use App\Repositories\FraseEticaRepositoryInterface;
 use App\Http\Requests\StoreFraseEticaRequest;
 use App\Http\Requests\UpdateFraseEticaRequest;
 

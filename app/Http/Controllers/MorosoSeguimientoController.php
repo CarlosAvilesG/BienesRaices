@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\MorosoSeguimientoRepositoryInterface;
+use App\Repositories\MorosoSeguimientoRepositoryInterface;
 use App\Http\Requests\StoreMorosoSeguimientoRequest;
 use App\Http\Requests\UpdateMorosoSeguimientoRequest;
 

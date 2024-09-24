@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\CorteCajaDetalleRepositoryInterface;
+use App\Repositories\CorteCajaDetalleRepositoryInterface;
 use App\Http\Requests\StoreCorteCajaDetalleRequest;
 use App\Http\Requests\UpdateCorteCajaDetalleRequest;
 

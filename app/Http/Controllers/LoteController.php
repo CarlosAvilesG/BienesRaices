@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\LoteRepositoryInterface;
+use App\Repositories\LoteRepositoryInterface;
 use App\Http\Requests\StoreLoteRequest;
 use App\Http\Requests\UpdateLoteRequest;
 use Illuminate\Http\Request;

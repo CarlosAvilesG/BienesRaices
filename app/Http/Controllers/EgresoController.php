@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\EgresoRepositoryInterface;
+use App\Repositories\EgresoRepositoryInterface;
 use App\Http\Requests\StoreEgresoRequest;
 use App\Http\Requests\UpdateEgresoRequest;
 

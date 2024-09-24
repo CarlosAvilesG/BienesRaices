@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repository\PagoLoteRepositoryInterface;
+use App\Repositories\PagoLoteRepositoryInterface;
 use App\Http\Requests\StorePagoLoteRequest;
 use App\Http\Requests\UpdatePagoLoteRequest;
 
