@@ -7,6 +7,11 @@
 @stop
 
 @section('content')
+
+
+
+
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Condiciones de Uso para la Empresa de Bienes Raíces en BCS</h3>

@@ -49,12 +49,12 @@ class StoreClienteRequest extends FormRequest
             'correoElectronico' => 'required|string|max:45|unique:clientes,correoElectronico',
             'pass' => 'required|string|max:60',
             'usuarioWeb' => 'nullable|string|max:45',
-            'foto_url' => 'nullable|string',
-            'fechaRegistro' => 'required|date',
+            'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg', //|max:2048',
+            //'fechaRegistro' => 'required|date',
             'morosidad_activa' => 'boolean',
             'monto_deuda_actual' => 'numeric|min:0',
             'ultima_actualizacion_morosidad' => 'nullable|date',
-            'idUsuario' => 'required|exists:users,id'
+          //  'idUsuario' => 'required|exists:users,id'
         ];
     }
 
@@ -78,8 +78,9 @@ class StoreClienteRequest extends FormRequest
             'correoElectronico.required' => 'El correo electrónico es obligatorio.',
             'correoElectronico.unique' => 'El correo electrónico ya ha sido registrado.',
             'pass.required' => 'La contraseña es obligatoria.',
-            'idUsuario.required' => 'El usuario es obligatorio.',
-            'idUsuario.exists' => 'El usuario seleccionado no es válido.'
+            'foto_url' => 'Foto con error: nullable|image|mimes:jpeg,png,jpg,gif,svg', //|max:2048', // Reglas para archivo de imagen
+          //  'idUsuario.required' => 'El usuario es obligatorio.',
+          //  'idUsuario.exists' => 'El usuario seleccionado no es válido.'
         ];
     }
 }

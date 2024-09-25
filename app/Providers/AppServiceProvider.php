@@ -2,15 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\CorteCajaDetalle;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\ClienteRepository;
-
 use App\Repositories\ClienteReferenciaRepository;
 use App\Repositories\ClienteReferenciaRepositoryInterface;
-// use App\Repositories\ClienteRepository;
-// use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\BitacoraRepository;
 use App\Repositories\BitacoraRepositoryInterface;
 use App\Repositories\ConceptoEgresoRepository;
@@ -47,33 +43,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-        $this->app->bind(
-            ClienteRepositoryInterface::class,  ClienteRepository::class,
-            ClienteReferenciaRepositoryInterface::class,   ClienteReferenciaRepository::class,
-            BitacoraRepositoryInterface::class,
-            BitacoraRepository::class,
-            ConceptoEgresoRepositoryInterface::class, ConceptoEgresoRepository::class,
-            ContratoRepositoryInterface::class,
-            ContratoRepository::class,
-            CorteCajaRepositoryInterface::class, CorteCajaRepository::class,
-
-            CorteCajaDetalleRepositoryInterface ::class, CorteCajaDetalleRepository::class,
-            EgresoRepositoryInterface::class, EgresoRepository::class,
-            FraseEticaRepositoryInterface::class, FraseEticaRepository::class,
-            LoteRepositoryInterface::class, LoteRepository::class,
-            MorosoRepositoryInterface::class, MorosoRepository::class,
-            MorosoSeguimientoRepositoryInterface::class, MorosoSeguimientoRepository::class,
-            NegocioRepositoryInterface::class, NegocioRepository::class,
-            PagoLoteRepositoryInterface::class, PagoLoteRepository::class,
-            PredioRepositoryInterface::class, PredioRepository::class,
-            UserRepositoryInterface::class, UserRepository::class,
-
-
-
-        );
-
-
+        // Registrar bindings individuales para cada repositorio
+        $this->app->bind(ClienteRepositoryInterface::class, ClienteRepository::class);
+        $this->app->bind(ClienteReferenciaRepositoryInterface::class, ClienteReferenciaRepository::class);
+        $this->app->bind(BitacoraRepositoryInterface::class, BitacoraRepository::class);
+        $this->app->bind(ConceptoEgresoRepositoryInterface::class, ConceptoEgresoRepository::class);
+        $this->app->bind(ContratoRepositoryInterface::class, ContratoRepository::class);
+        $this->app->bind(CorteCajaRepositoryInterface::class, CorteCajaRepository::class);
+        $this->app->bind(CorteCajaDetalleRepositoryInterface::class, CorteCajaDetalleRepository::class);
+        $this->app->bind(EgresoRepositoryInterface::class, EgresoRepository::class);
+        $this->app->bind(FraseEticaRepositoryInterface::class, FraseEticaRepository::class);
+        $this->app->bind(LoteRepositoryInterface::class, LoteRepository::class);
+        $this->app->bind(MorosoRepositoryInterface::class, MorosoRepository::class);
+        $this->app->bind(MorosoSeguimientoRepositoryInterface::class, MorosoSeguimientoRepository::class);
+        $this->app->bind(NegocioRepositoryInterface::class, NegocioRepository::class);
+        $this->app->bind(PagoLoteRepositoryInterface::class, PagoLoteRepository::class);
+        $this->app->bind(PredioRepositoryInterface::class, PredioRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

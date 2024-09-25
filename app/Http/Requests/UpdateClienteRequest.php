@@ -49,12 +49,13 @@ class UpdateClienteRequest extends FormRequest
             'correoElectronico' => 'sometimes|required|string|max:45|unique:clientes,correoElectronico,' . $this->route('cliente') . ',idCliente',
             'pass' => 'sometimes|required|string|max:60',
             'usuarioWeb' => 'nullable|string|max:45',
-            'foto_url' => 'nullable|string',
+           // 'foto_url' => 'nullable|string',
+           'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Reglas para archivo de imagen
             'fechaRegistro' => 'required|date',
             'morosidad_activa' => 'boolean',
             'monto_deuda_actual' => 'numeric|min:0',
             'ultima_actualizacion_morosidad' => 'nullable|date',
-            'idUsuario' => 'required|exists:users,id'
+            //'idUsuario' => 'required|exists:users,id'
         ];
     }
 

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+//use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 //use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\Controllers as Ctrl;
 
@@ -20,6 +22,14 @@ Route::get('/', function () {
 });
 
 
+
+
+// Route::get('/test-image', function () {
+//     // Crear una imagen de ejemplo de 300x300 con un color de fondo
+//     $manager = new \Intervention\Image\ImageManager();
+//     $img = $manager->canvas(300, 300, '#ff0000');
+//     return $img->response('jpg');
+// });
 
 
 Route::middleware([
@@ -47,6 +57,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
 
 
 Route::middleware([

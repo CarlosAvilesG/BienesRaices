@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -36,7 +37,7 @@ return new class extends Migration
             $table->string('pass', 60); // Contraseña hasheada
             $table->string('usuarioWeb', 45)->nullable();
             $table->string('foto_url')->nullable()->nullable();
-            $table->date('fechaRegistro');
+            $table->date('fechaRegistro')->default(DB::raw('CURRENT_DATE'));
 
             $table->boolean('morosidad_activa')->default(false); // Indica si el cliente tiene una morosidad activa
             $table->decimal('monto_deuda_actual', 20, 2)->default(0); // Monto total de la deuda actual

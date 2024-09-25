@@ -9,6 +9,24 @@
 @section('content')
 <div class="container">
 
+    <!-- Mostrar mensaje de éxito si existe -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Mostrar errores de validación si existen -->
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('cliente.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
