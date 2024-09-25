@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 
 
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -33,6 +35,30 @@ Route::middleware([
 Route::middleware('auth')->get('/terms', function () {
     return view('terms');
 })->name('terms');
+
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+
+    Route::resource('/clientes', Ctrl::$clienteController)->names('cliente');
+});
+
+/*
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
 
@@ -88,6 +114,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     // Rutas para Usuarios
     Route::resource('users', Ctrl::$userController);
 });
+
+*/
+
+
 
 
 

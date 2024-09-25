@@ -15,15 +15,24 @@ class ClienteController extends Controller
 
     public function __construct(ClienteRepositoryInterface $clienteRepository)
     {
-      
+
         $this->clienteRepository = $clienteRepository;
     }
 
     // Mostrar una lista de todos los clientes
     public function index()
     {
+        //return view('clientes.index');
+
         $clientes = $this->clienteRepository->getAll();
-        return response()->json($clientes);
+        //return response()->json($clientes);
+
+        return view('clientes.index', compact('clientes'));
+    }
+
+    public function create()
+    {
+        return view('clientes.create');
     }
 
     // Guardar un nuevo cliente en la base de datos
