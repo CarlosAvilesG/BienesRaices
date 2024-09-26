@@ -54,53 +54,53 @@ class ClienteController extends Controller
         $cliente = $this->clienteRepository->store($validatedData);
 
 
-        // 2. Procesar la imagen si existe
-        if ($request->hasFile('foto_url')) {
-            $file = $request->file('foto_url');
+        // // 2. Procesar la imagen si existe
+        // if ($request->hasFile('foto_url')) {
+        //     $file = $request->file('foto_url');
 
-            // Verificar si es una imagen válida
-            if ($file->isValid() && in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'])) {
+        //     // Verificar si es una imagen válida
+        //     if ($file->isValid() && in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'])) {
 
-                // Si la imagen es mayor de 2 MB, la comprimimos
-                if ($file->getSize() > 2097152) { // 2 MB en bytes
-                    try {
-                        // Comprimir manualmente usando GD
-                        $imageResource = $this->resizeImage($file->getRealPath());
+        //         // Si la imagen es mayor de 2 MB, la comprimimos
+        //         if ($file->getSize() > 2097152) { // 2 MB en bytes
+        //             try {
+        //                 // Comprimir manualmente usando GD
+        //                 $imageResource = $this->resizeImage($file->getRealPath());
 
-                        // Generar un nombre único para la imagen
-                        $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
-                        $filePath = 'uploads/clientes/' . $filename;
+        //                 // Generar un nombre único para la imagen
+        //                 $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
+        //                 $filePath = 'uploads/clientes/' . $filename;
 
-                        // Guardar la imagen comprimida
-                        imagejpeg($imageResource, storage_path('app/public/upload/clientes' . $filePath), 75); // Comprimir al 75%
+        //                 // Guardar la imagen comprimida
+        //                 imagejpeg($imageResource, storage_path('app/public/upload/clientes' . $filePath), 75); // Comprimir al 75%
 
-                        // Liberar recursos de la imagen
-                        imagedestroy($imageResource);
+        //                 // Liberar recursos de la imagen
+        //                 imagedestroy($imageResource);
 
-                        // Añadir la ruta de la imagen a los datos validados
-                        $validatedData['foto_url'] = $filePath;
+        //                 // Añadir la ruta de la imagen a los datos validados
+        //                 $validatedData['foto_url'] = $filePath;
 
-                    } catch (\Exception $e) {
-                        return redirect()->back()->withErrors(['foto_url' => 'Error al procesar la imagen: ' . $e->getMessage()]);
-                    }
-                } else {
-                    // Si la imagen es menor o igual a 2 MB, simplemente subirla sin procesar
-                    try {
-                        $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
-                        $filePath = $file->storeAs('uploads/clientes', $filename, 'public');
-                        $validatedData['foto_url'] = $filePath;
+        //             } catch (\Exception $e) {
+        //                 return redirect()->back()->withErrors(['foto_url' => 'Error al procesar la imagen: ' . $e->getMessage()]);
+        //             }
+        //         } else {
+        //             // Si la imagen es menor o igual a 2 MB, simplemente subirla sin procesar
+        //             try {
+        //                 $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
+        //                 $filePath = $file->storeAs('uploads/clientes', $filename, 'public');
+        //                 $validatedData['foto_url'] = $filePath;
 
-                    } catch (\Exception $e) {
-                        return redirect()->back()->withErrors(['foto_url' => 'Error al subir la imagen: ' . $e->getMessage()]);
-                    }
-                }
-            } else {
-                return redirect()->back()->withErrors(['foto_url' => 'El archivo no es una imagen válida.']);
-            }
-        }
+        //             } catch (\Exception $e) {
+        //                 return redirect()->back()->withErrors(['foto_url' => 'Error al subir la imagen: ' . $e->getMessage()]);
+        //             }
+        //         }
+        //     } else {
+        //         return redirect()->back()->withErrors(['foto_url' => 'El archivo no es una imagen válida.']);
+        //     }
+        // }
 
-         // Actualizar el cliente con la URL de la imagen si fue cargada
-         $this->clienteRepository->update($cliente->id, ['foto_url' => $validatedData['foto_url'] ?? null]);
+        //  // Actualizar el cliente con la URL de la imagen si fue cargada
+        //  $this->clienteRepository->update($cliente->id, ['foto_url' => $validatedData['foto_url'] ?? null]);
 
          // Redirigir a la página de edición con un mensaje de éxito
          return redirect()->route('clientes.edit', $cliente->id)->with('success', 'Cliente creado exitosamente.');
@@ -111,7 +111,7 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $cliente = $this->clienteRepository->find($id);
-        return view('clientes.edit', compact('cliente'));
+        return 'Prueba de edit'; //view('clientes.edit', compact('cliente'));
     }
 
 
@@ -119,7 +119,8 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = $this->clienteRepository->find($id);
-        return response()->json($cliente);
+        return 'prueba de show'; // view('clientes.show', compact('cliente'));
+       // return response()->json($cliente);
     }
 
     // Actualizar un cliente existente en la base de datos
@@ -138,7 +139,8 @@ class ClienteController extends Controller
     public function destroy($id)
     {
         $this->clienteRepository->delete($id);
-        return response()->json(null, 204);
+        //return response()->json(null, 204);
+        return redirect()->route('cliente.index')->with('success', 'Cliente eliminado exitosamente.');
     }
 
 

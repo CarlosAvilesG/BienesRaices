@@ -1,105 +1,134 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Clientes')
 
 @section('content_header')
     <h1>Clientes</h1>
 @stop
 
 @section('content')
-<p> Lista de clientes</p>
 
-<!-- Si no hay clientes -->
-@if($clientes->isEmpty())
-    <div class="alert alert-warning">No hay clientes disponibles.</div>
-@else
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido Paterno</th>
-                <th>Apellido Materno</th>
-                <th>Correo Electrónico</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($clientes as $cliente)
-                <tr>
-                    <td>{{ $cliente->id }}</td>
-                    <td>{{ $cliente->nombre }}</td>
-                    <td>{{ $cliente->paterno }}</td>
-                    <td>{{ $cliente->materno }}</td>
-                    <td>{{ $cliente->correoElectronico }}</td>
-                    {{-- <td>
-                        <a href="{{ route('clientes.show', $cliente->idCliente) }}" class="btn btn-info btn-sm">Ver</a>
-                        <a href="{{ route('clientes.edit', $cliente->idCliente) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('clientes.destroy', $cliente->idCliente) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                        </form>
-                    </td> --}}
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+
+@if(session('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 @endif
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Lista de Clientes</h3>
+        </div>
+        <div class="card-body">
+
+            <!-- Si no hay clientes -->
+            @if ($clientes->isEmpty())
+                <div class="alert alert-warning">No hay clientes disponibles.</div>
+            @else
+                {{-- Setup data for datatables --}}
+                @php
+                    $heads = [
+                        'Id',
+                        'Nombre',
+                        'Paterno',
+                        'Materno',
+                        'Correo Electronico',
+                        'Celular',
+
+                        ['label' => 'Acciones', 'no-export' => true, 'width' => 15],
+                    ];
+
+                    $btnEdit = '<button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                <i class="fa fa-lg fa-fw fa-pen"></i>
+            </button>';
+                    $btnDelete = '<button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                  <i class="fa fa-lg fa-fw fa-trash"></i>
+              </button>';
+                    $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                   <i class="fa fa-lg fa-fw fa-eye"></i>
+               </button>';
+
+                    $config = [
+                        'language' => ['url' => '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'],
+                        'paging' => true,
+                        'searching' => true,
+                        'info' => true,
+                        'autoWidth' => false,
+                    ];
+                @endphp
+
+                {{-- Minimal example / fill data using the component slot --}}
+                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" >
+                    @foreach ($clientes as $cliente)
+                        <tr>
+                            <td>{{ $cliente->id }}</td>
+                            <td>{{ $cliente->nombre }}</td>
+                            <td>{{ $cliente->paterno }}</td>
+                            <td>{{ $cliente->materno }}</td>
+                            <td>{{ $cliente->correoElectronico }}</td>
+                            <td>{{ $cliente->celular }}</td>
+{{--
+                            <td> {!! $btnEdit !!} {!! $btnDelete !!} {!! $btnDetails !!}
+                            </td> --}}
+                            <td>
+                                <a href="{{ route('cliente.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
+
+                                <a href="{{ route('cliente.edit', $cliente->id) }}" class="btn btn-warning btn-sm">Editar</a>
+
+                                <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" class="formEliminar" style="display: inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    @endforeach
+                </x-adminlte-datatable>
+
+
+
+        </div>
+    </div>
+
+
+    @endif
 @stop
 
 @section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    {{-- Carga los estilos de AdminLTE y DataTables --}}
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/datatables.min.css') }}">
+    <link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    {{-- Asegúrate de que el archivo JS de DataTables esté cargado --}}
+    <script src="{{ asset('vendor/datatables/datatables.min.js') }}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('.formEliminar').submit(function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar el registro?',
+                    text: "¡No podrás revertir esto!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '¡Sí, eliminarlo!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                })
+            });
+        });
+
+    </script>
 @stop
-
-{{--
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <h1 class="mb-4">Lista de Clientes</h1>
-
-    <!-- Si no hay clientes -->
-    @if($clientes->isEmpty())
-        <div class="alert alert-warning">No hay clientes disponibles.</div>
-    @else
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
-                    <th>Correo Electrónico</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($clientes as $cliente)
-                    <tr>
-                        <td>{{ $cliente->idCliente }}</td>
-                        <td>{{ $cliente->nombre }}</td>
-                        <td>{{ $cliente->paterno }}</td>
-                        <td>{{ $cliente->materno }}</td>
-                        <td>{{ $cliente->correoElectronico }}</td>
-                        {{-- <td>
-                            <a href="{{ route('clientes.show', $cliente->idCliente) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('clientes.edit', $cliente->idCliente) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form action="{{ route('clientes.destroy', $cliente->idCliente) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-</div>
-@endsection --}}
