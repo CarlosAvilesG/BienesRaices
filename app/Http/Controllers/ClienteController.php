@@ -110,8 +110,15 @@ class ClienteController extends Controller
 
     public function edit($id)
     {
-        $cliente = $this->clienteRepository->find($id);
-        return 'Prueba de edit'; //view('clientes.edit', compact('cliente'));
+        $cliente= $this->clienteRepository->find($id);
+        // return $clientes ;
+
+        // Verifica si el cliente fue encontrado
+        if (!$cliente) {
+            return redirect()->route('clientes.index')->with('error', 'Cliente no encontrado');
+        }
+
+        return view('clientes.edit', compact('cliente'));
     }
 
 
@@ -132,7 +139,9 @@ class ClienteController extends Controller
         // Actualizar cliente usando el repositorio
         $cliente = $this->clienteRepository->update($id, $validatedData);
 
-        return response()->json($cliente, 200);
+        return redirect()->route('cliente.edit', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
+
+       // return response()->json($cliente, 200);
     }
 
     // Eliminar un cliente específico de la base de datos

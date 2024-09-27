@@ -30,9 +30,9 @@ class UpdateClienteRequest extends FormRequest
             'paterno' => 'sometimes|required|string|max:30',
             'materno' => 'sometimes|required|string|max:30',
             'nombre' => 'sometimes|required|string|max:30',
-            'curp' => 'sometimes|required|string|max:30|unique:clientes,curp,' . $this->route('cliente') . ',idCliente',
-            'rfc' => 'sometimes|required|string|max:30|unique:clientes,rfc,' . $this->route('cliente') . ',idCliente',
-            'ine' => 'sometimes|required|string|max:90|unique:clientes,ine,' . $this->route('cliente') . ',idCliente',
+            'curp' => 'sometimes|required|string|max:30|unique:clientes,curp,' . $this->route('cliente') . ',id',
+            'rfc' => 'sometimes|required|string|max:30|unique:clientes,rfc,' . $this->route('cliente') . ',id',
+            'ine' => 'sometimes|required|string|max:90|unique:clientes,ine,' . $this->route('cliente') . ',id',
             'direccion' => 'nullable|string|max:300',
             'direccionEntreCalle' => 'nullable|string|max:50',
             'codigoPostal' => 'nullable|integer',
@@ -46,12 +46,12 @@ class UpdateClienteRequest extends FormRequest
             'estadoRepublica' => 'nullable|string|max:30',
             'municipio' => 'nullable|string|max:45',
             'localidad' => 'nullable|string|max:45',
-            'correoElectronico' => 'sometimes|required|string|max:45|unique:clientes,correoElectronico,' . $this->route('cliente') . ',idCliente',
-            'pass' => 'sometimes|required|string|max:60',
+            'correoElectronico' => 'sometimes|required|string|max:45|unique:clientes,correoElectronico,' . $this->route('cliente') . ',id',
+          //  'pass' => 'sometimes|required|string|max:60',
             'usuarioWeb' => 'nullable|string|max:45',
            // 'foto_url' => 'nullable|string',
-           'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Reglas para archivo de imagen
-            'fechaRegistro' => 'required|date',
+         //  'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Reglas para archivo de imagen
+          //  'fechaRegistro' => 'required|date',
             'morosidad_activa' => 'boolean',
             'monto_deuda_actual' => 'numeric|min:0',
             'ultima_actualizacion_morosidad' => 'nullable|date',
@@ -79,7 +79,7 @@ class UpdateClienteRequest extends FormRequest
             'correoElectronico.required' => 'El correo electrónico es obligatorio.',
             'correoElectronico.unique' => 'El correo electrónico ya ha sido registrado.',
             'pass.required' => 'La contraseña es obligatoria.',
-            'idUsuario.required' => 'El usuario es obligatorio.',
+           // 'idUsuario.required' => 'El usuario es obligatorio.',
             'idUsuario.exists' => 'El usuario seleccionado no es válido.'
         ];
     }

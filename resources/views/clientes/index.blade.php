@@ -9,14 +9,14 @@
 @section('content')
 
 
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ session('success') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-@endif
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
 
     <div class="card">
@@ -62,7 +62,7 @@
                 @endphp
 
                 {{-- Minimal example / fill data using the component slot --}}
-                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" >
+                <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
                     @foreach ($clientes as $cliente)
                         <tr>
                             <td>{{ $cliente->id }}</td>
@@ -71,15 +71,15 @@
                             <td>{{ $cliente->materno }}</td>
                             <td>{{ $cliente->correoElectronico }}</td>
                             <td>{{ $cliente->celular }}</td>
-{{--
-                            <td> {!! $btnEdit !!} {!! $btnDelete !!} {!! $btnDetails !!}
-                            </td> --}}
+
                             <td>
                                 <a href="{{ route('cliente.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
 
-                                <a href="{{ route('cliente.edit', $cliente->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{{ route('cliente.edit', $cliente->id) }}"
+                                    class="btn btn-warning btn-sm">Editar</a>
 
-                                <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" class="formEliminar" style="display: inline">
+                                <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST"
+                                    class="formEliminar" style="display: inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
@@ -96,18 +96,18 @@
     </div>
 
 
-    @endif
+     @endif
 @stop
 
 @section('css')
     {{-- Carga los estilos de AdminLTE y DataTables --}}
-    <link rel="stylesheet" href="{{ asset('vendor/datatables/datatables.min.css') }}">
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/datatables/datatables.min.css') }}">
+    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
     {{-- Asegúrate de que el archivo JS de DataTables esté cargado --}}
-    <script src="{{ asset('vendor/datatables/datatables.min.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/datatables/datatables.min.js') }}"></script> --}}
 
 
     <script>
@@ -129,6 +129,5 @@
                 })
             });
         });
-
     </script>
 @stop
