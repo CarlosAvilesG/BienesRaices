@@ -16,7 +16,7 @@ return new class extends Migration
             //$table->id('idCliente');
             $table->id();
             $table->string('paterno', 30);
-            $table->string('materno', 30);
+            $table->string('materno', 30)->nullable();
             $table->string('nombre', 30);
             $table->string('curp', 30)->index();
             $table->string('rfc', 30)->index();

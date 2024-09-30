@@ -49,7 +49,7 @@ class StoreClienteRequest extends FormRequest
             'correoElectronico' => 'required|string|max:45|unique:clientes,correoElectronico',
             'pass' => 'required|string|max:60',
             'usuarioWeb' => 'nullable|string|max:45',
-            'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg', //|max:2048',
+            'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg | max:4064',
             //'fechaRegistro' => 'required|date',
             'morosidad_activa' => 'boolean',
             'monto_deuda_actual' => 'numeric|min:0',
@@ -67,7 +67,7 @@ class StoreClienteRequest extends FormRequest
     {
         return [
             'paterno.required' => 'El apellido paterno es obligatorio.',
-            'materno.required' => 'El apellido materno es obligatorio.',
+           // 'materno.required' => 'El apellido materno es obligatorio.',
             'nombre.required' => 'El nombre es obligatorio.',
             'curp.required' => 'El CURP es obligatorio.',
             'curp.unique' => 'El CURP ya ha sido registrado.',

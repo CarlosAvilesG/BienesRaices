@@ -31,7 +31,7 @@
         @csrf
 
         <!-- Card: Información Personal -->
-        <div class="card mb-4">
+        <div class="card card-warning">
             <div class="card-header">
                 <h5>Información Personal</h5>
             </div>
@@ -58,9 +58,49 @@
                 </div>
             </div>
         </div>
+    <!-- Card: Usuario y Foto -->
+    <div class="card card-warning">
+        <div class="card-header">
+            <h5>Usuario y Foto</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Columna: Correo Electrónico y Contraseña -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="correoElectronico">Correo Electrónico</label>
+                        <input type="email" name="correoElectronico" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">Contraseña</label>
+                        <input type="password" name="pass" class="form-control" required>
+                    </div>
+                </div>
+
+                <!-- Columna: Foto del Cliente -->
+                <div class="col-md-6">
+                    <div class="form-group text-center">
+                        {{-- <label>Foto del Cliente</label> --}}
+                        <!-- Imagen por defecto (silueta) -->
+                        <div class="image-upload-container mb-2">
+                            <img id="preview" src="{{ asset('images/default-avatar.png') }}" alt="Vista Previa"
+                                 class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                        <!-- Botón para subir imagen -->
+                        <div class="custom-file">
+                            <input type="file" name="foto_url" class="custom-file-input" id="foto" accept="image/*">
+                            <label class="custom-file-label" for="foto">Seleccionar archivo</label>
+                        </div>
+                        <!-- Mostrar nombre del archivo cargado -->
+                        <small class="form-text text-muted" id="file-name"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- Card: Identificación -->
-        <div class="card mb-4">
+        <div class="card card-warning">
             <div class="card-header">
                 <h5>Identificación</h5>
             </div>
@@ -89,7 +129,7 @@
         </div>
 
         <!-- Card: Contacto y Dirección -->
-        <div class="card mb-4">
+        <div class="card card-warning">
             <div class="card-header">
                 <h5>Contacto y Dirección</h5>
             </div>
@@ -146,7 +186,7 @@
         </div>
 
         <!-- Card: Trabajo -->
-        <div class="card mb-4">
+        <div class="card card-warning">
             <div class="card-header">
                 <h5>Información de Trabajo</h5>
             </div>
@@ -174,45 +214,7 @@
             </div>
         </div>
 
-        <!-- Card: Usuario y Foto -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Usuario y Foto</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Columna: Correo Electrónico y Contraseña -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="correoElectronico">Correo Electrónico</label>
-                            <input type="email" name="correoElectronico" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="pass">Contraseña</label>
-                            <input type="password" name="pass" class="form-control" required>
-                        </div>
-                    </div>
-                    <!-- Columna: Foto del Cliente -->
-                    <div class="col-md-6">
-                        <div class="form-group text-center">
-                            <label>Foto del Cliente</label>
-                            <!-- Imagen por defecto (silueta) -->
-                            <div class="image-upload-container mb-2">
-                                <img id="preview" src="{{ asset('images/default-avatar.png') }}" alt="Vista Previa"
-                                     class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
-                            </div>
-                            <!-- Botón para subir imagen -->
-                            <div class="custom-file">
-                                <input type="file" name="foto_url" class="custom-file-input" id="foto" accept="image/*">
-                                <label class="custom-file-label" for="foto">Seleccionar archivo</label>
-                            </div>
-                            <!-- Mostrar nombre del archivo cargado -->
-                            <small class="form-text text-muted" id="file-name"></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Guardar</button>

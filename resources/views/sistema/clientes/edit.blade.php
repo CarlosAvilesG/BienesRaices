@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'Editar Cliente')
@@ -11,22 +10,22 @@
     <div class="container">
 
         <!-- Mostrar mensaje de éxito si existe -->
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
-                <!-- Mostrar errores de validación si existen -->
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+        <!-- Mostrar errores de validación si existen -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
 
         <form action="{{ route('clientes.update', $cliente) }}" method="POST" enctype="multipart/form-data">
@@ -34,7 +33,7 @@
             @method('PUT')
 
             <!-- Card: Información Personal -->
-            <div class="card mb-4">
+            <div class="card card-warning">
                 <div class="card-header">
                     <h5>Información Personal</h5>
                 </div>
@@ -64,9 +63,53 @@
                     </div>
                 </div>
             </div>
+            <!-- Card: Usuario y Foto -->
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h5>Usuario y Foto</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Columna: Correo Electrónico y Contraseña -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="correoElectronico">Correo Electrónico</label>
+                                <input type="email" name="correoElectronico" class="form-control"
+                                    value="{{ $cliente->correoElectronico }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pass">Contraseña</label>
+                                <input type="password" name="pass" class="form-control" value="">
+                                <small class="form-text text-muted">Dejar en blanco para no cambiar la contraseña.</small>
+                            </div>
+                        </div>
+                        <!-- Columna: Foto del Cliente -->
+                        <div class="col-md-6">
+                            <div class="form-group text-center">
+                                {{-- <label>Foto del Cliente</label> --}}
+                                <!-- Imagen existente o silueta -->
+                                <div class="image-upload-container mb-2">
+                                    <img id="preview"
+                                        src="{{ $cliente->foto_url ? asset('storage/' . $cliente->foto_url) : asset('images/default-avatar.png') }}"
+                                        alt="Vista Previa" class="img-thumbnail"
+                                        style="max-width: 200px; max-height: 200px;">
+                                </div>
+                                <!-- Botón para subir imagen -->
+                                <div class="custom-file">
+                                    <input type="file" name="foto_url" class="custom-file-input" id="foto"
+                                        accept="image/*">
+                                    <label class="custom-file-label" for="foto">Seleccionar archivo</label>
+                                </div>
+                                <!-- Mostrar nombre del archivo cargado -->
+                                <small class="form-text text-muted" id="file-name"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Card: Identificación -->
-            <div class="card mb-4">
+            <div class="card card-warning">
                 <div class="card-header">
                     <h5>Identificación</h5>
                 </div>
@@ -98,7 +141,7 @@
             </div>
 
             <!-- Card: Contacto y Dirección -->
-            <div class="card mb-4">
+            <div class="card card-warning">
                 <div class="card-header">
                     <h5>Contacto y Dirección</h5>
                 </div>
@@ -130,7 +173,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="colonia">Colonia</label>
-                                <input type="text" name="colonia" class="form-control" value="{{ $cliente->colonia }}">
+                                <input type="text" name="colonia" class="form-control"
+                                    value="{{ $cliente->colonia }}">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -161,7 +205,7 @@
             </div>
 
             <!-- Card: Trabajo -->
-            <div class="card mb-4">
+            <div class="card card-warning">
                 <div class="card-header">
                     <h5>Información de Trabajo</h5>
                 </div>
@@ -192,50 +236,7 @@
                 </div>
             </div>
 
-            <!-- Card: Usuario y Foto -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5>Usuario y Foto</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Columna: Correo Electrónico y Contraseña -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="correoElectronico">Correo Electrónico</label>
-                                <input type="email" name="correoElectronico" class="form-control"
-                                    value="{{ $cliente->correoElectronico }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="pass">Contraseña</label>
-                                <input type="password" name="pass" class="form-control" value="">
-                                <small class="form-text text-muted">Dejar en blanco para no cambiar la contraseña.</small>
-                            </div>
-                        </div>
-                        <!-- Columna: Foto del Cliente -->
-                        <div class="col-md-6">
-                            <div class="form-group text-center">
-                                <label>Foto del Cliente</label>
-                                <!-- Imagen existente o silueta -->
-                                <div class="image-upload-container mb-2">
-                                    <img id="preview"
-                                        src="{{ $cliente->foto_url ? asset('storage/' . $cliente->foto_url) : asset('images/default-avatar.png') }}"
-                                        alt="Vista Previa" class="img-thumbnail"
-                                        style="max-width: 200px; max-height: 200px;">
-                                </div>
-                                <!-- Botón para subir imagen -->
-                                <div class="custom-file">
-                                    <input type="file" name="foto_url" class="custom-file-input" id="foto"
-                                        accept="image/*">
-                                    <label class="custom-file-label" for="foto">Seleccionar archivo</label>
-                                </div>
-                                <!-- Mostrar nombre del archivo cargado -->
-                                <small class="form-text text-muted" id="file-name"></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -245,14 +246,13 @@
 
 @section('js')
     <script>
-
-// Función para redimensionar la imagen en el frontend antes de subirla
-function resizeImage(file, maxWidth, callback) {
+        // Función para redimensionar la imagen en el frontend antes de subirla
+        function resizeImage(file, maxWidth, callback) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 const img = new Image();
                 img.src = e.target.result;
-                img.onload = function () {
+                img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
@@ -270,16 +270,18 @@ function resizeImage(file, maxWidth, callback) {
         }
 
         // Manejar el evento de cambio del input de archivo para previsualizar y redimensionar la imagen
-        document.getElementById('foto').onchange = function (evt) {
+        document.getElementById('foto').onchange = function(evt) {
             const [file] = evt.target.files;
             if (file) {
                 // Redimensionar la imagen antes de previsualizarla
-                resizeImage(file, 800, function (resizedBlob) {
+                resizeImage(file, 800, function(resizedBlob) {
                     document.getElementById('preview').src = URL.createObjectURL(resizedBlob);
                     document.getElementById('file-name').textContent = file.name; // Mostrar nombre del archivo
 
                     // Crear un nuevo archivo de imagen redimensionado y agregarlo al formulario
-                    const resizedFile = new File([resizedBlob], file.name, { type: 'image/jpeg' });
+                    const resizedFile = new File([resizedBlob], file.name, {
+                        type: 'image/jpeg'
+                    });
                     const dataTransfer = new DataTransfer();
                     dataTransfer.items.add(resizedFile);
                     document.getElementById('foto').files = dataTransfer.files;
@@ -289,13 +291,13 @@ function resizeImage(file, maxWidth, callback) {
 
 
         // Mostrar el nombre del archivo cargado
-       /* document.getElementById('foto').onchange = function (evt) {
-            const [file] = evt.target.files;
-            if (file) {
-                document.getElementById('preview').src = URL.createObjectURL(file);
-                document.getElementById('file-name').textContent = file.name; // Mostrar nombre del archivo
-            }
-        }*/
+        /* document.getElementById('foto').onchange = function (evt) {
+             const [file] = evt.target.files;
+             if (file) {
+                 document.getElementById('preview').src = URL.createObjectURL(file);
+                 document.getElementById('file-name').textContent = file.name; // Mostrar nombre del archivo
+             }
+         }*/
     </script>
     @if (session('message'))
         <script>
@@ -306,7 +308,7 @@ function resizeImage(file, maxWidth, callback) {
                     title: '¡Actualización exitosa!',
                     text: message,
                     //showConfirmButton: false,
-                   // timer: 3000
+                    // timer: 3000
                 });
             });
         </script>

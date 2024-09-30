@@ -39,12 +39,12 @@ class ClienteController extends Controller
          $clientes = $this->clienteRepository->getAll();
         //return response()->json($clientes);
 
-        return view('clientes.index', compact('clientes'));
+        return view('sistema.clientes.index', compact('clientes'));
     }
 
     public function create()
     {
-        return view('clientes.create');
+        return view('sistema.clientes.create');
     }
 
     // Guardar un nuevo cliente en la base de datos
@@ -74,7 +74,7 @@ class ClienteController extends Controller
 
 
          // Redirigir a la página de edición con un mensaje de éxito
-         return redirect()->route('clientes.edit', $cliente->id)->with('success', 'Cliente creado exitosamente.');
+         return redirect()->route('sistema.clientes.show', $cliente->id)->with('success', 'Cliente creado exitosamente.');
 
         //return response()->json($cliente, 201);
     }
@@ -86,10 +86,10 @@ class ClienteController extends Controller
 
         // Verifica si el cliente fue encontrado
         if (!$cliente) {
-            return redirect()->route('clientes.index')->with('error', 'Cliente no encontrado');
+            return redirect()->route('sistema.clientes.index')->with('error', 'Cliente no encontrado');
         }
 
-        return view('clientes.edit', compact('cliente'));
+        return view('sistema.clientes.edit', compact('cliente'));
     }
 
 
@@ -97,7 +97,7 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = $this->clienteRepository->find($id);
-        return 'prueba de show'; // view('clientes.show', compact('cliente'));
+        return view('sistema.clientes.show', compact('cliente'));
        // return response()->json($cliente);
     }
 
@@ -130,7 +130,7 @@ class ClienteController extends Controller
         }
 
 
-        return redirect()->route('clientes.edit', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
+        return redirect()->route('sistema.clientes.show', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
 
     //    // return response()->json($cliente, 200);
     }
@@ -140,7 +140,7 @@ class ClienteController extends Controller
     {
         $this->clienteRepository->delete($id);
         //return response()->json(null, 204);
-        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente.');
+        return redirect()->route('sistema.clientes.index')->with('success', 'Cliente eliminado exitosamente.');
     }
 
     // Subir una imagen de perfil para un cliente específico
@@ -219,7 +219,7 @@ class ClienteController extends Controller
                 }
             }
 
-            return redirect()->route('clientes.edit', $cliente->id)->with('success', 'Imagen de perfil actualizada exitosamente.');
+            return redirect()->route('sistema.clientes.edit', $cliente->id)->with('success', 'Imagen de perfil actualizada exitosamente.');
         }
 
 

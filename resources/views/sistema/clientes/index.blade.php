@@ -22,6 +22,10 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Lista de Clientes</h3>
+            <div class="card-tools" style="float: right ;">
+                <a href="{{ route('clientes.create') }}" class="btn btn-block bg-gradient-primary btn-sm">Nuevo Cliente</a>
+                </div>
+           
         </div>
         <div class="card-body">
 

@@ -28,7 +28,7 @@ class UpdateClienteRequest extends FormRequest
     {
         return [
             'paterno' => 'sometimes|required|string|max:30',
-            'materno' => 'sometimes|nullable|string|max:30',
+            'materno' => 'nullable|string|max:30',
             'nombre' => 'sometimes|required|string|max:30',
             'curp' => 'sometimes|required|string|max:30|unique:clientes,curp,' . $this->route('cliente') . ',id',
             'rfc' => 'sometimes|required|string|max:30|unique:clientes,rfc,' . $this->route('cliente') . ',id',
@@ -50,7 +50,7 @@ class UpdateClienteRequest extends FormRequest
           //  'pass' => 'sometimes|required|string|max:60',
             'usuarioWeb' => 'nullable|string|max:45',
            // 'foto_url' => 'nullable|string',
-         //  'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Reglas para archivo de imagen
+           'foto_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4064', // Reglas para archivo de imagen
           //  'fechaRegistro' => 'required|date',
             'morosidad_activa' => 'boolean',
             'monto_deuda_actual' => 'numeric|min:0',

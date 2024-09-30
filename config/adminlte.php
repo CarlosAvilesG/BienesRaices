@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>BienesRaices</b>California',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -322,23 +322,23 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'user/profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'user/profile',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'logout',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-sign-out-alt',
-            'onclick' => "event.preventDefault(); document.getElementById('logout-form').submit();"
-        ],
+        // ['header' => 'account_settings'],
+        // [
+        //     'text' => 'profile',
+        //     'url' => 'user/profile',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
+        // [
+        //     'text' => 'change_password',
+        //     'url' => 'user/profile',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
+        // [
+        //     'text' => 'logout',
+        //     'url'  => '#',
+        //     'icon' => 'fas fa-fw fa-sign-out-alt',
+        //     'onclick' => "event.preventDefault(); document.getElementById('logout-form').submit();"
+        // ],
 
 
 
@@ -397,20 +397,39 @@ return [
         //     'url' => '#',
         // ],
 
-
-
-
-        ['header' => 'Cliente'],
         [
             'text' => 'Lista de Clientes',
             'route' => 'clientes.index',
-            'icon' => 'fas fa-fw fa-clients',
+            'icon' => 'fas fa-user-check',
         ],
+
         [
-            'text' => 'Nuevo de Clientes',
-            'route' => 'clientes.create',
-            'icon' => 'fas fa-fw fa-newclient',
+            'text' => 'Predios & Lotes',
+            'icon' => 'fas fa-fw fa-home',
+            'submenu' => [
+                [
+                    'text' => 'Predios',
+                    'route' => 'predios.index',
+
+                ],
+                [
+                    'text' => 'Lotes',
+                    'route' => 'lotes.index',
+                ],
+            ],
         ],
+
+        // ['header' => 'Cliente'],
+        // [
+        //     'text' => 'Lista de Clientes',
+        //     'route' => 'clientes.index',
+        //     'icon' => 'fas fa-fw fa-clients',
+        // ],
+        // [
+        //     'text' => 'Nuevo de Clientes',
+        //     'route' => 'clientes.create',
+        //     'icon' => 'fas fa-fw fa-newclient',
+        // ],
 
 
         [
@@ -461,7 +480,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
+                    'location' => '//cdn.datatables.net/2.1.7/js/dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
@@ -471,7 +490,7 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'location' => '//cdn.datatables.net/2.1.7/css/dataTables.dataTables.min.css',
                 ],
             ],
         ],

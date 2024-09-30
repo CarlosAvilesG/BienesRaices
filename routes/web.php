@@ -10,6 +10,8 @@ use App\Http\Controllers\Controllers as Ctrl;
 //     return view('welcome');
 // });
 
+
+
 // Página de bienvenida pública
 Route::get('/', function () {
     if (Auth::check()) {
@@ -57,6 +59,28 @@ Route::middleware([
 ])->group(function () {
 
     Route::resource('/clientes', Ctrl::$clienteController)->names('clientes');
+    Route::resource('/cliente-referencias', Ctrl::$clienteReferenciaController)->names('cliente-referencias');
+
+    Route::resource('/bitacoras', Ctrl::$bitacoraController)->names('bitacoras');
+    Route::resource('/conceptos-egreso', Ctrl::$conceptoEgresoController)->names('conceptos-egreso');
+    Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
+    Route::resource('/cortes-caja', Ctrl::$corteCajaController)->names('cortes-caja');
+    Route::resource('/corte-caja-detalles', Ctrl::$corteCajaDetalleController)->names('corte-caja-detalles');
+    Route::resource('/egresos', Ctrl::$egresoController)->names('egresos');
+    Route::resource('/frases-eticas', Ctrl::$fraseEticaController)->names('frases-eticas');
+    Route::get('/frases-eticas/random', [Ctrl::$fraseEticaController, 'random'])->name('frases-eticas.random');
+    Route::resource('/lotes', Ctrl::$loteController)->names('lotes');
+    Route::post('/lotes/{idLote}/fotos', [Ctrl::$loteController, 'addFoto'])->name('lotes.addFoto');
+    Route::get('/lotes/{idLote}/fotos', [Ctrl::$loteController, 'getFotos'])->name('lotes.getFotos');
+    Route::delete('/lotes/{idLote}/fotos/{idFoto}', [Ctrl::$loteController, 'deleteFoto'])->name('lotes.deleteFoto');
+    Route::resource('/morosos', Ctrl::$morosoController)->names('morosos');
+    Route::resource('/morosos-seguimiento', Ctrl::$morosoSeguimientoController)->names('morosos-seguimiento');
+    Route::resource('/negocios', Ctrl::$negocioController)->names('negocios');
+    Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
+    Route::resource('/predios', Ctrl::$predioController)->names('predios');
+    Route::resource('/users', Ctrl::$userController)->names('users');
+    
+
 });
 
 /*
