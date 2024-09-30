@@ -403,12 +403,12 @@ return [
         ['header' => 'Cliente'],
         [
             'text' => 'Lista de Clientes',
-            'route' => 'cliente.index',
+            'route' => 'clientes.index',
             'icon' => 'fas fa-fw fa-clients',
         ],
         [
             'text' => 'Nuevo de Clientes',
-            'route' => 'cliente.create',
+            'route' => 'clientes.create',
             'icon' => 'fas fa-fw fa-newclient',
         ],
 

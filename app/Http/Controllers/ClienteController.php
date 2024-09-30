@@ -9,10 +9,16 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+
+/**
+ * - Intervention Image: A PHP image handling and manipulation library.
+ *   - Facade: Provides a static interface to the Intervention Image library.
+ *   - Driver: Specifies the GD driver for image processing.
+ */
 use Intervention\Image\ImageManager;
-use Illuminate\Support\Facades\Storage; // Para manejar el almacenamiento de archivos
+use Intervention\Image\Drivers\Gd\Driver;
 
-
+use Illuminate\Support\Facades\Storage; // Para manejar el almacenamiento de
 class ClienteController extends Controller
 {
     protected $clienteRepository;
@@ -26,9 +32,11 @@ class ClienteController extends Controller
     // Mostrar una lista de todos los clientes
     public function index()
     {
+        //return 'entro a index';
+
         //return view('clientes.index');
 
-        $clientes = $this->clienteRepository->getAll();
+         $clientes = $this->clienteRepository->getAll();
         //return response()->json($clientes);
 
         return view('clientes.index', compact('clientes'));
@@ -54,53 +62,16 @@ class ClienteController extends Controller
         $cliente = $this->clienteRepository->store($validatedData);
 
 
-        // // 2. Procesar la imagen si existe
-        // if ($request->hasFile('foto_url')) {
-        //     $file = $request->file('foto_url');
+        // 2. Procesar la imagen si existe
 
-        //     // Verificar si es una imagen válida
-        //     if ($file->isValid() && in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'])) {
+        //verifica si foto_url existe
+        if ($request->hasFile('foto_url')) {
+            //manda print para validar que entra a la condicion
+            print('entro a la condicion , foto_url');
+            // llama a la funcion uploadImage
+            $this->uploadImage($request, $cliente->id);
+        }
 
-        //         // Si la imagen es mayor de 2 MB, la comprimimos
-        //         if ($file->getSize() > 2097152) { // 2 MB en bytes
-        //             try {
-        //                 // Comprimir manualmente usando GD
-        //                 $imageResource = $this->resizeImage($file->getRealPath());
-
-        //                 // Generar un nombre único para la imagen
-        //                 $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
-        //                 $filePath = 'uploads/clientes/' . $filename;
-
-        //                 // Guardar la imagen comprimida
-        //                 imagejpeg($imageResource, storage_path('app/public/upload/clientes' . $filePath), 75); // Comprimir al 75%
-
-        //                 // Liberar recursos de la imagen
-        //                 imagedestroy($imageResource);
-
-        //                 // Añadir la ruta de la imagen a los datos validados
-        //                 $validatedData['foto_url'] = $filePath;
-
-        //             } catch (\Exception $e) {
-        //                 return redirect()->back()->withErrors(['foto_url' => 'Error al procesar la imagen: ' . $e->getMessage()]);
-        //             }
-        //         } else {
-        //             // Si la imagen es menor o igual a 2 MB, simplemente subirla sin procesar
-        //             try {
-        //                 $filename = 'cliente_' . time() . '.' . $file->getClientOriginalExtension();
-        //                 $filePath = $file->storeAs('uploads/clientes', $filename, 'public');
-        //                 $validatedData['foto_url'] = $filePath;
-
-        //             } catch (\Exception $e) {
-        //                 return redirect()->back()->withErrors(['foto_url' => 'Error al subir la imagen: ' . $e->getMessage()]);
-        //             }
-        //         }
-        //     } else {
-        //         return redirect()->back()->withErrors(['foto_url' => 'El archivo no es una imagen válida.']);
-        //     }
-        // }
-
-        //  // Actualizar el cliente con la URL de la imagen si fue cargada
-        //  $this->clienteRepository->update($cliente->id, ['foto_url' => $validatedData['foto_url'] ?? null]);
 
          // Redirigir a la página de edición con un mensaje de éxito
          return redirect()->route('clientes.edit', $cliente->id)->with('success', 'Cliente creado exitosamente.');
@@ -133,15 +104,35 @@ class ClienteController extends Controller
     // Actualizar un cliente existente en la base de datos
     public function update(UpdateClienteRequest $request, $id)
     {
+
+
         // Obtener los datos validados del Request
-        $validatedData = $request->validated();
+        $validatedData = $request->except('foto_url');
+
+         // Comprobar si la contraseña ha sido enviada. Si no lo ha sido, eliminamos 'pass' del array de datos validados.
+        if (empty($validatedData['pass'])) {
+            unset($validatedData['pass']);  // No actualizar la contraseña si no se proporciona
+        } else {
+            // En caso de que se haya proporcionado una nueva contraseña, la encriptamos antes de guardarla
+            $validatedData['pass'] = bcrypt($validatedData['pass']);
+        }
+
 
         // Actualizar cliente usando el repositorio
         $cliente = $this->clienteRepository->update($id, $validatedData);
 
-        return redirect()->route('cliente.edit', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
+        //verifica si foto_url existe
+        if ($request->hasFile('foto_url')) {
+            //manda print para validar que entra a la condicion
+            print('entro a la condicion , foto_url');
+            // llama a la funcion uploadImage
+            $this->uploadImage($request, $id);
+        }
 
-       // return response()->json($cliente, 200);
+
+        return redirect()->route('clientes.edit', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
+
+    //    // return response()->json($cliente, 200);
     }
 
     // Eliminar un cliente específico de la base de datos
@@ -149,43 +140,89 @@ class ClienteController extends Controller
     {
         $this->clienteRepository->delete($id);
         //return response()->json(null, 204);
-        return redirect()->route('cliente.index')->with('success', 'Cliente eliminado exitosamente.');
+        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente.');
     }
 
-
-
-     /**
-     * Función para redimensionar la imagen usando GD.
-     *
-     * @param string $path Ruta del archivo de imagen.
-     * @return GdImage|null Imagen redimensionada.
-     */
-    private function resizeImage($path)
+    // Subir una imagen de perfil para un cliente específico
+    public function uploadImage(Request $request, $id)
     {
-        // Crear la imagen desde el archivo
-        $image = imagecreatefromjpeg($path);
+        // Obtener el cliente
+        $cliente = $this->clienteRepository->find($id);
 
-        // Verificar si la imagen fue creada correctamente
-        if (!$image) {
-            return null; // Si no se puede crear, devuelve null
+        // Verificar si el cliente fue encontrado
+        // if (!$cliente) {
+        //     return response()->json(['message' => 'Cliente no encontrado'], 404);
+        // }
+
+        // Verificar si la imagen fue enviada
+        if ($request->hasFile('foto_url')) {
+            // Obtener la imagen del request
+            $image = $request->file('foto_url');
+
+
+            // Generar un nombre único para la imagen
+            $filename = $id . '.' . $image->getClientOriginalExtension();
+
+             // Ruta del directorio donde se almacenarán las imágenes
+            $directory = 'uploads/clientes/';
+
+            // Obtener todos los archivos actuales en el directorio
+            $files = Storage::disk('public')->files($directory);
+
+            // Buscar y eliminar solo los archivos que coincidan con el ID actual, sin importar la extensión
+            foreach ($files as $file) {
+                // Extraer solo el nombre base (sin extensión y sin ruta)
+                $basename = pathinfo($file, PATHINFO_FILENAME);
+
+                // Verificar si el archivo tiene el mismo ID y no es el archivo que se está subiendo
+                if ($basename == (string)$id && $file !== $directory . $filename) {
+                    // Si el archivo tiene el mismo ID pero diferente extensión, lo eliminamos
+                    Storage::disk('public')->delete($file);
+                }
+            }
+
+            // Subir la imagen a storage con Illuminate\Support\Facades\Storage
+            $image->storeAs($directory , $filename, 'public');
+            //$image->move(public_path('uploads/clientes'), $filename);
+
+            // Redimensionar la imagen
+            $imgManager = new ImageManager(new Driver());
+
+            // leer imagen de la ruta storage con Illuminate\Support\Facades\Storage
+             $thumbImage = $imgManager->read(Storage::disk('public')->path($directory  . $filename));
+
+
+            // Leer la imagen de la ruta storage con Illuminate\Support\Facades\Storage
+
+            $thumbImage = $imgManager->read(Storage::disk('public')->path($directory  . $filename));
+           // $thumbImage = $imgManager->read(public_path('uploads/clientes/' . $filename));
+
+            // Redimensionar la imagen a 200x200
+           // $thumbImage->resize(200, 200);
+            $thumbImage->cover(800, 800);
+
+            // Guardar la imagen redimensionada en la ruta storage con Illuminate\Support\Facades\Storage
+            $thumbImage->save(Storage::disk('public')->path($directory  . $filename));
+            //$thumbImage->save(public_path('uploads/clientes/' . $filename));
+
+            // Actualizar la URL de la imagen en la base de datos con  storage con Illuminate\Support\Facades\Storage
+            $cliente->foto_url = Storage::disk('public')->path($directory  . $filename);
+            //$cliente->foto_url = url('uploads/clientes/' . $filename);
+           $cliente->foto_url = $directory  . $filename;
+            $cliente->save();
+
+            // borrar de  storage con Illuminate\Support\Facades\Storage todo los archivos con el mismo nombre, excepto el actual
+            $files = Storage::disk('public')->files($directory );
+            foreach ($files as $file) {
+                if ($file != $directory  . $filename) {
+                    Storage::disk('public')->delete($file);
+                }
+            }
+
+            return redirect()->route('clientes.edit', $cliente->id)->with('success', 'Imagen de perfil actualizada exitosamente.');
         }
 
-        // Obtener dimensiones de la imagen
-        $width = imagesx($image);
-        $height = imagesy($image);
 
-        // Definir el nuevo ancho, manteniendo la relación de aspecto
-        $newWidth = 800;
-        $newHeight = ($height / $width) * 800;
-
-        // Crear una nueva imagen en blanco con el nuevo tamaño
-        $newImage = imagecreatetruecolor($newWidth, $newHeight);
-
-        // Redimensionar la imagen
-        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-        // Devolver la imagen redimensionada
-        return $newImage;
     }
 
 }

@@ -28,7 +28,7 @@ class StoreClienteRequest extends FormRequest
     {
         return [
             'paterno' => 'required|string|max:30',
-            'materno' => 'required|string|max:30',
+            'materno' => 'nullable|string|max:30',
             'nombre' => 'required|string|max:30',
             'curp' => 'required|string|max:30|unique:clientes,curp',
             'rfc' => 'required|string|max:30|unique:clientes,rfc',

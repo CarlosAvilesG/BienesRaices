@@ -28,7 +28,7 @@ class UpdateClienteRequest extends FormRequest
     {
         return [
             'paterno' => 'sometimes|required|string|max:30',
-            'materno' => 'sometimes|required|string|max:30',
+            'materno' => 'sometimes|nullable|string|max:30',
             'nombre' => 'sometimes|required|string|max:30',
             'curp' => 'sometimes|required|string|max:30|unique:clientes,curp,' . $this->route('cliente') . ',id',
             'rfc' => 'sometimes|required|string|max:30|unique:clientes,rfc,' . $this->route('cliente') . ',id',

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 
 @extends('adminlte::page')
 
@@ -30,7 +29,7 @@
                 @endif
 
 
-        <form action="{{ route('cliente.update', $cliente) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('clientes.update', $cliente) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -245,16 +244,59 @@
 @stop
 
 @section('js')
-    {{-- <script>
-        // Mostrar el nombre del archivo cargado
+    <script>
+
+// Función para redimensionar la imagen en el frontend antes de subirla
+function resizeImage(file, maxWidth, callback) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const ratio = img.width / img.height;
+                    canvas.width = maxWidth;
+                    canvas.height = maxWidth / ratio;
+
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // Convertir el canvas a Blob con compresión al 80%
+                    canvas.toBlob(callback, 'image/jpeg', 0.8);
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Manejar el evento de cambio del input de archivo para previsualizar y redimensionar la imagen
         document.getElementById('foto').onchange = function (evt) {
+            const [file] = evt.target.files;
+            if (file) {
+                // Redimensionar la imagen antes de previsualizarla
+                resizeImage(file, 800, function (resizedBlob) {
+                    document.getElementById('preview').src = URL.createObjectURL(resizedBlob);
+                    document.getElementById('file-name').textContent = file.name; // Mostrar nombre del archivo
+
+                    // Crear un nuevo archivo de imagen redimensionado y agregarlo al formulario
+                    const resizedFile = new File([resizedBlob], file.name, { type: 'image/jpeg' });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(resizedFile);
+                    document.getElementById('foto').files = dataTransfer.files;
+                });
+            }
+        }
+
+
+        // Mostrar el nombre del archivo cargado
+       /* document.getElementById('foto').onchange = function (evt) {
             const [file] = evt.target.files;
             if (file) {
                 document.getElementById('preview').src = URL.createObjectURL(file);
                 document.getElementById('file-name').textContent = file.name; // Mostrar nombre del archivo
             }
-        }
-    </script> --}}
+        }*/
+    </script>
     @if (session('message'))
         <script>
             $(document).ready(function() {

@@ -73,12 +73,12 @@
                             <td>{{ $cliente->celular }}</td>
 
                             <td>
-                                <a href="{{ route('cliente.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
 
-                                <a href="{{ route('cliente.edit', $cliente->id) }}"
+                                <a href="{{ route('clientes.edit', $cliente->id) }}"
                                     class="btn btn-warning btn-sm">Editar</a>
 
-                                <form action="{{ route('cliente.destroy', $cliente->id) }}" method="POST"
+                                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST"
                                     class="formEliminar" style="display: inline">
                                     @csrf
                                     @method('DELETE')
