@@ -25,7 +25,7 @@
             <div class="card-tools" style="float: right ;">
                 <a href="{{ route('clientes.create') }}" class="btn btn-block bg-gradient-primary btn-sm">Nuevo Cliente</a>
                 </div>
-           
+
         </div>
         <div class="card-body">
 
@@ -57,7 +57,7 @@
                </button>';
 
                     $config = [
-                        'language' => ['url' => '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'],
+                      'language' => ['url' => '//cdn.datatables.net/plug-ins/2.1.7/i18n/es-MX.json'],
                         'paging' => true,
                         'searching' => true,
                         'info' => true,

@@ -16,5 +16,15 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    {{-- <script>
+        $(document).ready(function() {
+            $('#table2').DataTable({
+                'language' => ['url' => '//cdn.datatables.net/plug-ins/2.1.7/i18n/es-MX.json'],
+                        'paging' => true,
+                        'searching' => true,
+                        'info' => true,
+                        'autoWidth' => false,
+            });
+        });
+    </script> --}}
 @stop

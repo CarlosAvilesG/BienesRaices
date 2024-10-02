@@ -58,4 +58,9 @@ class LoteRepository implements LoteRepositoryInterface
         $foto->delete();
         return true;
     }
+
+    public function getLotesByPredio($idPredio)
+    {
+        return Lote::where('idPredio', $idPredio)->get();
+    }
 }

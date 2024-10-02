@@ -13,4 +13,6 @@ interface LoteRepositoryInterface
     public function addFoto($idLote, array $data);
     public function getFotos($idLote);
     public function deleteFoto($idLote, $idFoto);
+
+    public function getLotesByPredio($idPredio);
 }

@@ -485,7 +485,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'location' => '//cdn.datatables.net/2.1.7/css/dataTables.bootstrap4.css',
                 ],
                 [
                     'type' => 'css',
