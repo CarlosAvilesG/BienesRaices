@@ -23,7 +23,7 @@
         <div class="card-header">
             <h3 class="card-title">Lista de Predios</h3>
             <div class="card-tools" style="float: right ;">
-            <a href="{{ route('predios.create') }}" class="btn btn-block bg-gradient-primary btn-sm">Nuevo Predio</a>
+                <a href="{{ route('predios.create') }}" class="btn btn-block bg-gradient-primary btn-sm">Nuevo Predio</a>
             </div>
         </div>
 
@@ -72,7 +72,7 @@
                 {{-- Minimal example / fill data using the component slot --}}
                 <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
                     @foreach ($predios as $predio)
-                        <tr>
+                        {{-- <tr data-toggle="tooltip" title="Predio: {{ $predio->nombre }} - {{ $predio->descripcion }}"> --}}
                             <td>{{ $predio->id }}</td>
                             <td>{{ $predio->nombre }}</td>
                             <td>{{ $predio->descripcion }}</td>
@@ -115,16 +115,28 @@
 
 @section('css')
     {{-- Carga los estilos de AdminLTE y DataTables --}}
+    <style>
+        /* Efecto hover sobre la fila */
+        #table1 tbody tr:hover {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
 
-
+        /* Estilo del tooltip */
+        [data-toggle="tooltip"] {
+            position: relative;
+        }
+    </style>
 @stop
 
 @section('js')
     {{-- Asegúrate de que el archivo JS de DataTables esté cargado --}}
-
-
     <script>
         $(document).ready(function() {
+            // Inicializar tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // Confirmación de eliminación
             $('.formEliminar').submit(function(e) {
                 e.preventDefault();
                 Swal.fire({

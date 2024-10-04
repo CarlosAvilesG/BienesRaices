@@ -14,6 +14,7 @@ class UpdateContratoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'identificadorContrato' => 'required|string|max:50|unique:contratos',
             'idCliente' => 'required|exists:clientes,idCliente',
             'idLote' => 'required|exists:lotes,idLote',
             'NoContrato' => 'required|string|max:50',

@@ -44,6 +44,22 @@ class ClientesTableSeeder extends Seeder
                 'fechaRegistro' => '2024-01-02',
                 'idUsuario' => 2,
             ],
+            [
+                'paterno' => 'Pérez',
+                'materno' => 'García',
+                'nombre' => 'Juan',
+                'rfc' => 'PEGJ900123',
+                'curp' => 'PEGJ900MDFRRN08',
+                'ine' => '1230987654321',
+                'celular' => '7777777777',
+                'direccion' => 'Calle C, Colonia D, Ciudad, Estado',
+                'correoElectronico' => 'juan.perez@example.com',
+                'pass' => bcrypt('password'),
+                'usuarioWeb' => 'juanperez',
+                'fechaRegistro' => '2024-01-03',
+                'idUsuario' => 3,
+            ],
+
         ]);
     }
 }

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('pago_lotes', function (Blueprint $table) {
             //$table->id('refPagoInt');
             $table->id();
-            $table->unsignedBigInteger('idPredio');
-            $table->unsignedBigInteger('idLote');
-            $table->unsignedBigInteger('folio')->nullable();
-            $table->unsignedBigInteger('idContrato')->nullable();
-            $table->unsignedBigInteger('idCliente');
+            $table->unsignedBigInteger('folio')->nullable(); // consecutivo externo
+            $table->unsignedBigInteger('idPredio');     // Referencia al predio
+            $table->unsignedBigInteger('idLote'); // Referencia al lote
+            $table->unsignedBigInteger('idContrato')->nullable(); // Referencia al contrato, se aqui se obtiene el idCliente activo en el contrato
+            $table->unsignedBigInteger('idCliente'); // Referencia al cliente no necesariamente activo en el contrato (bitácora de pagos)
             $table->string('tipoPago', 50);
             $table->string('referenciaBancaria', 100)->nullable();
             $table->decimal('monto', 28, 2);
@@ -39,9 +39,9 @@ return new class extends Migration
             $table->foreign('idPredio')->references('id')->on('predios')->onDelete('cascade');
             $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
             $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
-            $table->foreign('idUsuario')->references('id')->on('users');
-            $table->foreign('idUsuarioCancela')->references('id')->on('users');
-            $table->foreign('idUsuarioValidaPago')->references('id')->on('users');
+            $table->foreign('idUsuario')->references('id')->on('users'); // Usuario que registra el pago
+            $table->foreign('idUsuarioCancela')->references('id')->on('users'); // Usuario que cancela el pago
+            $table->foreign('idUsuarioValidaPago')->references('id')->on('users');  // Usuario que valida el pago
 
             // Índices para optimización de consultas
             $table->index('idPredio');

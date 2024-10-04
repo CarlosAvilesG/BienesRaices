@@ -15,6 +15,7 @@ return new class extends Migration
            // $table->id('idLote');
             $table->id();
             $table->unsignedBigInteger('idPredio');
+            $table->unsignedBigInteger('idcontrato')->nullable();
             $table->integer('manzana');
             $table->integer('lote');
             $table->string('descripcion', 50)->nullable();
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->integer('plazoMeses')->nullable();
             $table->decimal('pagoMensual', 15, 2)->nullable();
             $table->enum('estatusPago', ['pendiente', 'pagado', 'atrasado'])->default('pendiente');
+
             $table->timestamps();
 
             // Foreign key constraint
@@ -41,10 +43,17 @@ return new class extends Migration
                   ->on('predios')
                   ->onDelete('cascade');
 
+            // $table->foreign('idcontrato')
+            //       ->references('id')
+            //       ->on('contrato')
+            //       ->nullable();
+
+
             // Índices para optimización de consultas
             $table->index('manzana');
             $table->index('lote');
             $table->index('idPredio');
+            $table->index('idcontrato');
         });
 
         Schema::create('lote_fotos', function (Blueprint $table) {

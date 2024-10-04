@@ -36,6 +36,7 @@ class Lote extends Model
            'plazoMeses',
            'pagoMensual',
            'estatusPago',
+           'idcontrato',
        ];
 
        // Casts para asegurar que los tipos sean correctos
@@ -52,8 +53,15 @@ class Lote extends Model
            'precio' => 'decimal:2',
            'pagoMensual' => 'decimal:2',
            'estatusPago' => 'string',
+
        ];
 
+       // relación con Contrato (Uno a Muchos)
+        public function contratos()
+        {
+            return $this->hasMany(Contrato::class, 'idLote');
+        }
+        
        // Relación con Predio (Muchos a Uno)
        public function predio()
        {

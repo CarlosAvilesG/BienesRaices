@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('contratos', function (Blueprint $table) {
             //$table->id('idContrato'); // Clave primaria del contrato
             $table->id();
+            $table->string('identificadorContrato', 50)->unique(); // Identificador único del contrato
             $table->unsignedBigInteger('idCliente'); // Referencia al cliente
             $table->unsignedBigInteger('idLote'); // Referencia al lote
 
@@ -48,12 +49,16 @@ return new class extends Migration
 
             // Timestamps para created_at y updated_at
             $table->timestamps();
+            // SoftDeletes para eliminación lógica
+            $table->softDeletes();
 
             // Claves foráneas para mantener la integridad referencial
             $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
             $table->foreign('idUsuario')->references('id')->on('users');
             $table->foreign('idUsuCancela')->references('id')->on('users');
+
+            $table->enum('estatus', ['disponible', 'reservado', 'vendido', 'cancelado'])->default('disponible');
 
             // Índices para optimización de consultas
             $table->index('NoContrato');

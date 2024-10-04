@@ -10,6 +10,7 @@ class ContratoController extends Controller
 {
     protected $contratoRepository;
 
+
     public function __construct(ContratoRepositoryInterface $contratoRepository)
     {
         $this->contratoRepository = $contratoRepository;
@@ -25,6 +26,9 @@ class ContratoController extends Controller
     // Almacenar un nuevo contrato
     public function store(StoreContratoRequest $request)
     {
+         // Convertir identificadorContrato a mayúsculas antes de almacenar
+        $request->merge(['identificadorContrato' => strtoupper($request->identificadorContrato)]);
+
         $contrato = $this->contratoRepository->create($request->validated());
         return response()->json($contrato, 201);
     }
