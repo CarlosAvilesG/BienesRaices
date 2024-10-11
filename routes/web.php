@@ -63,19 +63,23 @@ Route::middleware([
 
     Route::resource('/bitacoras', Ctrl::$bitacoraController)->names('bitacoras');
     Route::resource('/conceptos-egreso', Ctrl::$conceptoEgresoController)->names('conceptos-egreso');
+
+   // ruta para contraros test
+    // Route::get('/contratos/test', [Ctrl::$contratoController, 'test'])->name('contratos.test');
+
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
     Route::resource('/cortes-caja', Ctrl::$corteCajaController)->names('cortes-caja');
     Route::resource('/corte-caja-detalles', Ctrl::$corteCajaDetalleController)->names('corte-caja-detalles');
     Route::resource('/egresos', Ctrl::$egresoController)->names('egresos');
     Route::resource('/frases-eticas', Ctrl::$fraseEticaController)->names('frases-eticas');
     Route::get('/frases-eticas/random', [Ctrl::$fraseEticaController, 'random'])->name('frases-eticas.random');
-    
+
 
       // Ruta para obtener los lotes filtrados por predio
     Route::get('/lotes/predio', [Ctrl::$loteController, 'getLotesPorPredio'])->name('lotes.porPredio');
     Route::resource('/lotes', Ctrl::$loteController)->names('lotes');
 
-    
+
     // Route::post('/lotes/{idLote}/fotos', [Ctrl::$loteController, 'addFoto'])->name('lotes.addFoto');
     // Route::get('/lotes/{idLote}/fotos', [Ctrl::$loteController, 'getFotos'])->name('lotes.getFotos');
     // Route::delete('/lotes/{idLote}/fotos/{idFoto}', [Ctrl::$loteController, 'deleteFoto'])->name('lotes.deleteFoto');

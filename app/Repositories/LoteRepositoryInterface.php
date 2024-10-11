@@ -15,4 +15,7 @@ interface LoteRepositoryInterface
     public function deleteFoto($idLote, $idFoto);
 
     public function getLotesByPredio($idPredio);
+    public function getLoteByContrato($idContrato);
+    public function getAvailableLotes();
+
 }

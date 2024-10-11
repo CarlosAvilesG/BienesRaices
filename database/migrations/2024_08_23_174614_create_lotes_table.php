@@ -15,7 +15,7 @@ return new class extends Migration
            // $table->id('idLote');
             $table->id();
             $table->unsignedBigInteger('idPredio');
-            $table->unsignedBigInteger('idcontrato')->nullable();
+            $table->unsignedBigInteger('idContrato')->nullable();
             $table->integer('manzana');
             $table->integer('lote');
             $table->string('descripcion', 50)->nullable();
@@ -43,11 +43,7 @@ return new class extends Migration
                   ->on('predios')
                   ->onDelete('cascade');
 
-            // $table->foreign('idcontrato')
-            //       ->references('id')
-            //       ->on('contrato')
-            //       ->nullable();
-
+            $table->foreign('idContrato')->references('id')->on('contratos')->onDelete('set null'); // Si el contrato se elimina, el lote queda libre
 
             // Índices para optimización de consultas
             $table->index('manzana');

@@ -132,6 +132,17 @@ class LoteController extends Controller
         return view('sistema.lotes.partials.lotes_table', compact('lotes'))->render();
     }
 
+    // obtener lote por id contrato
+    public function getLoteByContrato($idContrato)
+    {
+        $lote = $this->loteRepo->getLoteByContrato($idContrato);
+
+        if (!$lote) {
+            return response()->json(['error' => 'No se encontró un lote asociado al contrato'], 404);
+        }
+
+        return view('sistema.lotes.form', compact('lote'));
+    }
 
 
 }
