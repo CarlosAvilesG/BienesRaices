@@ -11,7 +11,7 @@ use App\Http\Requests\UpdateContratoRequest;
 use App\Models\Predio;
 use App\Repositories\PredioRepository;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\GeneralHelper;
 
@@ -75,17 +75,17 @@ class ContratoController extends Controller
         $request->merge([
             'FechaRegistro' => now()->format('Y-m-d'),
             'HoraRegistro' => now()->format('H:i:s'),
-    ]);
+        ]);
 
-    // Validar los datos después de haber manipulado el request
-    $validatedData = $request->validated();
+        // Validar los datos después de haber manipulado el request
+        $validatedData = $request->validated();
 
-    // Crear el contrato usando los datos validados
-    $contrato = $this->contratoRepository->create($validatedData);
+        // Crear el contrato usando los datos validados
+        $contrato = $this->contratoRepository->create($validatedData);
 
-    // Redirigir a la vista 'show' después de guardar el contrato
-    return redirect()->route('contratos.show', $contrato->id)
-        ->with('success', 'El contrato ha sido creado exitosamente.');
+        // Redirigir a la vista 'show' después de guardar el contrato
+        return redirect()->route('contratos.show', $contrato->id)
+            ->with('success', 'El contrato ha sido creado exitosamente.');
     }
 
     // Mostrar un contrato específico

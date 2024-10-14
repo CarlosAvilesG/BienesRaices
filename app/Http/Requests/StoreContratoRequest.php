@@ -13,6 +13,10 @@ class StoreContratoRequest extends FormRequest
 
     public function rules(): array
     {
+        $this->merge([
+            'PrecioPredio' => str_replace(['$', ','], '', $this->PrecioPredio), // Convierte a número decimal
+        ]);
+
         return [
             'identificadorContrato' => 'required|string|max:50|unique:contratos',
             'idCliente' => 'required|exists:clientes,id',
@@ -27,12 +31,12 @@ class StoreContratoRequest extends FormRequest
             'FechaTerminoLetras' => 'nullable|date',
             'ConvenioTemporalidadPago' => 'nullable|string|max:50',
             'ConvenioViaPago' => 'nullable|string|max:50',
-            'FechaRegistro' => 'required|date',
-            'HoraRegistro' => 'required|string|max:8',
-            'idUsuario' => 'required|exists:users,id',
+           // 'FechaRegistro' => 'required|date',
+           // 'HoraRegistro' => 'required|string|max:8',
+           // 'idUsuario' => 'required|exists:users,id',
             'observacion' => 'nullable|string',
             'cancelado' => 'boolean',
-            'idUsuCancela' => 'nullable|exists:users,id',
+           // 'idUsuCancela' => 'nullable|exists:users,id',
             'CanceladoObservacion' => 'nullable|string',
         ];
     }
