@@ -60,7 +60,7 @@
                             <x-adminlte-select2 name="idPredio" id="idPredio" class="select2 select2-primary" data-dropdown-css-class="select2-primary" style="width: 100%;" required>
                                 @foreach($predios as $predio)
                                     <option value="{{ $predio->id }}" {{ isset($contrato) && $contrato->idPredio == $predio->id ? 'selected' : '' }}>
-                                        {{ $predio->nombre }} - {{ $predio->descripcion }}
+                                        {{ $predio->nombre }}
                                     </option>
                                 @endforeach
                             </x-adminlte-select2>
@@ -81,49 +81,6 @@
                             <input type="text" id="PrecioPredio" name="PrecioPredio" class="form-control" value="{{ old('PrecioPredio', $contrato->PrecioPredio ?? '') }}" readonly>
                         </div>
                     </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label for="NoContrato">No. de Contrato</label>
-                            <input type="text" name="NoContrato" class="form-control" value="{{ old('NoContrato', $contrato->NoContrato ?? '') }}" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="NoConvenio">No. de Convenio</label>
-                            <input type="text" name="NoConvenio" class="form-control" value="{{ old('NoConvenio', $contrato->NoConvenio ?? '') }}">
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label for="FechaCelebracion">Fecha de Celebración</label>
-                            <input type="date" name="FechaCelebracion" class="form-control" value="{{ old('FechaCelebracion', $contrato->FechaCelebracion ?? '') }}" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="HoraCelebracion">Hora de Celebración</label>
-                            <input type="time" name="HoraCelebracion" class="form-control" value="{{ old('HoraCelebracion', $contrato->HoraCelebracion ?? '') }}" required>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label for="NoLetras">Número de Letras (Pagos)</label>
-                            <input type="number" name="NoLetras" class="form-control" value="{{ old('NoLetras', $contrato->NoLetras ?? '') }}">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="InteresMoroso">Interés Moroso</label>
-                            <input type="number" step="0.1" name="InteresMoroso" class="form-control" value="{{ old('InteresMoroso', $contrato->InteresMoroso ?? '') }}">
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label for="observacion">Observaciones</label>
-                            <textarea name="observacion" class="form-control">{{ old('observacion', $contrato->observacion ?? '') }}</textarea>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -137,17 +94,8 @@
     </div>
 @stop
 
-@section('css')
-    <!-- Incluir CSS de Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap4-theme/1.0.0/select2-bootstrap4.min.css" rel="stylesheet" />
-@stop
-
 @section('js')
-    <!-- Incluir JS de Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-    <!-- Script para manejar el cambio de predio y cargar lotes -->
+    <!-- Inicialización de Select2 -->
     <script>
         $(document).ready(function() {
             // Inicializar Select2
@@ -157,12 +105,12 @@
                 allowClear: true
             });
 
-            // Al seleccionar un predio, cargar los lotes correspondientes
+            // Cargar lotes cuando se selecciona un predio
             $('#idPredio').on('change', function() {
                 var predioId = $(this).val();
                 if (predioId) {
                     $.ajax({
-                        url: '{{ route("lotes.byPredio") }}', // Ruta para obtener los lotes por predio
+                        url: '{{ route("lotes.byPredio") }}',  // Ruta a tu controlador
                         type: 'GET',
                         data: { idPredio: predioId },
                         success: function(data) {
@@ -172,7 +120,7 @@
                                     'Manzana: ' + lote.manzana + ', Lote: ' + lote.lote + ', Descripción: ' + lote.descripcion +
                                     '</option>');
                             });
-                            $('#idLote').trigger('change'); // Forzar actualización de Select2
+                            $('#idLote').trigger('change');
                         }
                     });
                 } else {
@@ -180,15 +128,11 @@
                 }
             });
 
-            // Al cambiar el lote, actualizar el precio
+            // Al cambiar lote, actualizar el precio
             $('#idLote').on('change', function() {
                 var selectedOption = $(this).find('option:selected');
-                var precio = selectedOption.data('precio'); // Obtener el precio del lote
-                if (precio) {
-                    $('#PrecioPredio').val(precio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }));
-                } else {
-                    $('#PrecioPredio').val('');
-                }
+                var precio = selectedOption.data('precio');
+                $('#PrecioPredio').val(precio ? precio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }) : '');
             });
         });
     </script>

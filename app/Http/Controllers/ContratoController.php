@@ -5,24 +5,33 @@ namespace App\Http\Controllers;
 use App\Repositories\ContratoRepositoryInterface;
 use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\LoteRepositoryInterface;
+use App\Repositories\PredioRepositoryInterface;
 use App\Http\Requests\StoreContratoRequest;
 use App\Http\Requests\UpdateContratoRequest;
+use App\Models\Predio;
+use App\Repositories\PredioRepository;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\GeneralHelper;
 
 class ContratoController extends Controller
 {
     protected $contratoRepository;
     protected $clienteRepository;
     protected $loteRepository;
+    protected $predioRepository;
 
     public function __construct(
         ContratoRepositoryInterface $contratoRepository,
         ClienteRepositoryInterface $clienteRepository,
-        LoteRepositoryInterface $loteRepository
+        LoteRepositoryInterface $loteRepository,
+        PredioRepositoryInterface $predioRepository
     ) {
         $this->contratoRepository = $contratoRepository;
         $this->clienteRepository = $clienteRepository;
         $this->loteRepository = $loteRepository;
+        $this->predioRepository = $predioRepository;
     }
 
     // probar si funciona
@@ -42,9 +51,9 @@ class ContratoController extends Controller
     {
         $clientes = $this->clienteRepository->getAll(); // Obtener todos los clientes
         $lotes = $this->loteRepository->getAvailableLotes(); // Obtener lotes disponibles (sin contrato)
+        $predios = $this->predioRepository->getAll(); // Obtener todos los predios
 
-
-        return view('sistema.contratos.form', compact('clientes', 'lotes'));
+        return view('sistema.contratos.create', compact('clientes', 'lotes', 'predios'));
     }
 
     // Almacenar un nuevo contrato
@@ -53,9 +62,30 @@ class ContratoController extends Controller
         // Convertir identificadorContrato a mayúsculas antes de almacenar
         $request->merge(['identificadorContrato' => strtoupper($request->identificadorContrato)]);
 
-        $contrato = $this->contratoRepository->create($request->validated());
+        // Convertir el precio al formato numérico (por si viene en formato de moneda)
+        $precio = str_replace([',', '$'], '', $request->input('PrecioPredio'));
 
-        return redirect()->route('sistema.contratos.index')->with('success', 'Contrato creado con éxito.');
+        // Agregar el precio convertido al request
+        $request->merge(['PrecioPredio' => $precio]);
+
+        // Asignar el ID del usuario autenticado
+        $request->merge(['idUsuario' => Auth::user()->id]);
+
+        // Asignar fecha y hora de registro automáticamente
+        $request->merge([
+            'FechaRegistro' => now()->format('Y-m-d'),
+            'HoraRegistro' => now()->format('H:i:s'),
+    ]);
+
+    // Validar los datos después de haber manipulado el request
+    $validatedData = $request->validated();
+
+    // Crear el contrato usando los datos validados
+    $contrato = $this->contratoRepository->create($validatedData);
+
+    // Redirigir a la vista 'show' después de guardar el contrato
+    return redirect()->route('contratos.show', $contrato->id)
+        ->with('success', 'El contrato ha sido creado exitosamente.');
     }
 
     // Mostrar un contrato específico
@@ -70,14 +100,14 @@ class ContratoController extends Controller
     {
         $contrato = $this->contratoRepository->findById($id);
 
-         // Verificar si el contrato fue encontrado
+        // Verificar si el contrato fue encontrado
         if (!$contrato) {
             return redirect()->route('contratos.index')->with('error', 'Contrato no encontrado.');
         }
 
-        $clientes = $this->clienteRepository->getAll();
-       //obtener los lotes con id de contrato de $contrato = $this->contratoRepository->findById($id);
-        $lotes = $this->loteRepository->getLoteByContrato( $contrato->id);
+        $clientes = $this->clienteRepository->find($contrato->idCliente);
+        $lotes = $this->loteRepository->show($contrato->idLote);
+        $predios = $this->loteRepository->show($contrato->idPredio);
 
         //  dd(  $contrato,$clientes, $lotes);
         // Verificar si el lote fue encontrado
@@ -85,7 +115,8 @@ class ContratoController extends Controller
             return redirect()->route('contratos.index')->with('error', 'No se encontraron lotes relacionados con este contrato.');
         }
 
-        return view('sistema.contratos.form', compact('contrato', 'clientes', 'lotes'));
+        return view('sistema.contratos.edit', compact('contrato', 'clientes', 'lotes', 'predios'));
+        // return view('sistema.contratos.edit', compact('contrato', 'clientes', 'lotes', 'predios'));
     }
 
     // Actualizar un contrato existente
@@ -100,5 +131,38 @@ class ContratoController extends Controller
     {
         $this->contratoRepository->delete($id);
         return redirect()->route('sistema.contratos.index')->with('success', 'Contrato eliminado con éxito.');
+    }
+
+    public function generarPromesaVentaPDF($contratoId)
+    {
+        // Supongamos que obtienes los datos del contrato y lote de la base de datos
+        $contrato =  $this->contratoRepository->findById($contratoId);
+        //obtener el predio por el id de predio
+        // $predio = Predio::find($contrato->idPredio);
+
+        $contratoData = [
+            'cliente' => $contrato->cliente->nombre . ' ' . $contrato->cliente->paterno . ' ' . $contrato->cliente->materno,
+            'vendedor' => 'Nombre del Vendedor',  // Aquí puedes agregar el nombre del vendedor si está en otra tabla o directamente
+            'lote' => [
+                'manzana' => $contrato->lote->manzana,
+                'lote' => $contrato->lote->lote,
+                'metrosCuadrados' => $contrato->lote->metrosCuadrados,
+            ],
+            'predio' => $contrato->lote->predio->nombre,  // Asegúrate de tener la relación Predio en el modelo Lote
+            'precio' => $contrato->PrecioPredio,
+            'letras' => $contrato->NoLetras,
+            'interes' => $contrato->InteresMoroso,
+            'temporalidad' => $contrato->ConvenioTemporalidadPago,
+            'viaPago' => $contrato->ConvenioViaPago,
+            'plazo' => '12 meses',  // Puedes personalizar este valor según tu lógica
+            'observacion' => $contrato->observacion,
+            'ciudad' => 'La Paz',  // Ciudad por defecto o dinámica
+        ];
+
+        // Generar el PDF con la vista y los datos
+        $pdf = PDF::loadView('contratos.promesa_venta_pdf', compact('contratoData'));
+
+        // Retornar el PDF generado para descarga o vista previa
+        return $pdf->download('Promesa_Compra_Venta.pdf');
     }
 }

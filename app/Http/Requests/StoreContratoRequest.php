@@ -15,8 +15,8 @@ class StoreContratoRequest extends FormRequest
     {
         return [
             'identificadorContrato' => 'required|string|max:50|unique:contratos',
-            'idCliente' => 'required|exists:clientes,idCliente',
-            'idLote' => 'required|exists:lotes,idLote',
+            'idCliente' => 'required|exists:clientes,id',
+            'idLote' => 'required|exists:lotes,id',
             'NoContrato' => 'required|string|max:50',
             'NoConvenio' => 'nullable|string|max:10',
             'NoLetras' => 'nullable|integer|min:0',

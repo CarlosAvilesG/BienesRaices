@@ -64,10 +64,13 @@ Route::middleware([
     Route::resource('/bitacoras', Ctrl::$bitacoraController)->names('bitacoras');
     Route::resource('/conceptos-egreso', Ctrl::$conceptoEgresoController)->names('conceptos-egreso');
 
-   // ruta para contraros test
+    // ruta para contraros test
     // Route::get('/contratos/test', [Ctrl::$contratoController, 'test'])->name('contratos.test');
 
+    Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contrato.promesa.pdf');
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
+
+
     Route::resource('/cortes-caja', Ctrl::$corteCajaController)->names('cortes-caja');
     Route::resource('/corte-caja-detalles', Ctrl::$corteCajaDetalleController)->names('corte-caja-detalles');
     Route::resource('/egresos', Ctrl::$egresoController)->names('egresos');
@@ -75,8 +78,8 @@ Route::middleware([
     Route::get('/frases-eticas/random', [Ctrl::$fraseEticaController, 'random'])->name('frases-eticas.random');
 
 
-      // Ruta para obtener los lotes filtrados por predio
-    Route::get('/lotes/predio', [Ctrl::$loteController, 'getLotesPorPredio'])->name('lotes.porPredio');
+    // Ruta para obtener lotes según predio vía AJAX
+    Route::get('/lotes-by-predio', [Ctrl::$loteController, 'getLotesByPredio'])->name('lotes.byPredio');
     Route::resource('/lotes', Ctrl::$loteController)->names('lotes');
 
 
@@ -89,11 +92,6 @@ Route::middleware([
     Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
     Route::resource('/predios', Ctrl::$predioController)->names('predios');
     Route::resource('/users', Ctrl::$userController)->names('users');
-
-
-
-
-
 });
 
 /*

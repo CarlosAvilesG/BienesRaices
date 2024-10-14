@@ -63,6 +63,9 @@
             </div>
         </div>
 
+        {{--  Botón para generar PDF el contrato de promesa de venta --}}
+        <a href="{{ route('contrato.promesa.pdf', $contrato->id) }}" class="btn btn-secondary">Generar Contrato de Promesa de Venta</a>
+
         <!-- Botón para regresar al listado -->
         <a href="{{ route('contratos.index') }}" class="btn btn-block bg-gradient-secondary">Regresar</a>
     </div>

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 interface PredioRepositoryInterface
 {
-    public function getAllPredios();
+    public function getAll();
 
     public function findPredioById($id);
 

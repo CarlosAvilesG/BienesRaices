@@ -54,7 +54,8 @@ return new class extends Migration
 
             // Claves foráneas para mantener la integridad referencial
             $table->foreign('idCliente')->references('id')->on('clientes')->onDelete('cascade');
-            $table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
+            // se paso para una migracion posterior
+            //$table->foreign('idLote')->references('id')->on('lotes')->onDelete('cascade');
             $table->foreign('idUsuario')->references('id')->on('users');
             $table->foreign('idUsuCancela')->references('id')->on('users');
 

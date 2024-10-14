@@ -20,7 +20,7 @@ class PredioController extends Controller
     {
       //  return "PredioController index";
 
-        $predios = $this->predioRepo->getAllPredios();
+        $predios = $this->predioRepo->getAll();
 
        // dd($predios); // Aquí puedes ver si está retornando algo
 

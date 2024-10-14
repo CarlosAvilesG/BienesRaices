@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Repositories\LoteRepositoryInterface;
 use App\Repositories\PredioRepositoryInterface; // Inyecta el repo de Predios si es necesario
 use App\Http\Requests\StoreLoteRequest;
@@ -21,7 +23,7 @@ class LoteController extends Controller
 
     public function index(Request $request)
     {
-        $predios = $this->predioRepo->getAllPredios(); // Obtener todos los predios
+        $predios = $this->predioRepo->getAll(); // Obtener todos los predios
         $lotes = $this->loteRepo->getAll();     // Obtener todos los lotes o lotes del predio filtrado
 
         return view('sistema.lotes.index', compact('lotes', 'predios'));
@@ -143,6 +145,37 @@ class LoteController extends Controller
 
         return view('sistema.lotes.form', compact('lote'));
     }
+
+    // obtener lotes disponibles por predio
+   // Obtener lotes disponibles por predio
+   public function getLotesByPredio(Request $request)
+   {
+        try {
+
+            $idPredio = $request->input('idPredio');  // Tomamos el id del predio desde la solicitud AJAX
+            Log::info('idPredio:', ['idPredio' => $idPredio]);
+
+            $lotes = $this->loteRepo->getLotesByPredio($idPredio); // Obtenemos los lotes disponibles para el predio
+
+            // Loguear los lotes obtenidos
+            Log::info('Lotes obtenidos:', ['lotes' => $lotes]);
+
+            // Si no hay lotes disponibles, devolver un error
+            if ($lotes->isEmpty()) {
+                return response()->json(['error' => 'No se encontraron lotes para el predio seleccionado'], 404);
+            }
+
+            // Devolver los lotes disponibles en formato JSON
+            return response()->json([
+                'lotes' => $lotes,
+            ]);
+
+        } catch (\Exception $e) {
+            // Loguear el error si ocurre alguna excepción
+            Log::error('Error al procesar la solicitud', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Error al procesar la solicitud'], 500);
+        }
+   }
 
 
 }

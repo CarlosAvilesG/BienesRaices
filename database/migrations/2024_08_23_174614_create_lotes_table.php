@@ -20,11 +20,11 @@ return new class extends Migration
             $table->integer('lote');
             $table->string('descripcion', 50)->nullable();
             $table->boolean('regular');
-            $table->boolean('donacion');
-            $table->boolean('loteComercial');
+            $table->boolean('donacion')->default(false);
+            $table->boolean('loteComercial')->default(false);
             $table->string('loteReparable', 5)->nullable();
             $table->string('loteReparableObs', 300)->nullable();
-            $table->boolean('inhabilitado');
+            $table->boolean('inhabilitado')->default(false);
             $table->decimal('metrosFrente', 10, 2);
             $table->decimal('metrosAtras', 10, 2);
             $table->decimal('metrosDerecho', 10, 2);
@@ -43,13 +43,14 @@ return new class extends Migration
                   ->on('predios')
                   ->onDelete('cascade');
 
-            $table->foreign('idContrato')->references('id')->on('contratos')->onDelete('set null'); // Si el contrato se elimina, el lote queda libre
+            // se paso para una migracion posterior
+          //  $table->foreign('idContrato')->references('id')->on('contratos')->onDelete('set null'); // Si el contrato se elimina, el lote queda libre
 
             // Índices para optimización de consultas
             $table->index('manzana');
             $table->index('lote');
             $table->index('idPredio');
-            $table->index('idcontrato');
+            $table->index('idContrato');
         });
 
         Schema::create('lote_fotos', function (Blueprint $table) {

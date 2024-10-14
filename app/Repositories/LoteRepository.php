@@ -61,7 +61,12 @@ class LoteRepository implements LoteRepositoryInterface
 
     public function getLotesByPredio($idPredio)
     {
-        return Lote::where('idPredio', $idPredio)->get();
+        return Lote::where('idPredio', $idPredio)
+                    ->where('inhabilitado', false)
+                    ->whereNull('idContrato') // Solo lotes disponibles (sin contrato)
+                    ->orderBy('manzana', 'asc')
+                    ->orderBy('lote', 'asc')
+                    ->get() ;
     }
 
     // obtener lote por idContrato

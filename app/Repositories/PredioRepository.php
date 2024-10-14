@@ -6,7 +6,7 @@ use App\Models\Predio;
 
 class PredioRepository implements PredioRepositoryInterface
 {
-    public function getAllPredios()
+    public function getAll()
     {
         return Predio::all();
     }
