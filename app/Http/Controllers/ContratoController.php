@@ -71,12 +71,13 @@ class ContratoController extends Controller
         // Asignar el ID del usuario autenticado
         $request->merge(['idUsuario' => Auth::user()->id]);
 
-        // Asignar fecha y hora de registro automáticamente
-        $request->merge([
-            'FechaRegistro' => now()->format('Y-m-d'),
-            'HoraRegistro' => now()->format('H:i:s'),
-        ]);
+        dd($request->all());  // Muestra todos los datos enviados en el request, incluyendo idUsuario
 
+        // Validar que Anualidades no sea mayor que NoAnios
+        if ($request->Anualidades > $request->NoAnios) {
+            return redirect()->back()->withErrors(['Anualidades' => 'El campo Anualidades no puede ser mayor que NoAnios.'])->withInput();
+        }
+        
         // Validar los datos después de haber manipulado el request
         $validatedData = $request->validated();
 

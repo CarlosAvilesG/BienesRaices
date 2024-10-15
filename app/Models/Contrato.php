@@ -27,6 +27,7 @@ class Contrato extends Model
         'idLote',
         'NoContrato',
         'NoConvenio',
+        'NoAnios',
         'NoLetras',
         'PrecioPredio',
         'InteresMoroso',
@@ -35,20 +36,24 @@ class Contrato extends Model
         'FechaTerminoLetras',
         'ConvenioTemporalidadPago',
         'ConvenioViaPago',
+        'Anualidades',
+        'PagoAnualidad',
+        'Enganche',
         'FechaRegistro',
         'HoraRegistro',
         'idUsuario',
         'observacion',
-        'cancelado',
-        'idUsuCancela',
-        'CanceladoObservacion',
+
+       // 'idUsuCancela',
+       // 'CanceladoObservacion',
     ];
 
     // Casts para asegurar que los tipos sean correctos
     protected $casts = [
         'PrecioPredio' => 'decimal:2',
         'InteresMoroso' => 'decimal:1',
-        'cancelado' => 'boolean',
+        'engache' => 'decimal:2',
+
     ];
 
     // Definir las relaciones con otros modelos

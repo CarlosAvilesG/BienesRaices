@@ -16,8 +16,10 @@ class ContratoTableSeeder extends Seeder
 
         $contratos = [
             [
-                'ConvenioTemporalidadPago' => 'Mensual',
-                'ConvenioViaPago' => 'Transferencia',
+                'anualidades' => 0,
+                'PagoAnualidad' => 0,
+                'ConvenioTemporalidadPago' => 'Menusual',
+                'ConvenioViaPago' => 'Bancario',
                 'FechaCelebracion' => '2024-01-10',
                 'FechaRegistro' => '2024-01-10',
                 'FechaTerminoLetras' => '2025-01-10',
@@ -27,8 +29,9 @@ class ContratoTableSeeder extends Seeder
                 'NoContrato' => 'CNT-001',
                 'NoConvenio' => 'CV-001',
                 'NoLetras' => 12,
+                'noAnios' => 4,
                 'PrecioPredio' => 150000,
-                'cancelado' => 0,
+
                 'idCliente' => 1,
                 'idLote' => 1,
                 'idUsuario' => 1,
@@ -38,8 +41,10 @@ class ContratoTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'ConvenioTemporalidadPago' => 'Bimestral',
-                'ConvenioViaPago' => 'Efectivo',
+                'anualidades' => 2,
+                'PagoAnualidad' => 100000,
+                'ConvenioTemporalidadPago' => 'Quincenal',
+                'ConvenioViaPago' => 'Nomina',
                 'FechaCelebracion' => '2024-02-01',
                 'FechaRegistro' => '2024-02-01',
                 'FechaTerminoLetras' => '2026-02-01',
@@ -49,8 +54,9 @@ class ContratoTableSeeder extends Seeder
                 'NoContrato' => 'CNT-002',
                 'NoConvenio' => 'CV-002',
                 'NoLetras' => 24,
+                'noAnios' => 5,
                 'PrecioPredio' => 200000,
-                'cancelado' => 0,
+
                 'idCliente' => 2,
                 'idLote' => 2,
                 'idUsuario' => 2,
@@ -60,8 +66,10 @@ class ContratoTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'ConvenioTemporalidadPago' => 'Trimestral',
-                'ConvenioViaPago' => 'Cheque',
+                'anualidades' => 1,
+                'PagoAnualidad' => 50000,
+                'ConvenioTemporalidadPago' => 'Menusual',
+                'ConvenioViaPago' => 'Efectivo',
                 'FechaCelebracion' => '2024-03-15',
                 'FechaRegistro' => '2024-03-15',
                 'FechaTerminoLetras' => '2027-03-15',
@@ -71,8 +79,9 @@ class ContratoTableSeeder extends Seeder
                 'NoContrato' => 'CNT-003',
                 'NoConvenio' => 'CV-003',
                 'NoLetras' => 36,
+                'noAnios' => 3,
                 'PrecioPredio' => 250000,
-                'cancelado' => 0,
+
                 'idCliente' => 3,
                 'idLote' => 3,
                 'idUsuario' => 3,
