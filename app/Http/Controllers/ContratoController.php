@@ -62,24 +62,31 @@ class ContratoController extends Controller
         // Convertir identificadorContrato a mayúsculas antes de almacenar
         $request->merge(['identificadorContrato' => strtoupper($request->identificadorContrato)]);
 
-        // Convertir el precio al formato numérico (por si viene en formato de moneda)
-        $precio = str_replace([',', '$'], '', $request->input('PrecioPredio'));
+        // Obtener el precio del lote seleccionado
+        $lotes = $this->loteRepository->show($request->idLote);
+         // Asegúrate de eliminar el formato de moneda (símbolo de $ y comas) del precio
+        $precioLote = str_replace([',', '$'], '', $lotes->precio);
+        $request->merge(['PrecioPredio' => $precioLote]);
 
-        // Agregar el precio convertido al request
-        $request->merge(['PrecioPredio' => $precio]);
+        // para calcular el número de letras basado en años y temporalidad (MENSUAL O QUINCENAL)
+        $request->merge(['NoLetras' => (int) $request->NoAnios * ($request->ConvenioTemporalidadPago == 'Quincenal' ? 24 : 12)]);
 
         // Asignar el ID del usuario autenticado
         $request->merge(['idUsuario' => Auth::user()->id]);
 
-        dd($request->all());  // Muestra todos los datos enviados en el request, incluyendo idUsuario
-
         // Validar que Anualidades no sea mayor que NoAnios
         if ($request->Anualidades > $request->NoAnios) {
-            return redirect()->back()->withErrors(['Anualidades' => 'El campo Anualidades no puede ser mayor que NoAnios.'])->withInput();
+            return redirect()->back()->withErrors(['Anualidades' => 'El campo Anualidades no puede ser mayor que el tiempo del contrato.'])->withInput();
         }
-        
+
         // Validar los datos después de haber manipulado el request
         $validatedData = $request->validated();
+
+        // Asegúrate de que `idUsuario` esté presente en los datos validados
+        $validatedData['idUsuario'] = $request->idUsuario;
+
+       // dd($validatedData);  // Muestra todos los datos enviados en el request, incluyendo idUsuario
+        //dd($request->all());  // Muestra todos los datos enviados en el request, incluyendo idUsuario
 
         // Crear el contrato usando los datos validados
         $contrato = $this->contratoRepository->create($validatedData);

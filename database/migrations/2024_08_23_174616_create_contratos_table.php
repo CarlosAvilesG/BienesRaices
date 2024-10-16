@@ -38,7 +38,7 @@ return new class extends Migration
 
             // Convenios y modalidades de pago
             //$table->string('ConvenioTemporalidadPago', 50)->nullable();
-            $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Menusual'])->default('Menusual');
+            $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Mensual'])->default('Menusual');
            // $table->string('ConvenioViaPago', 50)->nullable();
             $table->enum('ConvenioViaPago', ['Efectivo', 'Bancario', 'Nomina'])->default('Efectivo');
             // columnas para establecer pago de anualidades en caso de ser necesario
@@ -52,7 +52,7 @@ return new class extends Migration
             //
             $table->date('FechaRegistro')->default(DB::raw('CURRENT_DATE'));
             $table->string('HoraRegistro', 8)->default(DB::raw('CURRENT_TIME'));
-            $table->unsignedBigInteger('idUsuario')->nullable(false); // Usuario que registra el contrato
+            $table->unsignedBigInteger('idUsuario')->nullable(); // Usuario que registra el contrato
 
             // Estado del contrato
             $table->text('observacion')->nullable();

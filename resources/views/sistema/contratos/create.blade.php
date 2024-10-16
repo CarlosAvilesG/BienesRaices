@@ -86,14 +86,14 @@
                             <label for="PrecioPredio" data-toggle="tooltip"
                                 data-original-title="Precio original del lote">Precio del Lote</label>
                             <input type="text" id="PrecioPredio" name="PrecioPredio" class="form-control"
-                                value="{{ old('PrecioPredio') }}">
+                                value="{{ old('PrecioPredio') }}" readonly>
                         </div>
 
                         <div class="col-md-3">
                             <label for="Enganche" data-toggle="tooltip" data-original-title="Pago de Enganche">Pago del
                                 Enganche</label>
                             <input type="text" id="Enganche" name="Enganche" class="form-control"
-                                value="{{ old('Enganche') }}">
+                                value="{{ old('Enganche') }}" >
                         </div>
                     </div>
 
@@ -137,10 +137,10 @@
 
                         <!-- Número de años -->
                         <div class="col-md-3">
-                            <label for="Anios" data-toggle="tooltip"
+                            <label for="NoAnios" data-toggle="tooltip"
                                 data-original-title="Número de años que dura el contrato">Años del Contrato</label>
-                            <input type="number" name="Anios" id="Anios" class="form-control"
-                                value="{{ old('Anios') }}">
+                            <input type="number" name="NoAnios" id="NoAnios" class="form-control"
+                                value="{{ old('NoAnios') }}">
                         </div>
 
                         <!-- No. de Letras -->
@@ -177,9 +177,9 @@
                             <label for="ConvenioViaPago" data-toggle="tooltip"
                                 data-original-title="Opciones: efectivo, bancaria, nómina">Convenio Vía de Pago</label>
                             <select class="form-control" id="ConvenioViaPago" name="ConvenioViaPago">
-                                <option value="efectivo">Efectivo</option>
-                                <option value="bancaria">Bancaria</option>
-                                <option value="nomina">Nómina</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Bancario">Bancario</option>
+                                <option value="Nomina">Nomina</option>
                             </select>
                         </div>
                         <!-- Anualidades -->
@@ -201,7 +201,7 @@
                         <!-- Interés Moroso -->
                         <div class="col-md-2">
                             <label for="InteresMoroso" data-toggle="tooltip" data-original-title="Default: 10%">Interés
-                                Moroso (%)</label>
+                                Moratorio (%)</label>
                             <input type="number" name="InteresMoroso" class="form-control" step="0.1"
                                 value="10">
                         </div>
@@ -276,7 +276,7 @@
             // Función para calcular el número de letras basado en años y temporalidad
             function updateNoLetras() {
                 // Obtiene el valor de años
-                const anios = parseInt($('#Anios').val());
+                const anios = parseInt($('#NoAnios').val());
 
                 // Obtiene el valor del select de temporalidad
                 const temporalidad = $('#ConvenioTemporalidadPago').val();
@@ -304,7 +304,7 @@
             }
 
             // Escucha los eventos 'input' y 'change' en los campos involucrados
-            $('#Anios').on('input', updateNoLetras);
+            $('#NoAnios').on('input', updateNoLetras);
             $('#ConvenioTemporalidadPago').on('change', updateNoLetras); // Usar 'change' para selects
 
             // Función para calcular la mensualidad
@@ -314,7 +314,7 @@
                 const pagoAnualidad = parseFloat($('[name="PagoAnualidad"]').val()) || 0;
                 const anualidades = parseInt($('[name="Anualidades"]').val()) || 0;
                 const numeroLetras = parseInt($('#NoLetras').val()) || 0;
-                const anios = parseInt($('#Anios').val()) || 0;
+                const anios = parseInt($('#NoAnios').val()) || 0;
                 const temporalidad = $('#ConvenioTemporalidadPago').val();
 
                 // Verifica si los campos obligatorios están completos

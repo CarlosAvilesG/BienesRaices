@@ -48,6 +48,21 @@ class Contrato extends Model
        // 'CanceladoObservacion',
     ];
 
+    // Evento para calcular FechaTerminoLetras antes de crear el contrato
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($contrato) {
+            if ($contrato->FechaCelebracion && $contrato->NoAnios) {
+                // Convertir NoAnios a un entero para asegurarse de que no es una cadena
+                $noAnios = (int) $contrato->NoAnios;
+
+                // Ahora usarlo con Carbon::addYears() de forma segura
+                $contrato->FechaTerminoLetras = \Carbon\Carbon::parse($contrato->FechaCelebracion)->addYears($noAnios);
+            }
+        });
+    }
     // Casts para asegurar que los tipos sean correctos
     protected $casts = [
         'PrecioPredio' => 'decimal:2',
