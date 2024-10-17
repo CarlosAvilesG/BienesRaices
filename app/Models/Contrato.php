@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repositories\LoteRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -62,7 +63,16 @@ class Contrato extends Model
                 $contrato->FechaTerminoLetras = \Carbon\Carbon::parse($contrato->FechaCelebracion)->addYears($noAnios);
             }
         });
+        // EVENTO DESPUES DE CREAR UN CONTRATO para guardar el id del contrato en la tabla de lotes, sera buscar del repositorio de lotes y actualizar el campo idContrato
+        static::created(function ($contrato) {
+            $loteRepository = new LoteRepository();
+            $lote = $loteRepository->show($contrato->idLote);
+            $lote->idContrato = $contrato->id;
+            $lote->save();
+        });
+
     }
+
     // Casts para asegurar que los tipos sean correctos
     protected $casts = [
         'PrecioPredio' => 'decimal:2',

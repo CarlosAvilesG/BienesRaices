@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContratoRequest extends FormRequest
 {
@@ -33,8 +34,16 @@ class StoreContratoRequest extends FormRequest
             // crearregla para  $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Menusual'])->default('Menusual');
             'ConvenioTemporalidadPago' => 'nullable|in:Quincenal,Mensual',
             'ConvenioViaPago' => 'nullable|in:Efectivo,Bancario,Nomina',
-            'Anualidades' => 'nullable|integer|min:0',
-            'PagoAnualidad' => 'nullable|numeric|min:0',
+            'Anualidades' => 'nullable|integer|min:0|max:10',
+            'PagoAnualidad' => [
+                                    'nullable',
+                                    'numeric',
+                                    'min:0',
+                                    'max:100000',
+                                    Rule::when($this->input('Anualidades') > 0, ['gt:0']),
+                                ],
+
+
             'Enganche' => 'nullable|numeric|min:0',
 
            // 'FechaRegistro' => 'required|date',

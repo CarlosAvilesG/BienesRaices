@@ -6,7 +6,7 @@ interface PredioRepositoryInterface
 {
     public function getAll();
 
-    public function findPredioById($id);
+    public function find($id);
 
     public function createPredio(array $data);
 

@@ -18,7 +18,7 @@ class ContratoTableSeeder extends Seeder
             [
                 'anualidades' => 0,
                 'PagoAnualidad' => 0,
-                'ConvenioTemporalidadPago' => 'Menusual',
+                'ConvenioTemporalidadPago' => 'Mensual',
                 'ConvenioViaPago' => 'Bancario',
                 'FechaCelebracion' => '2024-01-10',
                 'FechaRegistro' => '2024-01-10',
@@ -68,7 +68,7 @@ class ContratoTableSeeder extends Seeder
             [
                 'anualidades' => 1,
                 'PagoAnualidad' => 50000,
-                'ConvenioTemporalidadPago' => 'Menusual',
+                'ConvenioTemporalidadPago' => 'Mensual',
                 'ConvenioViaPago' => 'Efectivo',
                 'FechaCelebracion' => '2024-03-15',
                 'FechaRegistro' => '2024-03-15',

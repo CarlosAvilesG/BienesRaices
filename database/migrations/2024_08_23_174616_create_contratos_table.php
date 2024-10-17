@@ -38,7 +38,7 @@ return new class extends Migration
 
             // Convenios y modalidades de pago
             //$table->string('ConvenioTemporalidadPago', 50)->nullable();
-            $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Mensual'])->default('Menusual');
+            $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Mensual'])->default('Mensual');
            // $table->string('ConvenioViaPago', 50)->nullable();
             $table->enum('ConvenioViaPago', ['Efectivo', 'Bancario', 'Nomina'])->default('Efectivo');
             // columnas para establecer pago de anualidades en caso de ser necesario

@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
+        "caouecs/laravel-lang": "*",
         "intervention/image": "^3.8",
         "jeroennoten/laravel-adminlte": "^3.13",
         "laravel-lang/lang": "^15.7",

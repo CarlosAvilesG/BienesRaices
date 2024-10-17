@@ -146,7 +146,7 @@ class LoteController extends Controller
         return view('sistema.lotes.form', compact('lote'));
     }
 
-    // obtener lotes disponibles por predio
+
    // Obtener lotes disponibles por predio
    public function getLotesByPredio(Request $request)
    {
@@ -175,7 +175,19 @@ class LoteController extends Controller
             Log::error('Error al procesar la solicitud', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Error al procesar la solicitud'], 500);
         }
+
    }
+   // obtener lote por idLote y regresa json
+    public function getLoteById($idLote)
+    {
+         $lote = $this->loteRepo->show($idLote);
+
+         if (!$lote) {
+              return response()->json(['error' => 'No se encontró un lote con el ID proporcionado'], 404);
+         }
+
+         return response()->json($lote);
+    }
 
 
 }

@@ -67,7 +67,7 @@ Route::middleware([
     // ruta para contraros test
     // Route::get('/contratos/test', [Ctrl::$contratoController, 'test'])->name('contratos.test');
 
-    Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contrato.promesa.pdf');
+    Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contratoPromesaPdf');
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
 
 
@@ -80,6 +80,8 @@ Route::middleware([
 
     // Ruta para obtener lotes según predio vía AJAX
     Route::get('/lotes-by-predio', [Ctrl::$loteController, 'getLotesByPredio'])->name('lotes.byPredio');
+    // ruta para obtener lote por idlote via ajax
+    Route::get('/lotes/{id}/get', [Ctrl::$loteController, 'getLoteById'])->name('lotes.get');
     Route::resource('/lotes', Ctrl::$loteController)->names('lotes');
 
 

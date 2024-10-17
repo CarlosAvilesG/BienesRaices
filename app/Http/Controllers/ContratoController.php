@@ -85,8 +85,6 @@ class ContratoController extends Controller
         // Asegúrate de que `idUsuario` esté presente en los datos validados
         $validatedData['idUsuario'] = $request->idUsuario;
 
-       // dd($validatedData);  // Muestra todos los datos enviados en el request, incluyendo idUsuario
-        //dd($request->all());  // Muestra todos los datos enviados en el request, incluyendo idUsuario
 
         // Crear el contrato usando los datos validados
         $contrato = $this->contratoRepository->create($validatedData);
@@ -143,10 +141,14 @@ class ContratoController extends Controller
 
     public function generarPromesaVentaPDF($contratoId)
     {
+
         // Supongamos que obtienes los datos del contrato y lote de la base de datos
         $contrato =  $this->contratoRepository->findById($contratoId);
         //obtener el predio por el id de predio
-        // $predio = Predio::find($contrato->idPredio);
+        $predio = Predio::find($contrato->idPredio);
+
+        // Formatear el precio en número con formato de moneda
+        $precioFormateado = number_format($contrato->PrecioPredio, 2, '.', ',');  // Formato $638,179.78
 
         $contratoData = [
             'cliente' => $contrato->cliente->nombre . ' ' . $contrato->cliente->paterno . ' ' . $contrato->cliente->materno,
@@ -157,18 +159,21 @@ class ContratoController extends Controller
                 'metrosCuadrados' => $contrato->lote->metrosCuadrados,
             ],
             'predio' => $contrato->lote->predio->nombre,  // Asegúrate de tener la relación Predio en el modelo Lote
-            'precio' => $contrato->PrecioPredio,
+
+            'precio' => '$'.$precioFormateado, // $contrato->PrecioPredio,
             'letras' => $contrato->NoLetras,
             'interes' => $contrato->InteresMoroso,
             'temporalidad' => $contrato->ConvenioTemporalidadPago,
             'viaPago' => $contrato->ConvenioViaPago,
-            'plazo' => '12 meses',  // Puedes personalizar este valor según tu lógica
+            'plazo' =>  '12 meses',  // Puedes personalizar este valor según tu lógica
             'observacion' => $contrato->observacion,
             'ciudad' => 'La Paz',  // Ciudad por defecto o dinámica
+            'precioLetras' => GeneralHelper::convertirNumeroALetras($contrato->PrecioPredio),
         ];
 
+
         // Generar el PDF con la vista y los datos
-        $pdf = PDF::loadView('contratos.promesa_venta_pdf', compact('contratoData'));
+        $pdf = PDF::loadView('sistema.contratos.promesa_venta_pdf', compact('contratoData'));
 
         // Retornar el PDF generado para descarga o vista previa
         return $pdf->download('Promesa_Compra_Venta.pdf');

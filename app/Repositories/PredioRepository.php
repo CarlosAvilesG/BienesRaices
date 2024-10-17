@@ -11,7 +11,7 @@ class PredioRepository implements PredioRepositoryInterface
         return Predio::all();
     }
 
-    public function findPredioById($id)
+    public function find($id)
     {
         return Predio::findOrFail($id);
     }
