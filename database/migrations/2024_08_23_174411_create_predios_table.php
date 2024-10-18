@@ -16,11 +16,19 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 30);
             $table->string('descripcion', 100);
-            $table->string('calle', 30);
-            $table->string('numero', 10);
-            $table->string('colonia', 30);
+
             $table->string('codigoPostal', 10);
             $table->string('claveCatastral', 30);
+            $table->string('Notaria', 30);
+            $table->string('numeroEscritura', 30);
+            $table->string('folioEscritura', 30);
+            $table->string('volumenEscritura', 30);
+            $table->string('fechaEscritura', 30);
+            $table->string('coordenadasNorte', 30);
+            $table->string('coordenadasSur', 30);
+            $table->string('coordenadasEste', 30);
+            $table->string('coordenadasOeste', 30);
+
             $table->string('estadoRepublica', 30);
             $table->string('municipio', 30);
             $table->string('localidad', 30);

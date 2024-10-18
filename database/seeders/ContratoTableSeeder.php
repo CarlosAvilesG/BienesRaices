@@ -31,6 +31,7 @@ class ContratoTableSeeder extends Seeder
                 'NoLetras' => 12,
                 'noAnios' => 4,
                 'PrecioPredio' => 150000,
+                'enganche' => 50000,
 
                 'idCliente' => 1,
                 'idLote' => 1,
@@ -56,6 +57,7 @@ class ContratoTableSeeder extends Seeder
                 'NoLetras' => 24,
                 'noAnios' => 5,
                 'PrecioPredio' => 200000,
+                'enganche' => 50000,
 
                 'idCliente' => 2,
                 'idLote' => 2,
@@ -81,6 +83,7 @@ class ContratoTableSeeder extends Seeder
                 'NoLetras' => 36,
                 'noAnios' => 3,
                 'PrecioPredio' => 250000,
+                'Enganche' => 50000,
 
                 'idCliente' => 3,
                 'idLote' => 3,

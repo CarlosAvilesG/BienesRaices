@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 
 class RolesAndPermissionsSeeder extends Seeder
@@ -14,50 +15,63 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-       // Crear permisos
-        Permission::create(['name' => 'gestionar usuarios']);
-        Permission::create(['name' => 'gestionar lotes']);
-        Permission::create(['name' => 'gestionar casas']);
-        Permission::create(['name' => 'ver pagos']);
-        Permission::create(['name' => 'realizar pagos']);
-        Permission::create(['name' => 'realizar cortes']);
-        Permission::create(['name' => 'operaciones de caja']);
+       // Crear permisos, usando firstOrCreate para evitar duplicados
+       Permission::firstOrCreate(['name' => 'gestionar usuarios']);
+       Permission::firstOrCreate(['name' => 'gestionar lotes']);
+       Permission::firstOrCreate(['name' => 'gestionar casas']);
+       Permission::firstOrCreate(['name' => 'ver pagos']);
+       Permission::firstOrCreate(['name' => 'realizar pagos']);
+       Permission::firstOrCreate(['name' => 'realizar cortes']);
+       Permission::firstOrCreate(['name' => 'operaciones de caja']);
 
-        // Crear roles y asignar permisos
-        $superuserRole = Role::create(['name' => 'SuperUsuario']);
-        $superuserRole->givePermissionTo('gestionar usuarios');
-        $superuserRole->givePermissionTo('gestionar lotes');
-        $superuserRole->givePermissionTo('gestionar casas');
-        $superuserRole->givePermissionTo('ver pagos');
-        $superuserRole->givePermissionTo('realizar pagos');
-        $superuserRole->givePermissionTo('realizar cortes');
-        $superuserRole->givePermissionTo('operaciones de caja');
+       // Crear roles y asignar permisos, usando firstOrCreate para evitar duplicados
+       $superuserRole = Role::firstOrCreate(['name' => 'SuperUsuario']);
+       $superuserRole->givePermissionTo(['gestionar usuarios', 'gestionar lotes', 'gestionar casas', 'ver pagos', 'realizar pagos', 'realizar cortes', 'operaciones de caja']);
 
-        $propietarioRole = Role::create(['name' => 'Propietario']);
-        $propietarioRole->givePermissionTo('gestionar lotes');
-        $propietarioRole->givePermissionTo('gestionar casas');
-        $propietarioRole->givePermissionTo('ver pagos');
+       $propietarioRole = Role::firstOrCreate(['name' => 'Propietario']);
+       $propietarioRole->givePermissionTo(['gestionar lotes', 'gestionar casas', 'ver pagos']);
 
-        $adminGeneralRole = Role::create(['name' => 'AdminGeneral']);
-        $adminGeneralRole->givePermissionTo('gestionar usuarios');
-        $adminGeneralRole->givePermissionTo('gestionar lotes');
-        $adminGeneralRole->givePermissionTo('gestionar casas');
-        $adminGeneralRole->givePermissionTo('ver pagos');
+       $adminGeneralRole = Role::firstOrCreate(['name' => 'AdminGeneral']);
+       $adminGeneralRole->givePermissionTo(['gestionar usuarios', 'gestionar lotes', 'gestionar casas', 'ver pagos']);
 
-        $adminRole = Role::create(['name' => 'Admin']);
-        $adminRole->givePermissionTo('gestionar lotes');
-        $adminRole->givePermissionTo('gestionar casas');
-        $adminRole->givePermissionTo('ver pagos');
+       $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+       $adminRole->givePermissionTo(['gestionar lotes', 'gestionar casas', 'ver pagos']);
 
-        $gerenteCajaRole = Role::create(['name' => 'GerenteCaja']);
-        $gerenteCajaRole->givePermissionTo('realizar cortes');
-        $gerenteCajaRole->givePermissionTo('operaciones de caja');
+       $gerenteCajaRole = Role::firstOrCreate(['name' => 'GerenteCaja']);
+       $gerenteCajaRole->givePermissionTo(['realizar cortes', 'operaciones de caja']);
 
-        $operadorCajaRole = Role::create(['name' => 'OperadorCaja']);
-        $operadorCajaRole->givePermissionTo('operaciones de caja');
+       $operadorCajaRole = Role::firstOrCreate(['name' => 'OperadorCaja']);
+       $operadorCajaRole->givePermissionTo(['operaciones de caja']);
 
-        $clienteRole = Role::create(['name' => 'Cliente']);
-        $clienteRole->givePermissionTo('ver pagos');
+       $clienteRole = Role::firstOrCreate(['name' => 'Cliente']);
+       $clienteRole->givePermissionTo(['ver pagos']);
+
+       // Asignar roles a usuarios, si existen
+       $user = User::find(1);
+       if ($user) {
+           $user->assignRole('SuperUsuario');
+       }
+
+       $user = User::find(2);
+       if ($user) {
+           $user->assignRole('Propietario');
+       }
+
+       $user = User::find(3);
+       if ($user) {
+           $user->assignRole('AdminGeneral');
+       }
+
+       $user = User::find(4);
+       if ($user) {
+           $user->assignRole('Admin');
+       }
+
+       $user = User::find(5);
+       if ($user) {
+           $user->assignRole('GerenteCaja');
+       }
+
 
     }
 }

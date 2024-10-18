@@ -55,7 +55,40 @@ class UsersTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Puedes agregar más usuarios aquí
+
+            // crea dos usuarios más
+
+            [
+                'name' => 'Luisa Sanchez',
+                'paterno' => 'Sanchez',
+                'materno' => 'Garcia',
+                'nombre' => 'Luisa',
+                'email' => 'luis@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'),
+                'remember_token' => Str::random(10),
+                'current_team_id' => null,
+                'profile_photo_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Carlos Lopez',
+                'paterno' => 'Lopez',
+                'materno' => 'Garcia',
+                'nombre' => 'Carlos',
+                'email' => 'carlos.lopex@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'),
+                'remember_token' => Str::random(10),
+                'current_team_id' => null,
+                'profile_photo_path' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+
         ]);
     }
 }

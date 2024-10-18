@@ -39,7 +39,7 @@ class PredioController extends Controller
     {
         //return "termino edit";
 
-        $predio = $this->predioRepo->findPredioById($id);
+        $predio = $this->predioRepo->find($id);
         return view('sistema.predios.form', compact('predio'));
         //return response()->json($predio);
     }
@@ -61,7 +61,7 @@ class PredioController extends Controller
     {
        // return "termino show";
 
-        $predio = $this->predioRepo->findPredioById($id);
+        $predio = $this->predioRepo->find($id);
         //return response()->json($predio);
 
         return view('sistema.predios.show', compact('predio'));

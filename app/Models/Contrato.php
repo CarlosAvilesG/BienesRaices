@@ -81,7 +81,9 @@ class Contrato extends Model
 
     ];
 
+
     // Definir las relaciones con otros modelos
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'idCliente');
@@ -89,7 +91,7 @@ class Contrato extends Model
 
     public function lote()
     {
-        return $this->belongsTo(Lote::class, 'idLote');
+        return $this->belongsTo(Lote::class, 'idLote'); // 'idLote' es la clave foránea en la tabla de contratos que referencia a la tabla de lotes
     }
 
     public function usuario()

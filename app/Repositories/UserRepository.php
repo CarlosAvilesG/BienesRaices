@@ -34,4 +34,10 @@ class UserRepository implements UserRepositoryInterface
         $user = User::findOrFail($id);
         return $user->delete();
     }
+
+    // crear funcion para obtener usuario con rol propietario
+    public function findUserByRole($roleName)
+    {
+        return User::role($roleName)->first();  // Aquí usamos el modelo directamente
+    }
 }

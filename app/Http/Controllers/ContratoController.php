@@ -6,6 +6,8 @@ use App\Repositories\ContratoRepositoryInterface;
 use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\LoteRepositoryInterface;
 use App\Repositories\PredioRepositoryInterface;
+use App\Repositories\UserRepositoryInterface;
+
 use App\Http\Requests\StoreContratoRequest;
 use App\Http\Requests\UpdateContratoRequest;
 use App\Models\Predio;
@@ -14,6 +16,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\GeneralHelper;
+//use App\Models\User;
 
 class ContratoController extends Controller
 {
@@ -21,17 +24,20 @@ class ContratoController extends Controller
     protected $clienteRepository;
     protected $loteRepository;
     protected $predioRepository;
+    protected $userRepository;
 
     public function __construct(
         ContratoRepositoryInterface $contratoRepository,
         ClienteRepositoryInterface $clienteRepository,
         LoteRepositoryInterface $loteRepository,
-        PredioRepositoryInterface $predioRepository
+        PredioRepositoryInterface $predioRepository,
+        UserRepositoryInterface $userRepository
     ) {
         $this->contratoRepository = $contratoRepository;
         $this->clienteRepository = $clienteRepository;
         $this->loteRepository = $loteRepository;
         $this->predioRepository = $predioRepository;
+        $this->userRepository = $userRepository;
     }
 
     // probar si funciona
@@ -64,7 +70,7 @@ class ContratoController extends Controller
 
         // Obtener el precio del lote seleccionado
         $lotes = $this->loteRepository->show($request->idLote);
-         // Asegúrate de eliminar el formato de moneda (símbolo de $ y comas) del precio
+        // Asegúrate de eliminar el formato de moneda (símbolo de $ y comas) del precio
         $precioLote = str_replace([',', '$'], '', $lotes->precio);
         $request->merge(['PrecioPredio' => $precioLote]);
 
@@ -141,41 +147,146 @@ class ContratoController extends Controller
 
     public function generarPromesaVentaPDF($contratoId)
     {
-
-        // Supongamos que obtienes los datos del contrato y lote de la base de datos
+        // Obtener el contrato y sus relaciones
         $contrato =  $this->contratoRepository->findById($contratoId);
-        //obtener el predio por el id de predio
-        $predio = Predio::find($contrato->idPredio);
+        $lote = $contrato->lote;
+        $predio = $lote->predio;
+        $cliente = $contrato->cliente;  // Obtener el cliente completo
+        $usurio =  $contrato->usuario;
 
-        // Formatear el precio en número con formato de moneda
-        $precioFormateado = number_format($contrato->PrecioPredio, 2, '.', ',');  // Formato $638,179.78
+        // Buscar al usuario con rol de 'vendedor_autorizado'
+        //  $usuarioVendedor = User::role('vendedor_autorizado')->first();
+        $usuarioVendedor = $this->userRepository->findUserByRole('propietario');
 
+
+        // dd(Auth::user());
+        //obtener el usuario con rol propetario
+        //  $usurio = $this->contratoRepository->getUsuarioPropietario($contratoId);
+
+        // Formatear el precio en formato de moneda
+        $precioFormateado = number_format($contrato->PrecioPredio, 2, '.', ',');  // Ejemplo: $638,179.78
+
+        // Generar la representación del precio en letras
+        $precioEnLetras = GeneralHelper::convertirNumeroALetras($contrato->PrecioPredio);
+
+        // Datos a enviar a la vista
         $contratoData = [
-            'cliente' => $contrato->cliente->nombre . ' ' . $contrato->cliente->paterno . ' ' . $contrato->cliente->materno,
-            'vendedor' => 'Nombre del Vendedor',  // Aquí puedes agregar el nombre del vendedor si está en otra tabla o directamente
-            'lote' => [
-                'manzana' => $contrato->lote->manzana,
-                'lote' => $contrato->lote->lote,
-                'metrosCuadrados' => $contrato->lote->metrosCuadrados,
-            ],
-            'predio' => $contrato->lote->predio->nombre,  // Asegúrate de tener la relación Predio en el modelo Lote
-
-            'precio' => '$'.$precioFormateado, // $contrato->PrecioPredio,
+            'cliente' => $cliente->nombre . ' ' . $cliente->paterno . ' ' . $cliente->materno,  // Nombre completo
+            'vendedor' =>  $usuarioVendedor->nombre . ' ' . $usuarioVendedor->paterno . ' ' . $usuarioVendedor->materno, //'Nombre del Vendedor',  // Si hay un vendedor asociado
+            'precio' =>  $precioFormateado,
+            'precioLetras' => ucfirst($precioEnLetras) . ' M.N.',  // Precio en letras con formato correcto
             'letras' => $contrato->NoLetras,
             'interes' => $contrato->InteresMoroso,
             'temporalidad' => $contrato->ConvenioTemporalidadPago,
             'viaPago' => $contrato->ConvenioViaPago,
-            'plazo' =>  '12 meses',  // Puedes personalizar este valor según tu lógica
+            'plazo' => $contrato->NoLetras,  // Ajusta según sea necesario
             'observacion' => $contrato->observacion,
             'ciudad' => 'La Paz',  // Ciudad por defecto o dinámica
-            'precioLetras' => GeneralHelper::convertirNumeroALetras($contrato->PrecioPredio),
+            'montoEnganche' => $contrato->Enganche,
+            'montoAnualidad' => $contrato->PagoAnualidad,
+            'anualidades' => $contrato->Anualidades,
+            'montoFinanciar' => $contrato->PrecioPredio - $contrato->Enganche,
         ];
 
+        // objeto lote
+        $loteData = [
+
+            'manzana' => $lote->manzana,
+            'lote' => $lote->lote,
+            'metrosCuadrados' => $lote->metrosCuadrados,
+
+        ];
+
+        // objeto predio
+        $predioData = [
+
+            'nombre' => $predio->nombre,
+            'descripcion' => $predio->descripcion,
+            'claveCatastral' => $predio->claveCatastral,
+            'notaria' => $predio->Notaria,
+            'numeroEscritura' => $predio->numeroEscritura,
+            'folioEscritura' => $predio->folioEscritura,
+            'volumenEscritura' => $predio->volumenEscritura,
+            'coordenadasNorte' => $predio->coordenadasNorte,
+            'coordenadasSur' => $predio->coordenadasSur,
+            'coordenadasEste' => $predio->coordenadasEste,
+            'coordenadasOeste' => $predio->coordenadasOeste,
+
+        ];
+
+        // También enviar el objeto del cliente completo
+        $clienteData = [
+            'curp' => $cliente->curp,
+            'rfc' => $cliente->rfc,
+            'direccion' => $cliente->direccion,
+            'colonia' => $cliente->colonia,
+            'municipio' => $cliente->municipio,
+            'estadoRepublica' => $cliente->estadoRepublica,
+            'codigoPostal' => $cliente->codigoPostal,
+        ];
+
+        // Datos de la amortización (ejemplo sencillo)
+        $montoFinanciar = $contrato->PrecioPredio - $contrato->Enganche;  // Monto a financiar
+        $interesAnual = 0; // $contrato->InteresMoroso;   // Tasa de interés anual
+        $numPagos = $contrato->NoLetras;            // Número de pagos
+
+        $amortizacion = $this->generarTablaAmortizacion($montoFinanciar, $interesAnual, $numPagos, $contrato->Anualidades, $contrato->PagoAnualidad);
 
         // Generar el PDF con la vista y los datos
-        $pdf = PDF::loadView('sistema.contratos.promesa_venta_pdf', compact('contratoData'));
+        $pdf = PDF::loadView('sistema.contratos.promesa_venta_pdf', compact('contratoData', 'clienteData', 'loteData', 'predioData', 'amortizacion'));
 
         // Retornar el PDF generado para descarga o vista previa
         return $pdf->download('Promesa_Compra_Venta.pdf');
     }
+
+    private function generarTablaAmortizacion($monto, $interesAnual, $numPagos, $anualidades = 0, $pagoAnualidad = 0)
+{
+    $amortizacion = [];
+    $saldo = $monto;
+    $interesMensual = $interesAnual / 12 / 100;
+
+    // Si no hay interés, dividir el monto en cuotas iguales
+    $cuotaMensual = ($interesAnual > 0)
+        ? ($saldo * $interesMensual) / (1 - pow(1 + $interesMensual, -$numPagos))
+        : $monto / $numPagos;
+
+    $contadorAnualidades = 0;  // Para controlar cuántas anualidades se han aplicado
+
+    for ($i = 1; $i <= $numPagos; $i++) {
+        $interes = $saldo * $interesMensual;
+        $capital = $cuotaMensual - $interes;
+        $saldo -= $capital;
+
+        // Guardar la cuota mensual normal primero
+        $amortizacion[] = [
+            'numero' => $i,
+            'fecha' => now()->addMonths($i)->format('d/m/Y'),
+            'cuota' => $cuotaMensual,
+            'interes' => $interes,
+            'capital' => $capital,
+            'saldo' => $saldo > 0 ? $saldo : 0,
+        ];
+
+        // Aplicar la anualidad si corresponde, y si aún quedan anualidades por aplicar
+        if ($anualidades > 0 && $contadorAnualidades < $anualidades && $i % 12 == 0) {
+            $saldo -= $pagoAnualidad;  // Reducir el saldo con el pago de anualidad
+
+            // Añadir el pago de la anualidad
+            $amortizacion[] = [
+                'numero' => "$i (Anualidad)",  // Indicar que es la anualidad
+                'fecha' => now()->addMonths($i)->format('d/m/Y'),  // La misma fecha que el mes de la cuota
+                'cuota' => $pagoAnualidad,
+                'interes' => 0,  // No hay interés en el pago de la anualidad
+                'capital' => $pagoAnualidad,
+                'saldo' => $saldo > 0 ? $saldo : 0,
+            ];
+
+            $contadorAnualidades++;  // Incrementar el contador de anualidades aplicadas
+        }
+    }
+
+    return $amortizacion;
+}
+
+
 }

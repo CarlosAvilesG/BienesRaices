@@ -128,7 +128,7 @@
         </div>
 
         <!-- Botón para generar PDF del contrato de promesa de venta -->
-        <a href="{{ route('contrato.promesa.pdf', $contrato->id) }}" class="btn btn-primary mt-3"><i class="fas fa-file-pdf"></i> Generar Contrato de Promesa de Venta</a>
+        <a href="{{ route('contratoPromesaPdf', $contrato->id) }}" class="btn btn-primary mt-3"><i class="fas fa-file-pdf"></i> Generar Contrato de Promesa de Venta</a>
 
         <!-- Botón para regresar al listado -->
         <a href="{{ route('contratos.index') }}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Regresar</a>

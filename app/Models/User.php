@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    // use HasRoles; // Descomenta si vas a usar roles y permisos
+     use HasRoles; // Descomenta si vas a usar roles y permisos
 
     /**
      * The attributes that are mass assignable.
