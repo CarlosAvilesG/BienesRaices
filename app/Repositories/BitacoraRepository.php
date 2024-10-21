@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Bitacora;
 
+
 class BitacoraRepository implements BitacoraRepositoryInterface
 {
     // Obtener todos los registros de la bitácora

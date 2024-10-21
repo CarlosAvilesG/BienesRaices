@@ -8,6 +8,19 @@
 
 @section('content')
     <div class="container">
+
+          <!-- Botones pegajosos en la parte superior -->
+          <div class="sticky-top bg-light py-2 mb-3">
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('contratoPromesaPdf', $contrato->id) }}" class="btn btn-primary me-2">
+                    <i class="fas fa-file-pdf"></i> Generar Contrato de Promesa de Venta
+                </a>
+                <a href="{{ route('contratos.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
+        </div>
+
         <!-- Mensaje de éxito si existe -->
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -26,15 +39,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="NoContrato">No. de Contrato</label>
+                        <label for="NoContrato" class="font-weight-bold">No. de Contrato:</label>
                         <p>{{ $contrato->NoContrato }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="Cliente">Cliente</label>
+                        <label for="Cliente" class="font-weight-bold">Cliente:</label>
                         <p>{{ $contrato->cliente->nombre }} {{ $contrato->cliente->paterno }} {{ $contrato->cliente->materno }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="FechaCelebracion">Fecha de Celebración</label>
+                        <label for="FechaCelebracion" class="font-weight-bold">Fecha de Celebración:</label>
                         <p>{{ \Carbon\Carbon::parse($contrato->FechaCelebracion)->format('d/m/Y') }}</p>
                     </div>
                 </div>
@@ -49,15 +62,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="Lote">Manzana y Lote</label>
+                        <label for="Lote" class="font-weight-bold">Manzana y Lote:</label>
                         <p>Manzana: {{ $contrato->lote->manzana }}, Lote: {{ $contrato->lote->lote }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="DescripcionLote">Descripción del Lote</label>
+                        <label for="DescripcionLote" class="font-weight-bold">Descripción del Lote:</label>
                         <p>{{ $contrato->lote->descripcion }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="PrecioPredio">Precio del Lote</label>
+                        <label for="PrecioPredio" class="font-weight-bold">Precio del Lote:</label>
                         <p id="PrecioPredio" data-value="{{ $contrato->PrecioPredio }}">${{ number_format($contrato->PrecioPredio, 2) }}</p>
                     </div>
                 </div>
@@ -72,45 +85,45 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <label for="Enganche">Enganche</label>
+                        <label for="Enganche" class="font-weight-bold">Enganche:</label>
                         <p id="Enganche" data-value="{{ $contrato->Enganche }}">${{ number_format($contrato->Enganche, 2) }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="Anualidades">Anualidades</label>
+                        <label for="Anualidades" class="font-weight-bold">Anualidades:</label>
                         <p id="Anualidades" data-value="{{ $contrato->Anualidades }}">{{ $contrato->Anualidades }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="PagoAnualidad">Pago Anualidad</label>
+                        <label for="PagoAnualidad" class="font-weight-bold">Pago Anualidad:</label>
                         <p id="PagoAnualidad" data-value="{{ $contrato->PagoAnualidad }}">${{ number_format($contrato->PagoAnualidad, 2) }}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-4">
-                        <label for="NoLetras">Número de Letras (Pagos)</label>
+                        <label for="NoLetras" class="font-weight-bold">Número de Letras (Pagos):</label>
                         <p id="NoLetras" data-value="{{ $contrato->NoLetras }}">{{ $contrato->NoLetras }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="Mensualidad">Mensualidad</label>
+                        <label for="Mensualidad" class="font-weight-bold">Mensualidad:</label>
                         <p id="Mensualidad">${{ number_format($contrato->Mensualidad, 2) }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="Quincenal">Pago Quincenal</label>
+                        <label for="Quincenal" class="font-weight-bold">Pago Quincenal:</label>
                         <p id="Quincenal">${{ number_format($contrato->Quincenal, 2) }}</p>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-4">
-                        <label for="TotalAnualidad">Total en Anualidad</label>
+                        <label for="TotalAnualidad" class="font-weight-bold">Total en Anualidad:</label>
                         <p id="TotalAnualidad">${{ number_format($contrato->TotalAnualidad, 2) }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="TotalFinanciar">Total a Financiar</label>
+                        <label for="TotalFinanciar" class="font-weight-bold">Total a Financiar:</label>
                         <p id="TotalFinanciar">${{ number_format($contrato->TotalFinanciar, 2) }}</p>
                     </div>
                     <div class="col-md-4">
-                        <label for="InteresMoroso">Interés Moratorio</label>
+                        <label for="InteresMoroso" class="font-weight-bold">Interés Moratorio:</label>
                         <p>{{ $contrato->InteresMoroso }}%</p>
                     </div>
                 </div>
@@ -127,11 +140,18 @@
             </div>
         </div>
 
-        <!-- Botón para generar PDF del contrato de promesa de venta -->
-        <a href="{{ route('contratoPromesaPdf', $contrato->id) }}" class="btn btn-primary mt-3"><i class="fas fa-file-pdf"></i> Generar Contrato de Promesa de Venta</a>
+        <!-- Botones de Acción -->
+        {{-- <div class="d-flex justify-content-end">
+            <!-- Botón para generar PDF del contrato de promesa de venta -->
+            <a href="{{ route('contratoPromesaPdf', $contrato->id) }}" class="btn btn-primary me-2">
+                <i class="fas fa-file-pdf"></i> Generar Contrato de Promesa de Venta
+            </a>
 
-        <!-- Botón para regresar al listado -->
-        <a href="{{ route('contratos.index') }}" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Regresar</a>
+            <!-- Botón para regresar al listado -->
+            <a href="{{ route('contratos.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Regresar
+            </a>
+        </div> --}}
     </div>
 @stop
 

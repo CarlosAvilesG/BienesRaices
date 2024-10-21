@@ -50,7 +50,7 @@ class LoteController extends Controller
         }
 
         // Obtener los datos del predio (puedes ajustar según tu repositorio)
-        $predio = $this->predioRepo->findPredioById($predioId);
+        $predio = $this->predioRepo->find($predioId);
 
         // Asegurarse de que el predio exista
         if (!$predio) {

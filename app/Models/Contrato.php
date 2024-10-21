@@ -49,20 +49,34 @@ class Contrato extends Model
        // 'CanceladoObservacion',
     ];
 
-    // Evento para calcular FechaTerminoLetras antes de crear el contrato
+
     protected static function boot()
     {
         parent::boot();
 
+        // EVENTO ANTES DE CREAR UN CONTRATO
+        
+        // Evento para calcular FechaTerminoLetras antes de crear el contrato
         static::creating(function ($contrato) {
-            if ($contrato->FechaCelebracion && $contrato->NoAnios) {
-                // Convertir NoAnios a un entero para asegurarse de que no es una cadena
-                $noAnios = (int) $contrato->NoAnios;
+            // Verificar que el campo 'FechaCelebracion' sea una fecha válida
+            if (!empty($contrato->FechaCelebracion) && \Carbon\Carbon::hasFormat($contrato->FechaCelebracion, 'Y-m-d')) {
 
-                // Ahora usarlo con Carbon::addYears() de forma segura
-                $contrato->FechaTerminoLetras = \Carbon\Carbon::parse($contrato->FechaCelebracion)->addYears($noAnios);
+                // Verificar que el campo 'NoAnios' sea un número válido mayor que cero
+                if (!empty($contrato->NoAnios) && is_numeric($contrato->NoAnios)) {
+                    $noAnios = (int) $contrato->NoAnios;
+
+                    // Calcular 'FechaTerminoLetras' sumando los años a la 'FechaCelebracion'
+                    $contrato->FechaTerminoLetras = \Carbon\Carbon::parse($contrato->FechaCelebracion)->addYears($noAnios);
+                } else {
+                    // Si 'NoAnios' no es válido, puedes lanzar un error o asignar un valor predeterminado
+                   // \Log::error("NoAnios no es válido o está vacío: {$contrato->NoAnios}");
+                }
+            } else {
+                // Si 'FechaCelebracion' no es válida, puedes lanzar un error o hacer un fallback
+              //  \Log::error("FechaCelebracion no es válida: {$contrato->FechaCelebracion}");
             }
         });
+
         // EVENTO DESPUES DE CREAR UN CONTRATO para guardar el id del contrato en la tabla de lotes, sera buscar del repositorio de lotes y actualizar el campo idContrato
         static::created(function ($contrato) {
             $loteRepository = new LoteRepository();
@@ -73,6 +87,9 @@ class Contrato extends Model
 
     }
 
+
+
+
     // Casts para asegurar que los tipos sean correctos
     protected $casts = [
         'PrecioPredio' => 'decimal:2',
@@ -81,9 +98,7 @@ class Contrato extends Model
 
     ];
 
-
     // Definir las relaciones con otros modelos
-
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'idCliente');
@@ -91,7 +106,7 @@ class Contrato extends Model
 
     public function lote()
     {
-        return $this->belongsTo(Lote::class, 'idLote'); // 'idLote' es la clave foránea en la tabla de contratos que referencia a la tabla de lotes
+        return $this->belongsTo(Lote::class, 'idLote');
     }
 
     public function usuario()

@@ -21,44 +21,44 @@ return new class extends Migration
             $table->unsignedBigInteger('idLote'); // Referencia al lote
 
             // Información del contrato
-            $table->string('NoContrato', 50);
-            $table->string('NoConvenio', 10)->nullable();
+            $table->string('noContrato', 50);
+            $table->string('noConvenio', 10)->nullable();
             // campo para numero de amios
-            $table->integer('NoAnios')->nullable();
-            $table->integer('NoLetras')->nullable(); // Número de pagos (letras)
+            $table->integer('noAnios')->nullable();
+            $table->integer('noLetras')->nullable(); // Número de pagos (letras)
 
             // Detalles financieros
-            $table->decimal('PrecioPredio', 18, 2);
-            $table->decimal('InteresMoroso', 3, 1)->nullable();
+            $table->decimal('precioPredio', 18, 2);
+            $table->decimal('interesMoroso', 3, 1)->nullable();
 
             // Fechas importantes
-            $table->date('FechaCelebracion');
-            $table->string('HoraCelebracion', 8); // Formato estándar HH:MM:SS
-            $table->date('FechaTerminoLetras')->nullable();
+            $table->date('fechaCelebracion');
+            $table->string('horaCelebracion', 8); // Formato estándar HH:MM:SS
+            $table->date('fechaTerminoLetras')->nullable();
 
             // Convenios y modalidades de pago
             //$table->string('ConvenioTemporalidadPago', 50)->nullable();
-            $table->enum('ConvenioTemporalidadPago', ['Quincenal', 'Mensual'])->default('Mensual');
+            $table->enum('convenioTemporalidadPago', ['Quincenal', 'Mensual'])->default('Mensual');
            // $table->string('ConvenioViaPago', 50)->nullable();
-            $table->enum('ConvenioViaPago', ['Efectivo', 'Bancario', 'Nomina'])->default('Efectivo');
+            $table->enum('convenioViaPago', ['Efectivo', 'Bancario', 'Nomina'])->default('Efectivo');
             // columnas para establecer pago de anualidades en caso de ser necesario
-            $table->integer('Anualidades')->default(0);
-            $table->decimal('PagoAnualidad', 18, 2)->nullable();
+            $table->integer('anualidades')->default(0);
+            $table->decimal('pagoAnualidad', 18, 2)->nullable();
              // agrega campo para ingresar el enganche
-             $table->decimal('Enganche', 18, 2)->nullable();
+             $table->decimal('enganche', 18, 2)->nullable();
 
 
             // Información de registro y auditoría
             //
-            $table->date('FechaRegistro')->default(DB::raw('CURRENT_DATE'));
-            $table->string('HoraRegistro', 8)->default(DB::raw('CURRENT_TIME'));
+            $table->date('fechaRegistro')->default(DB::raw('CURRENT_DATE'));
+            $table->string('horaRegistro', 8)->default(DB::raw('CURRENT_TIME'));
             $table->unsignedBigInteger('idUsuario')->nullable(); // Usuario que registra el contrato
 
             // Estado del contrato
             $table->text('observacion')->nullable();
           //  $table->boolean('cancelado')->default(false); //ya esta conciderado en el estatus
             $table->unsignedBigInteger('idUsuCancela')->nullable();
-            $table->text('CanceladoObservacion')->nullable();
+            $table->text('canceladoObservacion')->nullable();
 
 
 
@@ -77,7 +77,7 @@ return new class extends Migration
             $table->enum('estatus', ['Activo', 'Cancelado', 'Finiquitado'])->default('Activo');
 
             // Índices para optimización de consultas
-            $table->index('NoContrato');
+            $table->index('noContrato');
             $table->index('idCliente');
             $table->index('idLote');
         });

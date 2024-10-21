@@ -7,16 +7,14 @@ use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\LoteRepositoryInterface;
 use App\Repositories\PredioRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
+use App\Repositories\BitacoraRepositoryInterface;
 
 use App\Http\Requests\StoreContratoRequest;
 use App\Http\Requests\UpdateContratoRequest;
-use App\Models\Predio;
-use App\Repositories\PredioRepository;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\GeneralHelper;
-//use App\Models\User;
+
 
 class ContratoController extends Controller
 {
@@ -25,19 +23,22 @@ class ContratoController extends Controller
     protected $loteRepository;
     protected $predioRepository;
     protected $userRepository;
+    protected $bitacoraRepository;
 
     public function __construct(
         ContratoRepositoryInterface $contratoRepository,
         ClienteRepositoryInterface $clienteRepository,
         LoteRepositoryInterface $loteRepository,
         PredioRepositoryInterface $predioRepository,
-        UserRepositoryInterface $userRepository
+        UserRepositoryInterface $userRepository,
+        BitacoraRepositoryInterface $bitacoraRepository,
     ) {
         $this->contratoRepository = $contratoRepository;
         $this->clienteRepository = $clienteRepository;
         $this->loteRepository = $loteRepository;
         $this->predioRepository = $predioRepository;
         $this->userRepository = $userRepository;
+        $this->bitacoraRepository = $bitacoraRepository;
     }
 
     // probar si funciona
@@ -231,6 +232,20 @@ class ContratoController extends Controller
         $numPagos = $contrato->NoLetras;            // Número de pagos
 
         $amortizacion = $this->generarTablaAmortizacion($montoFinanciar, $interesAnual, $numPagos, $contrato->Anualidades, $contrato->PagoAnualidad);
+
+        // utilica Repositories Bitacora para guardar la bitacora de la generacion de la promesa de venta
+         $this->bitacoraRepository->create([
+            'fecha' => now(),
+            'usuario' => Auth::user()->id,
+            'tabla' => 'contratos',
+            'tipoOperacion' => 'Generación de promesa de venta',
+            'campoLlave' => $contrato->id,
+            'descripcion' => 'Se generó la promesa de venta del contrato ' . $contrato->identificadorContrato,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
+
 
         // Generar el PDF con la vista y los datos
         $pdf = PDF::loadView('sistema.contratos.promesa_venta_pdf', compact('contratoData', 'clienteData', 'loteData', 'predioData', 'amortizacion'));

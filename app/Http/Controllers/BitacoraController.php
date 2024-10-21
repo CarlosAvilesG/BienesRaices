@@ -49,4 +49,6 @@ class BitacoraController extends Controller
         $this->bitacoraRepository->delete($id);
         return response()->json(null, 204);
     }
+
+
 }
