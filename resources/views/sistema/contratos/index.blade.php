@@ -53,14 +53,15 @@
                                 <td>
                                     <a href="{{ route('contratos.show', $contrato->id) }}" class="btn btn-info btn-sm">Ver</a>
                                     <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                    //boton para cencelar contrato en su estatus = cancelado
-                                    <a href="{{ route('contratos.cancelar', $contrato->id) }}" class="btn btn-danger btn-sm">Cancelar</a>
+                                    {{-- //boton para cencelar contrato en su estatus = cancelado
+                                    <a href="{{ route('contratos.cancelar', $contrato->id) }}" class="btn btn-danger btn-sm">Cancelar</a> --}}
 
-                                    {{-- <form action="{{ route('contratos.destroy', $contrato->id) }}" method="POST" class="d-inline">
+
+                                    <form action="{{ route('contratos.destroy', $contrato->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                    </form> --}}
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

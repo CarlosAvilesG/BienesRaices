@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class ConceptoEgreso extends Model
 {
-    use HasFactory;
+       use HasFactory, Auditable;
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo

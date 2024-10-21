@@ -15,8 +15,8 @@ class StoreContratoRequest extends FormRequest
     public function rules(): array
     {
         $this->merge([
-            'PrecioPredio' => str_replace(['$', ','], '', $this->PrecioPredio), // Convierte a número decimal
-            'Enganche' => str_replace(['$', ','], '', $this->Enganche), // Convierte a número decimal
+            'precioPredio' => str_replace(['$', ','], '', $this->precioPredio), // Convierte a número decimal
+            'enganche' => str_replace(['$', ','], '', $this->enganche), // Convierte a número decimal
         ]);
 
         return [

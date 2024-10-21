@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class Predio extends Model
 {
-    use HasFactory;
+    use HasFactory, Auditable;
 
    // protected $table = 'predio';
 
@@ -54,7 +55,7 @@ class Predio extends Model
         'coordinadasSur' => 'required|string|max:30',
         'coordinadasEste' => 'required|string|max:30',
         'coordinadasOeste' => 'required|string|max:30',
-        
+
         'estadoRepublica' => 'required|string|max:30',
         'municipio' => 'required|string|max:30',
         'localidad' => 'required|string|max:30',

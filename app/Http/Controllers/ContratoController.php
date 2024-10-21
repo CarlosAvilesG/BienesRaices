@@ -73,17 +73,17 @@ class ContratoController extends Controller
         $lotes = $this->loteRepository->show($request->idLote);
         // Asegúrate de eliminar el formato de moneda (símbolo de $ y comas) del precio
         $precioLote = str_replace([',', '$'], '', $lotes->precio);
-        $request->merge(['PrecioPredio' => $precioLote]);
+        $request->merge(['precioPredio' => $precioLote]);
 
         // para calcular el número de letras basado en años y temporalidad (MENSUAL O QUINCENAL)
-        $request->merge(['NoLetras' => (int) $request->NoAnios * ($request->ConvenioTemporalidadPago == 'Quincenal' ? 24 : 12)]);
+        $request->merge(['noLetras' => (int) $request->noAnios * ($request->convenioTemporalidadPago == 'Quincenal' ? 24 : 12)]);
 
         // Asignar el ID del usuario autenticado
         $request->merge(['idUsuario' => Auth::user()->id]);
 
         // Validar que Anualidades no sea mayor que NoAnios
-        if ($request->Anualidades > $request->NoAnios) {
-            return redirect()->back()->withErrors(['Anualidades' => 'El campo Anualidades no puede ser mayor que el tiempo del contrato.'])->withInput();
+        if ($request->anualidades > $request->noAnios) {
+            return redirect()->back()->withErrors(['anualidades' => 'El campo Anualidades no puede ser mayor que el tiempo del contrato.'])->withInput();
         }
 
         // Validar los datos después de haber manipulado el request
@@ -165,10 +165,10 @@ class ContratoController extends Controller
         //  $usurio = $this->contratoRepository->getUsuarioPropietario($contratoId);
 
         // Formatear el precio en formato de moneda
-        $precioFormateado = number_format($contrato->PrecioPredio, 2, '.', ',');  // Ejemplo: $638,179.78
+        $precioFormateado = number_format($contrato->precioPredio, 2, '.', ',');  // Ejemplo: $638,179.78
 
         // Generar la representación del precio en letras
-        $precioEnLetras = GeneralHelper::convertirNumeroALetras($contrato->PrecioPredio);
+        $precioEnLetras = GeneralHelper::convertirNumeroALetras($contrato->precioPredio);
 
         // Datos a enviar a la vista
         $contratoData = [
@@ -176,17 +176,17 @@ class ContratoController extends Controller
             'vendedor' =>  $usuarioVendedor->nombre . ' ' . $usuarioVendedor->paterno . ' ' . $usuarioVendedor->materno, //'Nombre del Vendedor',  // Si hay un vendedor asociado
             'precio' =>  $precioFormateado,
             'precioLetras' => ucfirst($precioEnLetras) . ' M.N.',  // Precio en letras con formato correcto
-            'letras' => $contrato->NoLetras,
-            'interes' => $contrato->InteresMoroso,
-            'temporalidad' => $contrato->ConvenioTemporalidadPago,
-            'viaPago' => $contrato->ConvenioViaPago,
-            'plazo' => $contrato->NoLetras,  // Ajusta según sea necesario
+            'letras' => $contrato->noLetras,
+            'interes' => $contrato->interesMoroso,
+            'temporalidad' => $contrato->convenioTemporalidadPago,
+            'viaPago' => $contrato->convenioViaPago,
+            'plazo' => $contrato->noLetras,  // Ajusta según sea necesario
             'observacion' => $contrato->observacion,
             'ciudad' => 'La Paz',  // Ciudad por defecto o dinámica
-            'montoEnganche' => $contrato->Enganche,
-            'montoAnualidad' => $contrato->PagoAnualidad,
-            'anualidades' => $contrato->Anualidades,
-            'montoFinanciar' => $contrato->PrecioPredio - $contrato->Enganche,
+            'montoEnganche' => $contrato->enganche,
+            'montoAnualidad' => $contrato->pagoAnualidad,
+            'anualidades' => $contrato->anualidades,
+            'montoFinanciar' => $contrato->precioPredio - $contrato->enganche,
         ];
 
         // objeto lote
@@ -204,7 +204,7 @@ class ContratoController extends Controller
             'nombre' => $predio->nombre,
             'descripcion' => $predio->descripcion,
             'claveCatastral' => $predio->claveCatastral,
-            'notaria' => $predio->Notaria,
+            'notaria' => $predio->notaria,
             'numeroEscritura' => $predio->numeroEscritura,
             'folioEscritura' => $predio->folioEscritura,
             'volumenEscritura' => $predio->volumenEscritura,
@@ -227,23 +227,23 @@ class ContratoController extends Controller
         ];
 
         // Datos de la amortización (ejemplo sencillo)
-        $montoFinanciar = $contrato->PrecioPredio - $contrato->Enganche;  // Monto a financiar
+        $montoFinanciar = $contrato->precioPredio - $contrato->enganche;  // Monto a financiar
         $interesAnual = 0; // $contrato->InteresMoroso;   // Tasa de interés anual
-        $numPagos = $contrato->NoLetras;            // Número de pagos
+        $numPagos = $contrato->noLetras;            // Número de pagos
 
-        $amortizacion = $this->generarTablaAmortizacion($montoFinanciar, $interesAnual, $numPagos, $contrato->Anualidades, $contrato->PagoAnualidad);
+        $amortizacion = $this->generarTablaAmortizacion($montoFinanciar, $interesAnual, $numPagos, $contrato->anualidades, $contrato->pagoAnualidad);
 
-        // utilica Repositories Bitacora para guardar la bitacora de la generacion de la promesa de venta
-         $this->bitacoraRepository->create([
-            'fecha' => now(),
-            'usuario' => Auth::user()->id,
-            'tabla' => 'contratos',
-            'tipoOperacion' => 'Generación de promesa de venta',
-            'campoLlave' => $contrato->id,
-            'descripcion' => 'Se generó la promesa de venta del contrato ' . $contrato->identificadorContrato,
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
+        // // utilica Repositories Bitacora para guardar la bitacora de la generacion de la promesa de venta
+        //  $this->bitacoraRepository->create([
+        //     'fecha' => now(),
+        //     'usuario' => Auth::user()->id,
+        //     'tabla' => 'contratos',
+        //     'tipoOperacion' => 'Generación de promesa de venta',
+        //     'campoLlave' => $contrato->id,
+        //     'descripcion' => 'Se generó la promesa de venta del contrato ' . $contrato->identificadorContrato,
+        //     'ip' => request()->ip(),
+        //     'user_agent' => request()->userAgent(),
+        // ]);
 
 
 

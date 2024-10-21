@@ -6,10 +6,11 @@ use App\Repositories\LoteRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Auditable;
 
 class Contrato extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Auditable;
 
     // Definir el nombre de la tabla si es diferente al plural del modelo
     // protected $table = 'contrato';
@@ -26,22 +27,22 @@ class Contrato extends Model
         'identificadorContrato',
         'idCliente',
         'idLote',
-        'NoContrato',
-        'NoConvenio',
-        'NoAnios',
-        'NoLetras',
-        'PrecioPredio',
-        'InteresMoroso',
-        'FechaCelebracion',
-        'HoraCelebracion',
-        'FechaTerminoLetras',
-        'ConvenioTemporalidadPago',
-        'ConvenioViaPago',
-        'Anualidades',
-        'PagoAnualidad',
-        'Enganche',
-        'FechaRegistro',
-        'HoraRegistro',
+        'noContrato',
+        'noConvenio',
+        'noAnios',
+        'noLetras',
+        'precioPredio',
+        'interesMoroso',
+        'fechaCelebracion',
+        'horaCelebracion',
+        'fechaTerminoLetras',
+        'convenioTemporalidadPago',
+        'convenioViaPago',
+        'anualidades',
+        'pagoAnualidad',
+        'enganche',
+        'fechaRegistro',
+        'horaRegistro',
         'idUsuario',
         'observacion',
 
@@ -55,18 +56,18 @@ class Contrato extends Model
         parent::boot();
 
         // EVENTO ANTES DE CREAR UN CONTRATO
-        
+
         // Evento para calcular FechaTerminoLetras antes de crear el contrato
         static::creating(function ($contrato) {
             // Verificar que el campo 'FechaCelebracion' sea una fecha válida
-            if (!empty($contrato->FechaCelebracion) && \Carbon\Carbon::hasFormat($contrato->FechaCelebracion, 'Y-m-d')) {
+            if (!empty($contrato->fechaCelebracion) && \Carbon\Carbon::hasFormat($contrato->fechaCelebracion, 'Y-m-d')) {
 
                 // Verificar que el campo 'NoAnios' sea un número válido mayor que cero
-                if (!empty($contrato->NoAnios) && is_numeric($contrato->NoAnios)) {
-                    $noAnios = (int) $contrato->NoAnios;
+                if (!empty($contrato->noAnios) && is_numeric($contrato->noAnios)) {
+                    $noAnios = (int) $contrato->noAnios;
 
                     // Calcular 'FechaTerminoLetras' sumando los años a la 'FechaCelebracion'
-                    $contrato->FechaTerminoLetras = \Carbon\Carbon::parse($contrato->FechaCelebracion)->addYears($noAnios);
+                    $contrato->fechaTerminoLetras = \Carbon\Carbon::parse($contrato->fechaCelebracion)->addYears($noAnios);
                 } else {
                     // Si 'NoAnios' no es válido, puedes lanzar un error o asignar un valor predeterminado
                    // \Log::error("NoAnios no es válido o está vacío: {$contrato->NoAnios}");
@@ -78,11 +79,22 @@ class Contrato extends Model
         });
 
         // EVENTO DESPUES DE CREAR UN CONTRATO para guardar el id del contrato en la tabla de lotes, sera buscar del repositorio de lotes y actualizar el campo idContrato
+        // static::created(function ($contrato) {
+        //     $loteRepository = new LoteRepository();
+        //     $lote = $loteRepository->show($contrato->idLote);
+        //     $lote->idContrato = $contrato->id;
+        //     $lote->save();
+        // });
         static::created(function ($contrato) {
-            $loteRepository = new LoteRepository();
-            $lote = $loteRepository->show($contrato->idLote);
-            $lote->idContrato = $contrato->id;
-            $lote->save();
+            // Al crear un contrato, también queremos actualizar el lote relacionado
+            $lote = $contrato->lote;
+
+            if ($lote) {
+                // Al actualizar el lote, podemos almacenar una razón temporal para la bitácora
+                $lote->setAuditReason('Actualización derivada de la creación del contrato con ID ' . $contrato->id);
+                $lote->idContrato = $contrato->id;
+                $lote->save();
+            }
         });
 
     }
@@ -92,8 +104,8 @@ class Contrato extends Model
 
     // Casts para asegurar que los tipos sean correctos
     protected $casts = [
-        'PrecioPredio' => 'decimal:2',
-        'InteresMoroso' => 'decimal:1',
+        'precioPredio' => 'decimal:2',
+        'interesMoroso' => 'decimal:1',
         'engache' => 'decimal:2',
 
     ];

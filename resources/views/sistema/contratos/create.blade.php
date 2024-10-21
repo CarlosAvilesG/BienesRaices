@@ -11,6 +11,7 @@
 @section('content')
     <div class="container">
 
+
         <!-- Mensaje de éxito si existe -->
         @if (session('success'))
             <div class="alert alert-success">
@@ -32,6 +33,13 @@
         <!-- Formulario de Creación -->
         <form action="{{ route('contratos.store') }}" method="POST">
             @csrf
+            <!-- Botones pegajosos en la parte superior -->
+            <div class="sticky-top bg-light py-2 mb-3">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Crear Contrato</button>
+                    <a href="{{ route('contratos.index') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </div>
 
             <div class="card card-primary">
                 <div class="card-header">
@@ -83,17 +91,17 @@
 
                         <!-- Precio del predio -->
                         <div class="col-md-3">
-                            <label for="PrecioPredio" data-toggle="tooltip"
+                            <label for="precioPredio" data-toggle="tooltip"
                                 data-original-title="Precio original del lote">Precio del Lote</label>
-                            <input type="text" id="PrecioPredio" name="PrecioPredio" class="form-control"
-                                value="{{ old('PrecioPredio') }}" readonly>
+                            <input type="text" id="precioPredio" name="precioPredio" class="form-control"
+                                value="{{ old('precioPredio') }}" readonly>
                         </div>
 
                         <div class="col-md-3">
-                            <label for="Enganche" data-toggle="tooltip" data-original-title="Pago de Enganche">Pago del
+                            <label for="enganche" data-toggle="tooltip" data-original-title="Pago de Enganche">Pago del
                                 Enganche</label>
-                            <input type="text" id="Enganche" name="Enganche" class="form-control"
-                                value="{{ old('Enganche') }}">
+                            <input type="text" id="enganche" name="enganche" class="form-control"
+                                value="{{ old('enganche') }}">
                         </div>
                     </div>
 
@@ -107,49 +115,49 @@
 
                         <!-- No. de Contrato -->
                         <div class="col-md-3">
-                            <label for="NoContrato">No. de Contrato</label>
-                            <input type="text" name="NoContrato" class="form-control" required
-                                value="{{ old('NoContrato') }}">
+                            <label for="noContrato">No. de Contrato</label>
+                            <input type="text" name="noContrato" class="form-control" required
+                                value="{{ old('noContrato') }}">
                         </div>
                         <!-- No. de Convenio -->
                         <div class="col-md-6">
-                            <label for="NoConvenio" data-toggle="tooltip" data-original-title="Máximo 10 caracteres">No. de
+                            <label for="noConvenio" data-toggle="tooltip" data-original-title="Máximo 10 caracteres">No. de
                                 Convenio</label>
-                            <input type="text" name="NoConvenio" class="form-control" maxlength="10"
-                                value="{{ old('NoConvenio') }}">
+                            <input type="text" name="noConvenio" class="form-control" maxlength="10"
+                                value="{{ old('noConvenio') }}">
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <!-- Fecha de Celebración -->
                         <div class="col-md-3">
-                            <label for="FechaCelebracion">Fecha de Celebración</label>
-                            <input type="date" name="FechaCelebracion" id="FechaCelebracion" class="form-control"
-                                required value="{{ old('FechaCelebracion') }}">
+                            <label for="fechaCelebracion">Fecha de Celebración</label>
+                            <input type="date" name="fechaCelebracion" id="fechaCelebracion" class="form-control"
+                                required value="{{ old('fechaCelebracion') }}">
                         </div>
 
                         <!-- Hora de Celebración -->
                         <div class="col-md-3">
-                            <label for="HoraCelebracion">Hora de Celebración</label>
-                            <input type="time" id="HoraCelebracion" name="HoraCelebracion" class="form-control" required
-                                value="{{ old('HoraCelebracion') }}">
+                            <label for="horaCelebracion">Hora de Celebración</label>
+                            <input type="time" id="horaCelebracion" name="horaCelebracion" class="form-control" required
+                                value="{{ old('horaCelebracion') }}">
                         </div>
 
                         <!-- Número de años -->
                         <div class="col-md-3">
-                            <label for="NoAnios" data-toggle="tooltip"
+                            <label for="noAnios" data-toggle="tooltip"
                                 data-original-title="Número de años que dura el contrato">Años del Contrato</label>
-                            <input type="number" step="1" name="NoAnios" id="NoAnios" class="form-control"
-                                value="{{ old('NoAnios') }}">
+                            <input type="number" step="1" name="noAnios" id="noAnios" class="form-control"
+                                value="{{ old('noAnios') }}">
                         </div>
 
                         <!-- No. de Letras -->
                         <div class="col-md-3">
-                            <label for="NoLetras" data-toggle="tooltip"
+                            <label for="noLetras" data-toggle="tooltip"
                                 data-original-title="Modificado: tabla: lotes, campo: plazoMeses">Número de Letras
                                 (Pagos)</label>
-                            <input type="number" name="NoLetras" id="NoLetras" class="form-control"
-                                value="{{ old('NoLetras') }}" readonly>
+                            <input type="number" name="noLetras" id="noLetras" class="form-control"
+                                value="{{ old('noLetras') }}" readonly>
                         </div>
 
 
@@ -162,53 +170,53 @@
                     <div class="row mt-3">
                         <!-- Convenio Temporalidad Pago -->
                         <div class="col-md-3">
-                            <label for="ConvenioTemporalidadPago" data-toggle="tooltip"
+                            <label for="convenioTemporalidadPago" data-toggle="tooltip"
                                 data-original-title="Opciones: quincenal, mensual">Temporalidad de Pago</label>
-                            <select id="ConvenioTemporalidadPago" class="form-control" name="ConvenioTemporalidadPago">
+                            <select id="convenioTemporalidadPago" class="form-control" name="convenioTemporalidadPago">
                                 <option value="">Selecciona una opción</option>
                                 <option value="Quincenal"
-                                    {{ old('ConvenioTemporalidadPago') == 'Quincenal' ? 'selected' : '' }}>Quincenal
+                                    {{ old('convenioTemporalidadPago') == 'Quincenal' ? 'selected' : '' }}>Quincenal
                                 </option>
                                 <option value="Mensual"
-                                    {{ old('ConvenioTemporalidadPago') == 'Mensual' ? 'selected' : '' }}>Mensual</option>
+                                    {{ old('convenioTemporalidadPago') == 'Mensual' ? 'selected' : '' }}>Mensual</option>
                             </select>
                         </div>
 
                         <!-- Convenio Vía de Pago -->
                         <div class="col-md-3">
-                            <label for="ConvenioViaPago" data-toggle="tooltip"
+                            <label for="convenioViaPago" data-toggle="tooltip"
                                 data-original-title="Opciones: efectivo, bancaria, nómina">Convenio Vía de Pago</label>
-                            <select class="form-control" id="ConvenioViaPago" name="ConvenioViaPago">
+                            <select class="form-control" id="convenioViaPago" name="convenioViaPago">
                                 <option value="">Selecciona una opción</option>
-                                <option value="Efectivo" {{ old('ConvenioViaPago') == 'Efectivo' ? 'selected' : '' }}>
+                                <option value="Efectivo" {{ old('convenioViaPago') == 'Efectivo' ? 'selected' : '' }}>
                                     Efectivo</option>
-                                <option value="Bancario" {{ old('ConvenioViaPago') == 'Bancario' ? 'selected' : '' }}>
+                                <option value="Bancario" {{ old('convenioViaPago') == 'Bancario' ? 'selected' : '' }}>
                                     Bancario</option>
-                                <option value="Nomina" {{ old('ConvenioViaPago') == 'Nomina' ? 'selected' : '' }}>Nomina
+                                <option value="Nomina" {{ old('convenioViaPago') == 'Nomina' ? 'selected' : '' }}>Nomina
                                 </option>
                             </select>
                         </div>
                         <!-- Anualidades -->
                         <div class="col-md-2">
-                            <label for="Anualidades" data-toggle="tooltip"
+                            <label for="anualidades" data-toggle="tooltip"
                                 data-original-title="Número de anualidades">Anualidades</label>
-                            <input type="number" id="Anualidades" name="Anualidades" step="1"
-                                class="form-control" value="{{ old('Anualidades', 0) }}">
+                            <input type="number" id="anualidades" name="anualidades" step="1"
+                                class="form-control" value="{{ old('anualidades', 0) }}">
                         </div>
 
                         <!-- Pago Anualidad -->
                         <div class="col-md-2">
-                            <label for="PagoAnualidad" data-toggle="tooltip"
+                            <label for="pagoAnualidad" data-toggle="tooltip"
                                 data-original-title="Si no hay Pagos Anuales poner cero, Si incluye no puede ser mayor a los Anios del Contrato">Pago
                                 Anualidad</label>
-                            <input type="number" step="1" id="PagoAnualidad" name="PagoAnualidad"
-                                class="form-control" value="{{ old('PagoAnualidad') }}">
+                            <input type="number" step="1" id="pagoAnualidad" name="pagoAnualidad"
+                                class="form-control" value="{{ old('pagoAnualidad') }}">
                         </div>
                         <!-- Interés Moroso -->
                         <div class="col-md-2">
-                            <label for="InteresMoroso" data-toggle="tooltip" data-original-title="Default: 10%">Interés
+                            <label for="interesMoroso" data-toggle="tooltip" data-original-title="Default: 10%">Interés
                                 Moratorio (%)</label>
-                            <input type="number" name="InteresMoroso" id="InteresMoroso" class="form-control"
+                            <input type="number" name="interesMoroso" id="interesMoroso" class="form-control"
                                 step="0.1" value="10">
                         </div>
                     </div>
@@ -266,10 +274,10 @@
             </div>
 
             <!-- Botones de acción -->
-            <div class="form-group mt-3">
+            {{-- <div class="form-group mt-3">
                 <button type="submit" class="btn btn-primary">Crear Contrato</button>
                 <a href="{{ route('contratos.index') }}" class="btn btn-secondary">Cancelar</a>
-            </div>
+            </div> --}}
         </form>
     </div>
 @stop
@@ -282,9 +290,9 @@
             // Función para calcular el número de letras basado en años y temporalidad
             function updateNoLetras() {
                 // Obtiene el valor de años
-                const anios = parseInt($('#NoAnios').val());
+                const anios = parseInt($('#noAnios').val());
                 // Obtiene el valor del select de temporalidad
-                const temporalidad = $('#ConvenioTemporalidadPago').val();
+                const temporalidad = $('#convenioTemporalidadPago').val();
                 // Variable para almacenar el factor de la temporalidad
                 let temporalidadFactor = 0;
                 // Verifica el tipo de temporalidad seleccionada
@@ -297,26 +305,26 @@
                 if (!isNaN(anios) && anios > 0 && temporalidadFactor > 0) {
                     const noLetras = anios * temporalidadFactor;
                     // Establece el valor calculado en el campo NoLetras
-                    $('#NoLetras').val(noLetras);
+                    $('#noLetras').val(noLetras);
                 } else {
                     // Si los valores no son válidos, vacía el campo NoLetras
-                    $('#NoLetras').val('');
+                    $('#noLetras').val('');
                 }
             }
 
             // Escucha los eventos 'input' y 'change' en los campos involucrados
-            $('#NoAnios').on('input', updateNoLetras);
-            $('#ConvenioTemporalidadPago').on('change', updateNoLetras); // Usar 'change' para selects
+            $('#noAnios').on('input', updateNoLetras);
+            $('#convenioTemporalidadPago').on('change', updateNoLetras); // Usar 'change' para selects
 
             // Función para calcular la mensualidad
             function calcularMensualidad() {
-                const precioLote = parseFloat($('#PrecioPredio').val().replace(/[^0-9.-]+/g, "")) || 0;
-                const pagoEnganche = parseFloat($('#Enganche').val().replace(/[^0-9.-]+/g, "")) || 0;
-                const pagoAnualidad = parseFloat($('#PagoAnualidad').val()) || 0;
-                const anualidades = parseInt($('#Anualidades').val()) || 0;
-                const numeroLetras = parseInt($('#NoLetras').val()) || 0;
-                const anios = parseInt($('#NoAnios').val()) || 0;
-                const temporalidad = $('#ConvenioTemporalidadPago').val();
+                const precioLote = parseFloat($('#precioPredio').val().replace(/[^0-9.-]+/g, "")) || 0;
+                const pagoEnganche = parseFloat($('#enganche').val().replace(/[^0-9.-]+/g, "")) || 0;
+                const pagoAnualidad = parseFloat($('#pagoAnualidad').val()) || 0;
+                const anualidades = parseInt($('#anualidades').val()) || 0;
+                const numeroLetras = parseInt($('#noLetras').val()) || 0;
+                const anios = parseInt($('#noAnios').val()) || 0;
+                const temporalidad = $('#convenioTemporalidadPago').val();
 
                 // Verifica si los campos obligatorios están completos
                 if (numeroLetras > 0 && precioLote > 0 && pagoEnganche >= 0) {
@@ -358,7 +366,7 @@
             }
 
             // Al cambiar cualquiera de los campos involucrados, recalcular la mensualidad
-            $('#PrecioPredio, #Enganche, #PagoAnualidad, #Anualidades, #NoLetras').on('input',
+            $('#precioPredio, #enganche, #pagoAnualidad, #anualidades, #noLetras').on('input',
                 calcularMensualidad);
 
             // Al cambiar predio, cargar lotes disponibles
@@ -434,31 +442,31 @@
                                 // Actualizar PrecioPredio con el precio formateado
                                 var precio = parseFloat(jsonlote.precio);
                                 if (!isNaN(precio)) {
-                                    $('#PrecioPredio').val(precio.toLocaleString('es-MX', {
+                                    $('#precioPredio').val(precio.toLocaleString('es-MX', {
                                         style: 'currency',
                                         currency: 'MXN'
                                     }));
                                 } else {
-                                    $('#PrecioPredio').val('');
+                                    $('#precioPredio').val('');
                                 }
                                 // Actualizar el número de letras (plazoMeses)
-                                $('#NoLetras').val(jsonlote.plazoMeses || '');
+                                $('#noLetras').val(jsonlote.plazoMeses || '');
 
                                 // Actualizar el interés moratorio (fijo en 10 en este caso)
-                                $('#InteresMoroso').val('10');
+                                $('#interesMoroso').val('10');
 
                                 // Calcular el número de años en base a los meses (plazoMeses)
                                 var noAnios = jsonlote.plazoMeses / 12;
-                                $('#NoAnios').val(noAnios || '');
+                                $('#noAnios').val(noAnios || '');
 
                                 // Asignar el valor de temporalidad (Mensual fijo en este caso)
-                                $('#ConvenioTemporalidadPago').val('Mensual');
+                                $('#convenioTemporalidadPago').val('Mensual');
 
                                 // Crear variable FechaCelebracion con la fecha actual en formato yyyy-MM-dd
                                 var FechaCelebracion = new Date();
                                 var formattedDate = FechaCelebracion.toISOString().split('T')[
                                     0]; // yyyy-MM-dd
-                                $('#FechaCelebracion').val(formattedDate);
+                                $('#fechaCelebracion').val(formattedDate);
 
                                 // Crear variable HoraCelebracion con la hora actual en formato HH:mm
                                 var HoraCelebracion = new Date();
@@ -468,7 +476,7 @@
                                     2,
                                     '0'); // Formato mm
                                 var formattedTime = hours + ':' + minutes; // HH:mm
-                                $('#HoraCelebracion').val(formattedTime);
+                                $('#horaCelebracion').val(formattedTime);
 
                                 // Recalcular la mensualidad
                                 calcularMensualidad();
@@ -482,13 +490,13 @@
                     });
                 } else {
                     // Si no se selecciona un lote, puedes vaciar los campos si lo consideras necesario
-                    $('#PrecioPredio').val('');
-                    $('#NoLetras').val('');
-                    $('#InteresMoroso').val('');
-                    $('#NoAnios').val('');
-                    $('#ConvenioTemporalidadPago').val('');
-                    $('#FechaCelebracion').val('');
-                    $('#HoraCelebracion').val('');
+                    $('#precioPredio').val('');
+                    $('#noLetras').val('');
+                    $('#interesMoroso').val('');
+                    $('#noAnios').val('');
+                    $('#convenioTemporalidadPago').val('');
+                    $('#fechaCelebracion').val('');
+                    $('#horaCelebracion').val('');
                 }
             });
 
@@ -533,8 +541,8 @@
                                             .id + '" ' + selected + '>' +
                                             'Manzana: ' + lote.manzana +
                                             ', Lote: ' + lote.lote +
-                                            ', Descripción: ' + lote.descripcion
-                                            + '</option>');
+                                            ', Descripción: ' + lote.descripcion +
+                                            '</option>');
                                     });
                                 } else {
                                     $('#idLote').append(
@@ -555,17 +563,17 @@
 
             $(document).ready(function() {
                 // Escucha los cambios en los campos que afectan los cálculos
-                $('#Anualidades, #PagoAnualidad, #PrecioPredio, #Enganche').on('input',
+                $('#anualidades, #pagoAnualidad, #precioPredio, #enganche').on('input',
                     calcularTotalAnualidad);
 
                 // Función para calcular total anualidad y total a financiar
                 function calcularTotalAnualidad() {
                     // Obtener los valores de los campos relevantes
-                    const anualidades = parseInt($('#Anualidades').val()) || 0;
-                    const pagoAnualidad = parseFloat($('#PagoAnualidad').val().replace(/[^0-9.-]+/g, "")) ||
+                    const anualidades = parseInt($('#anualidades').val()) || 0;
+                    const pagoAnualidad = parseFloat($('#pagoAnualidad').val().replace(/[^0-9.-]+/g, "")) ||
                         0;
-                    const precioLote = parseFloat($('#PrecioPredio').val().replace(/[^0-9.-]+/g, "")) || 0;
-                    const pagoEnganche = parseFloat($('#Enganche').val().replace(/[^0-9.-]+/g, "")) || 0;
+                    const precioLote = parseFloat($('#precioPredio').val().replace(/[^0-9.-]+/g, "")) || 0;
+                    const pagoEnganche = parseFloat($('#enganche').val().replace(/[^0-9.-]+/g, "")) || 0;
 
                     // Calcular el total de anualidades
                     const totalAnualidad = anualidades * pagoAnualidad;
@@ -575,8 +583,8 @@
 
                     // validar si Anualidades es igual o menor a cero, pagoAnualidad pasarlos a 0
                     if (anualidades <= 0) {
-                        $('#Anualidades').val(0);
-                        $('#PagoAnualidad').val(0);
+                        $('#anualidades').val(0);
+                        $('#pagoAnualidad').val(0);
                     }
 
                     // Mostrar los valores calculados en los campos de TotalAnualidad y TotalFinanciar
@@ -604,7 +612,7 @@
 
                 // Al enviar el formulario, eliminar las comas del campo Enganche
                 $('form').on('submit', function() {
-                    var enganche = $('#Enganche').val();
+                    var enganche = $('#enganche').val();
                     $('#Enganche').val(removeCommas(enganche)); // Elimina las comas antes de enviar
                 });
 
