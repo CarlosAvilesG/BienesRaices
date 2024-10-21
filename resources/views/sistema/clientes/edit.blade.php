@@ -32,8 +32,18 @@
             @csrf
             @method('PUT')
 
+            <div class="sticky-top bg-light py-2 mb-3">
+                <div class="d-flex justify-content-end">
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="{{ route('clientes.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Regresar
+                    </a>
+                </div>
+            </div>
+
             <!-- Card: Información Personal -->
-            <div class="card card-warning">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h5>Información Personal</h5>
                 </div>
@@ -238,8 +248,7 @@
 
 
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">Actualizar</button>
+
         </form>
     </div>
 @stop

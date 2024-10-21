@@ -8,6 +8,18 @@
 
 @section('content')
     <div class="container">
+
+
+          <!-- Botones pegajosos en la parte superior -->
+          <div class="sticky-top bg-light py-2 mb-3">
+            <div class="d-flex justify-content-end">
+
+                <a href="{{ route('clientes.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
+        </div>
+
         <!-- Mensaje de éxito -->
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">

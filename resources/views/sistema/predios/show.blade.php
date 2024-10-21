@@ -8,6 +8,19 @@
 
 @section('content')
     <div class="container">
+
+         <!-- Botones pegajosos en la parte superior -->
+         <div class="sticky-top bg-light py-2 mb-3">
+            <div class="d-flex justify-content-end">
+
+                <!-- Botón de Guardar/Actualizar -->
+                <div class="form-group">
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary">Regresar</a>
+
+                </div>
+            </div>
+        </div>
+
         <!-- Mensaje de éxito -->
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -137,7 +150,7 @@
         </div>
 
 
-        <a href="{{ route('predios.index') }}" class="btn btn-block bg-gradient-secondary">Regresar</a>
+
 
     </div>
 

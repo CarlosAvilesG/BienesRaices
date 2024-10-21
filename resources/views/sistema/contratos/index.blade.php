@@ -38,12 +38,18 @@
                             <th>No. Contrato</th>
                             <th>Precio Predio</th>
                             <th>Fecha Celebración</th>
+                            <th>Estatus</th> <!-- Nueva columna para mostrar el estatus -->
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($contratos as $contrato)
-                            <tr>
+                            <tr class="
+                                @if($contrato->estatus == 'Cancelado') table-danger
+                                @elseif($contrato->estatus == 'Finiquitado') table-success
+                                @else table-default
+                                @endif
+                            ">
                                 <td>{{ $contrato->id }}</td>
                                 <td>{{ $contrato->cliente->nombre }} {{ $contrato->cliente->paterno }}</td>
                                 <td>{{ $contrato->lote->descripcion }}</td>
@@ -51,17 +57,28 @@
                                 <td>${{ number_format($contrato->PrecioPredio, 2) }}</td>
                                 <td>{{ \Carbon\Carbon::parse($contrato->FechaCelebracion)->format('d/m/Y') }}</td>
                                 <td>
+                                    <span class="badge
+                                        @if($contrato->estatus == 'Activo') badge-primary
+                                        @elseif($contrato->estatus == 'Cancelado') badge-danger
+                                        @elseif($contrato->estatus == 'Finiquitado') badge-success
+                                        @endif">
+                                        {{ $contrato->estatus }}
+                                    </span>
+                                </td>
+                                <td>
                                     <a href="{{ route('contratos.show', $contrato->id) }}" class="btn btn-info btn-sm">Ver</a>
                                     <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                    {{-- //boton para cencelar contrato en su estatus = cancelado
-                                    <a href="{{ route('contratos.cancelar', $contrato->id) }}" class="btn btn-danger btn-sm">Cancelar</a> --}}
 
-
-                                    <form action="{{ route('contratos.destroy', $contrato->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                    </form>
+                                    <!-- Si el contrato no está cancelado, mostrar el botón de cancelar -->
+                                    @if ($contrato->estatus == 'Activo')
+                                        <form action="{{ route('contrato.cancelar', $contrato->id) }}" method="get" class="d-inline">
+                                            @csrf
+                                            {{-- @method('DELETE') --}}
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmarCancelacion({{ $contrato->id }})">
+                                                Cancelar
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -73,3 +90,37 @@
     </div>
 
 @stop
+
+@section('js')
+<script>
+    function confirmarCancelacion(contratoId) {
+        Swal.fire({
+            title: 'Confirmar Cancelación',
+            input: 'textarea',
+            inputPlaceholder: 'Escribe la razón de la cancelación aquí...',
+            showCancelButton: true,
+            confirmButtonText: 'Cancelar Contrato',
+            cancelButtonText: 'Volver',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Necesitas escribir una observación antes de continuar!';
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Crear un formulario oculto y agregar la observación
+                let form = document.querySelector(`form[action='{{ route('contrato.cancelar', $contrato->id) }}']`);
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'canceladoObservacion';
+                input.id = 'canceladoObservacion';
+                input.value = result.value;
+
+                form.appendChild(input);
+                form.submit();
+            }
+        });
+    }
+</script>
+@stop
+

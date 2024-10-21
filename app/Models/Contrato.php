@@ -12,6 +12,9 @@ class Contrato extends Model
 {
     use HasFactory, SoftDeletes, Auditable;
 
+    // Propiedad para almacenar la razón temporal de auditoría
+    protected $auditReason;
+
     // Definir el nombre de la tabla si es diferente al plural del modelo
     // protected $table = 'contrato';
 

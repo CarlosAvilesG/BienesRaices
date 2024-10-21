@@ -11,6 +11,7 @@ use App\Repositories\BitacoraRepositoryInterface;
 
 use App\Http\Requests\StoreContratoRequest;
 use App\Http\Requests\UpdateContratoRequest;
+use Illuminate\Http\Request; // Esta es la importación correcta de Request
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\GeneralHelper;
@@ -24,6 +25,8 @@ class ContratoController extends Controller
     protected $predioRepository;
     protected $userRepository;
     protected $bitacoraRepository;
+
+    protected $setAuditReason;
 
     public function __construct(
         ContratoRepositoryInterface $contratoRepository,
@@ -138,6 +141,30 @@ class ContratoController extends Controller
         $contrato = $this->contratoRepository->update($id, $request->validated());
         return redirect()->route('sistema.contratos.index')->with('success', 'Contrato actualizado con éxito.');
     }
+
+    // Cambiar el estado de un contrato a cancelado
+    public function cancelarContrato(Request  $request, $id)
+    {
+        $contrato =  $this->contratoRepository->findById($id);
+
+        // Validar que se reciba la observación de cancelación
+        $request->validate([
+            'canceladoObservacion' => 'required|string|max:255'
+        ]);
+
+        // Cambiar el estatus a "Cancelado"
+        $contrato->estatus = 'Cancelado';
+        $contrato->canceladoObservacion = $request->canceladoObservacion; // Guardar la observación de cancelación
+        $contrato->idUsuCancela = Auth::user()->id; // Guardar el ID del usuario que cancela
+        $contrato->save();
+
+        // Opcionalmente, agregar la entrada en la bitácora usando tu sistema de auditoría
+        $contrato->setAuditReason('Contrato cancelado con observación: ' . $request->cancelacion_observacion);
+        $contrato->save();
+
+        return redirect()->route('contratos.index')->with('success', 'Contrato cancelado exitosamente.');
+    }
+
 
     // Eliminar un contrato
     public function destroy($id)

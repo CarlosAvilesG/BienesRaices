@@ -34,6 +34,19 @@
                 @method('PUT')
             @endif
 
+            <!-- Botones pegajosos en la parte superior -->
+            <div class="sticky-top bg-light py-2 mb-3">
+                <div class="d-flex justify-content-end">
+                    <!-- Botón de Guardar/Actualizar -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            {{ isset($predio) ? 'Actualizar Predio' : 'Crear Predio' }}
+                        </button>
+                        <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Card: Información General del Predio -->
             <div class="card card-primary">
                 <div class="card-header">
@@ -141,20 +154,22 @@
                     <div class="form-group">
                         <label for="activo">¿Está Activo?</label>
                         <select name="activo" class="form-control">
-                            <option value="1" {{ old('activo', $predio->activo ?? 1) == 1 ? 'selected' : '' }}>Sí</option>
-                            <option value="0" {{ old('activo', $predio->activo ?? 1) == 0 ? 'selected' : '' }}>No</option>
+                            <option value="1" {{ old('activo', $predio->activo ?? 1) == 1 ? 'selected' : '' }}>Sí
+                            </option>
+                            <option value="0" {{ old('activo', $predio->activo ?? 1) == 0 ? 'selected' : '' }}>No
+                            </option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Botón de Guardar/Actualizar -->
+            {{-- <!-- Botón de Guardar/Actualizar -->
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">
                     {{ isset($predio) ? 'Actualizar Predio' : 'Crear Predio' }}
                 </button>
                 <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancelar</a>
-            </div>
+            </div> --}}
         </form>
     </div>
 @stop

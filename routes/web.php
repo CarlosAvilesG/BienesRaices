@@ -67,6 +67,8 @@ Route::middleware([
     // ruta para contraros test
     // Route::get('/contratos/test', [Ctrl::$contratoController, 'test'])->name('contratos.test');
 
+    //ruta cancelar contrato
+    Route::get('/contrato/{id}/cancelar', [Ctrl::$contratoController, 'cancelarContrato'])->name('contrato.cancelar');
     Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contratoPromesaPdf');
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
 
