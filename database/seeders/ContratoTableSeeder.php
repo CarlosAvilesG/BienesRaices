@@ -17,7 +17,7 @@ class ContratoTableSeeder extends Seeder
         $contratos = [
             [
                 'anualidades' => 0,
-                'PagoAnualidad' => 0,
+                'pagoAnualidad' => 0,
                 'convenioTemporalidadPago' => 'Mensual',
                 'convenioViaPago' => 'Bancario',
                 'fechaCelebracion' => '2024-01-10',
@@ -33,6 +33,7 @@ class ContratoTableSeeder extends Seeder
                 'precioPredio' => 150000,
                 'enganche' => 50000,
 
+
                 'idCliente' => 1,
                 'idLote' => 1,
                 'idUsuario' => 1,
@@ -43,7 +44,7 @@ class ContratoTableSeeder extends Seeder
             ],
             [
                 'anualidades' => 2,
-                'PagoAnualidad' => 100000,
+                'pagoAnualidad' => 100000,
                 'convenioTemporalidadPago' => 'Quincenal',
                 'convenioViaPago' => 'Nomina',
                 'fechaCelebracion' => '2024-02-01',

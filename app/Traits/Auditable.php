@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\BitacoraRepositoryInterface;
 
+
 trait Auditable
 {
     // Registrar eventos para crear, actualizar y eliminar registros
@@ -15,8 +16,8 @@ trait Auditable
         });
 
         static::updated(function ($model) {
-            // Aquí puedes pasar una razón especial si es que la actualización es derivada de una creación
-            $reason = $model->getAuditReason() ?? null;
+            // Verificar si el modelo tiene el método getAuditReason
+            $reason = method_exists($model, 'getAuditReason') ? $model->getAuditReason() : null;
             static::audit('Actualización', $model, $model->getOriginal(), $model->getChanges(), $reason);
         });
 

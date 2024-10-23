@@ -16,23 +16,26 @@ class StorePredioRequest extends FormRequest
         return [
             'nombre' => 'required|string|max:30',
             'descripcion' => 'required|string|max:100',
-            
+
             'codigoPostal' => 'required|string|max:10',
             'claveCatastral' => 'required|string|max:30',
-            'Notaria' => 'required|string|max:30',
+            'notaria' => 'required|string|max:30',
             'numeroEscritura' => 'required|string|max:30',
             'folioEscritura' => 'required|string|max:30',
             'volumenEscritura' => 'required|string|max:30',
             'fechaEscritura' => 'required|string|max:30',
-            'coordinadasNorte' => 'required|string|max:30',
-            'coordinadasSur' => 'required|string|max:30',
-            'coordinadasEste' => 'required|string|max:30',
-            'coordinadasOeste' => 'required|string|max:30',
+            'coordenadasNorte' => 'required|string|max:30',
+            'coordenadasSur' => 'required|string|max:30',
+            'coordenadasEste' => 'required|string|max:30',
+            'coordenadasOeste' => 'required|string|max:30',
+
+            'latitud' => 'nullable|numeric',
+            'longitud' => 'nullable|numeric',
 
             'estadoRepublica' => 'required|string|max:30',
             'municipio' => 'required|string|max:30',
             'localidad' => 'required|string|max:30',
-            'hectarias' => 'required|integer|min:0',
+            'hectareas' => 'required|integer|min:0',
             'numeroManzanas' => 'required|integer|min:0',
             'numeroLotes' => 'required|integer|min:0',
             'fechaInauguracion' => 'required|date',

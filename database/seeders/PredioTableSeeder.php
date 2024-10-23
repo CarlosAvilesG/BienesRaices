@@ -20,7 +20,7 @@ class PredioTableSeeder extends Seeder
 
                 'codigoPostal' => '12345',
                 'claveCatastral' => 'CC-001',
-                'Notaria' => 'Notaría 1',
+                'notaria' => 'Notaría 1',
                 'numeroEscritura' => 'E-001',
                 'folioEscritura' => 'F-001',
                 'volumenEscritura' => 'V-001',
@@ -45,7 +45,7 @@ class PredioTableSeeder extends Seeder
 
                 'codigoPostal' => '54321',
                 'claveCatastral' => 'CC-002',
-                'Notaria' => 'Notaría 2',
+                'notaria' => 'Notaría 2',
                 'numeroEscritura' => 'E-002',
                 'folioEscritura' => 'F-002',
                 'volumenEscritura' => 'V-002',
