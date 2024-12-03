@@ -130,7 +130,7 @@ class ClienteController extends Controller
         }
 
 
-        return redirect()->route('sistema.clientes.show', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
+        return redirect()->route('clientes.show', $cliente->id)->with('message', 'Cliente actualizado exitosamente.');
 
     //    // return response()->json($cliente, 200);
     }

@@ -86,7 +86,7 @@
 
             // Cargar los lotes mediante AJAX
             $.ajax({
-                url: '{{ route('lotes.porPredio') }}',
+                url: '{{ route('lotes.byPredio') }}',
                 method: 'GET',
                 data: { predioId: predioId },  // Enviar el ID del predio
                 success: function(data) {
