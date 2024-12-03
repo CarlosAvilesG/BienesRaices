@@ -69,6 +69,11 @@
                                     <a href="{{ route('contratos.show', $contrato->id) }}" class="btn btn-info btn-sm">Ver</a>
                                     <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning btn-sm">Editar</a>
 
+                                     <!-- Botón para redirigir al índice de pagos-lote -->
+                                     <a href="{{ route('pagos-lote.index', ['idContrato' => $contrato->id]) }}" class="btn btn-success btn-sm">
+                                        Pagos
+                                    </a>
+                                    
                                     <!-- Si el contrato no está cancelado, mostrar el botón de cancelar -->
                                     @if ($contrato->estatus == 'Activo')
                                         <form action="{{ route('contrato.cancelar', $contrato->id) }}" method="get" class="d-inline">
