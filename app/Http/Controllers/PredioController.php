@@ -9,6 +9,7 @@ use App\Repositories\PredioRepositoryInterface;
 class PredioController extends Controller
 {
     protected $predioRepo;
+    protected $setAuditReason;
 
     public function __construct(PredioRepositoryInterface $predioRepo)
     {
@@ -18,21 +19,21 @@ class PredioController extends Controller
     // Mostrar una lista de todos los predios
     public function index()
     {
-      //  return "PredioController index";
+        //  return "PredioController index";
 
         $predios = $this->predioRepo->getAll();
 
-       // dd($predios); // Aquí puedes ver si está retornando algo
+        // dd($predios); // Aquí puedes ver si está retornando algo
 
         return view('sistema.predios.index', compact('predios'));
-       // return response()->json($predios);
+        // return response()->json($predios);
     }
 
     public function create()
     {
-      // return "entro a create";
+        // return "entro a create";
 
-        return view('sistema.predios.form');//, compact('predio'));
+        return view('sistema.predios.form'); //, compact('predio'));
     }
 
     public function edit($id)
@@ -48,36 +49,35 @@ class PredioController extends Controller
     // Almacenar un nuevo predio en la base de datos
     public function store(StorePredioRequest $request)
     {
-       // return "termino store";
+        // return "termino store";
 
-        $predio = $this->predioRepo->createPredio($request->validated()).with('success', 'Predio creado con exito!');
-      //  return response()->json($predio, 201);
-       //return redirect()->route('predios.show', $predio->id);
+        $predio = $this->predioRepo->createPredio($request->validated()) . with('success', 'Predio creado con exito!');
+        //  return response()->json($predio, 201);
+        //return redirect()->route('predios.show', $predio->id);
 
     }
 
     // Mostrar un predio específico
     public function show($id)
     {
-       // return "termino show";
+        // return "termino show";
 
         $predio = $this->predioRepo->find($id);
         //return response()->json($predio);
 
         return view('sistema.predios.show', compact('predio'));
-
     }
 
     // Actualizar un predio existente
     public function update(UpdatePredioRequest $request, $id)
     {
-       // return "termino update";
+        // return "termino update";
 
-        $predio = $this->predioRepo->updatePredio($id, $request->validated()).with('success', 'Predio actualizado con exito!');
+        // Actualizar el predio
+        $this->predioRepo->updatePredio($id, $request->validated());
 
-
-        // return response()->json($predio);
-
+        // Redirigir a la vista deseada con el mensaje de éxito
+        return redirect()->route('predios.show', $id)->with('success', 'Predio actualizado con éxito!');
     }
 
     // Eliminar un predio
@@ -85,7 +85,7 @@ class PredioController extends Controller
     {
         //return "termino destroy";
 
-        $this->predioRepo->deletePredio($id).with('success', 'Predio eliminado con exito!');
+        $this->predioRepo->deletePredio($id) . with('success', 'Predio eliminado con exito!');
         //return response()->json(null, 204);
     }
 }

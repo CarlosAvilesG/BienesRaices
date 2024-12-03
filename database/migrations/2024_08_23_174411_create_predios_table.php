@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->string('codigoPostal', 10);
             $table->string('claveCatastral', 30);
-            $table->string('Notaria', 30);
+            $table->string('notaria', 30);
             $table->string('numeroEscritura', 30);
             $table->string('folioEscritura', 30);
             $table->string('volumenEscritura', 30);
@@ -28,6 +28,9 @@ return new class extends Migration
             $table->string('coordenadasSur', 30);
             $table->string('coordenadasEste', 30);
             $table->string('coordenadasOeste', 30);
+            // Campos adicionales para almacenar coordenadas google maps
+            $table->decimal('latitud', 10, 8)->nullable();
+            $table->decimal('longitud', 11, 8)->nullable();
 
             $table->string('estadoRepublica', 30);
             $table->string('municipio', 30);
