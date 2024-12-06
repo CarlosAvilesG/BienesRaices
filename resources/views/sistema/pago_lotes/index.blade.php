@@ -19,12 +19,12 @@
     @endif
 
     <!-- Filtros para predios, lotes y contratos -->
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-header">
             <h3 class="card-title">Filtros</h3>
         </div>
         <div class="card-body">
-            <form id="filter-form" method="GET" action="{{ route('pago_lotes.index') }}">
+            <form id="filter-form" method="GET" action="{{ route('pagos-lote.index') }}">
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="idPredio">Predio</label>
@@ -66,7 +66,45 @@
                 <button type="submit" class="btn btn-primary">Filtrar</button>
             </form>
         </div>
-    </div>
+    </div> --}}
+
+    <!-- Detalles del Contrato y Cliente -->
+    @if ($pagos->isNotEmpty())
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Detalles del Contrato</h3>
+                <div class="form-group">
+                    <label for="contrato-select">Seleccionar Contrato:</label>
+                    <select id="contrato-select" name="contrato_id" class="form-control">
+                        @foreach ($contratos as $contrato)
+                            <option value="{{ $contrato->id }}"
+                                {{ $contratoActivo && $contratoActivo->id == $contrato->id ? 'selected' : '' }}>
+                                {{ $contrato->noContrato }} - {{ $contrato->estatus }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="card-body" id="detalle-contrato">
+                @if ($contratoActivo)
+                    <h5>Contrato: {{ $contratoActivo->noContrato }}</h5>
+                    <p>
+                        <strong>Convenio:</strong> {{ $contratoActivo->noConvenio ?? 'N/A' }}<br>
+                        <strong>Precio del Predio:</strong> ${{ number_format($contratoActivo->precioPredio, 2) }}<br>
+                        <strong>Fecha de Celebración:</strong> {{ \Carbon\Carbon::parse($contratoActivo->fechaCelebracion)->format('d/m/Y') }}<br>
+                    </p>
+
+                    @if ($contratoActivo->cliente)
+                        <h5>Cliente</h5>
+                        <p>
+                            <strong>Nombre:</strong> {{ $contratoActivo->cliente->nombre }} {{ $contratoActivo->cliente->paterno }} {{ $contratoActivo->cliente->materno }}<br>
+                            <strong>Email:</strong> {{ $contratoActivo->cliente->email ?? 'No especificado' }}<br>
+                        </p>
+                    @endif
+                @endif
+            </div>
+        </div>
+    @endif
 
     <!-- Tabla de pagos -->
     <div class="card">
@@ -81,10 +119,12 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Predio</th>
+                            <th>Manzana</th>
                             <th>Lote</th>
                             <th>Cliente</th>
                             <th>Monto</th>
+                            <th>Referencia Bancaria</th>
+                            <th>No. Pago</th>
                             <th>Fecha de Pago</th>
                             <th>Hora</th>
                             <th>Observaciones</th>
@@ -94,11 +134,13 @@
                         @foreach ($pagos as $pago)
                             <tr>
                                 <td>{{ $pago->id }}</td>
-                                <td>{{ $pago->predio->nombre ?? 'N/A' }}</td>
-                                <td>{{ $pago->lote->nombre ?? 'N/A' }}</td>
-                                <td>{{ $pago->cliente->nombre ?? 'N/A' }}</td>
+                                <td>{{ $pago->lote->manzana ?? 'N/A' }}</td>
+                                <td>{{ $pago->lote->lote ?? 'N/A' }}</td>
+                                <td>{{ $pago->cliente->nombre ?? 'N/A' }} {{ $pago->cliente->paterno ?? '' }} {{ $pago->cliente->materno ?? '' }}</td>
                                 <td>{{ number_format($pago->monto, 2) }}</td>
-                                <td>{{ $pago->fechaPago }}</td>
+                                <td>{{ $pago->referenciaBancaria ?? 'N/A' }}</td>
+                                <td>{{ $pago->pagoNumero ?? 'N/A' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($pago->fechaPago)->format('d/m/Y') }}</td>
                                 <td>{{ $pago->horaPago }}</td>
                                 <td>{{ $pago->observacion }}</td>
                             </tr>
@@ -118,9 +160,44 @@
 
 @section('js')
     <script>
-        // Script adicional para manejar el cambio de predio, lote o contrato
-        $('#idPredio, #idLote, #idContrato').on('change', function() {
-            $('#filter-form').submit(); // Enviar formulario al cambiar un filtro
+        $('#contrato-select').on('change', function () {
+            const contratoId = $(this).val();
+
+            if (contratoId) {
+                $.ajax({
+                    url: '{{ route("contratos.show", ":id") }}'.replace(':id', contratoId),
+                    type: 'GET',
+                    success: function (data) {
+                        const contrato = data.contrato;
+                        const cliente = data.cliente;
+
+                        // Actualizar los detalles del contrato en la vista
+                        let detalles = `
+                            <h5>Contrato: ${contrato.noContrato}</h5>
+                            <p>
+                                <strong>Convenio:</strong> ${contrato.noConvenio ?? 'N/A'}<br>
+                                <strong>Precio del Predio:</strong> $${Number(contrato.precioPredio).toFixed(2)}<br>
+                                <strong>Fecha de Celebración:</strong> ${contrato.fechaCelebracion}<br>
+                            </p>
+                        `;
+
+                        if (cliente) {
+                            detalles += `
+                                <h5>Cliente</h5>
+                                <p>
+                                    <strong>Nombre:</strong> ${cliente.nombre} ${cliente.paterno} ${cliente.materno}<br>
+                                    <strong>Email:</strong> ${cliente.email ?? 'No especificado'}<br>
+                                </p>
+                            `;
+                        }
+
+                        $('#detalle-contrato').html(detalles);
+                    },
+                    error: function () {
+                        alert('Error al cargar los detalles del contrato.');
+                    }
+                });
+            }
         });
     </script>
 @stop

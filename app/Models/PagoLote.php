@@ -66,4 +66,9 @@ class PagoLote extends Model
     {
         return $this->belongsTo(User::class, 'idUsuarioValidaPago');
     }
+
+    public function contrato()
+    {
+        return $this->belongsTo(Contrato::class, 'idContrato', 'id');
+    }
 }

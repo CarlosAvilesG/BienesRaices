@@ -15,6 +15,15 @@ class ContratoRepository implements ContratoRepositoryInterface
     {
         return Contrato::findOrFail($id);
     }
+    public function show($id)
+    {
+        $contrato = Contrato::with('cliente')->findOrFail($id);
+
+        return response()->json([
+            'contrato' => $contrato,
+            'cliente' => $contrato->cliente,
+        ]);
+    }
 
     public function create(array $data)
     {

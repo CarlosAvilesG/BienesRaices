@@ -6,6 +6,7 @@ interface ContratoRepositoryInterface
 {
     public function getAll();
     public function findById($id);
+    public function show($id); // regresa un json con el contrato y el cliente
     public function create(array $data);
     public function update($id, array $data);
     public function delete($id);
