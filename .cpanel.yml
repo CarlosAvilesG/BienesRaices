@@ -1,0 +1,24 @@
+---
+# .cpanel.yml configuration for Laravel project
+
+# Specify the deployment branch
+deployment:
+  tasks:
+    # - export DEPLOYMENT_BRANCH=main
+    - export DEPLOYMENT_BRANCH=/home/bajapjbl/brcalifornia.bajasur.online/public
+    - /bin/rsync -av public/ $DEPLOYMENT_BRANCH
+
+# Specify the build commands
+build:
+  tasks:
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+    - php artisan migrate --force
+    - php artisan config:cache
+    - php artisan route:cache
+    - php artisan view:cache
+
+# Specify the post-deployment commands
+post_deploy:
+  tasks:
+    - php artisan queue:restart
+    - php artisan storage:link
