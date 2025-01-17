@@ -14,6 +14,7 @@ class StorePagoLoteRequest extends FormRequest
     public function rules()
     {
         return [
+            'contrato_id' => 'required|exists:contratos,id',
             'idPredio' => 'required|exists:predio,idPredio',
             'idLote' => 'required|exists:lotes,idLote',
             'folio' => 'nullable|integer',

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('trabajoDireccion', 100);
             $table->string('trabajoTelefono', 30);
             $table->timestamps();
+            $table->softDeletes(); // Eliminación lógica
 
             // Foreign key constraint
             $table->foreign('idCliente')

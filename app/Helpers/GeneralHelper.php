@@ -41,7 +41,7 @@ class GeneralHelper
 
         return $resultado;
     }
-    
+
     private static function convertirParteEnteraALetras($numero)
     {
         $unidad = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
@@ -89,5 +89,18 @@ class GeneralHelper
         }
 
         return "";
+    }
+
+    /**
+     * Convierte un número al formato de moneda.
+     *
+     * @param float $numero
+     * @param string $simboloMoneda
+     * @return string
+     */
+    public static function convertirNumeroAMoneda($numero, $simboloMoneda = '$')
+    {
+        // Formatear con dos decimales y separadores de miles
+        return $simboloMoneda . number_format($numero, 2, '.', ',');
     }
 }

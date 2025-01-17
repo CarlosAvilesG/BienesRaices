@@ -36,4 +36,24 @@ class Cliente extends Model
         return $this->hasMany(Moroso::class, 'id');
     }
 
+    // Relación con el modelo ClienteReferencia
+    public function referencias()
+    {
+        return $this->hasMany(ClienteReferencia::class, 'idCliente', 'id'); // Clave foránea: idCliente
+    }
+
+    // Propiedad para regresar el nombre completo del cliente
+    public function getNombreCompletoAttribute()
+    {
+        $nombre = $this->nombre ?? ''; // Si es null, usar una cadena vacía
+        $paterno = $this->paterno ?? ''; // Si es null, usar una cadena vacía
+        $materno = $this->materno ?? ''; // Si es null, usar una cadena vacía
+
+        // Concatenar los valores, eliminando espacios extras
+        $nombreCompleto = trim("$nombre $paterno $materno");
+
+        // Si el nombre completo está vacío, regresar "Sin Referencias"
+        return $nombreCompleto !== '' ? $nombreCompleto : 'Sin registro';
+    }
+    
 }

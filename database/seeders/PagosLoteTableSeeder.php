@@ -22,6 +22,7 @@ class PagosLoteTableSeeder extends Seeder
                 'idLote' => rand(1, 3), // Asegúrate de que hay al menos 3 lotes
                 'idCliente' => rand(1, 2), // Asegúrate de que hay al menos 10 clientes
                 'idContrato' => rand(1, 3),
+                'motivo' => ['Enganche', 'Mensualidad', 'Anualidad'][rand(0, 2)],
                 'tipoPago' => ['Efectivo', 'Cheque', 'Transferencia'][rand(0, 2)],
                 'referenciaBancaria' => Str::random(10),
                 'monto' => rand(1000, 10000) + rand(0, 99) / 100,

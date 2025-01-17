@@ -136,6 +136,7 @@ Route::middleware([
 
 
     Route::get('/pagos-lote/filter', [Ctrl::$pagoLoteController, 'filter'])->name('pagos-lote.filter');
+    Route::get('/pagos-lote/create/{contrato}', [Ctrl::$pagoLoteController, 'createByContrato'])->name('pagos-lote.createByContrato');
     Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
 
 

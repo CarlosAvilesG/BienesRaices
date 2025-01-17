@@ -20,6 +20,7 @@ class PagoLote extends Model
         'folio',
         'idContrato',
         'idCliente',
+        'motivo',
         'tipoPago',
         'referenciaBancaria',
         'monto',

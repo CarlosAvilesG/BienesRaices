@@ -19,7 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('idLote'); // Referencia al lote
             $table->unsignedBigInteger('idContrato')->nullable(); // Referencia al contrato, se aqui se obtiene el idCliente activo en el contrato
             $table->unsignedBigInteger('idCliente'); // Referencia al cliente no necesariamente activo en el contrato (bitácora de pagos)
-            $table->string('tipoPago', 50);
+            $table->enum('motivo', ['Enganche', 'Mensualidad', 'Anualidad']);
+            $table->enum('tipoPago',['Efectivo', 'Cheque', 'Transferencia']);
             $table->string('referenciaBancaria', 100)->nullable();
             $table->decimal('monto', 28, 2);
             $table->integer('pagoNumero')->nullable();

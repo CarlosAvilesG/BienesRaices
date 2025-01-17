@@ -17,7 +17,7 @@ class PagoLoteRepository implements PagoLoteRepositoryInterface
         return PagoLote::findOrFail($id);
     }
 
-    public function create(array $data)
+    public function store(array $data)
     {
         return PagoLote::create($data);
     }

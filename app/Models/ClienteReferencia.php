@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Auditable;
 
 class ClienteReferencia extends Model
 {
-    use HasFactory, Auditable;
+    use SoftDeletes, HasFactory, Auditable;
 
    // protected $table = 'cliente_referencia'; // Nombre de la tabla
 
@@ -28,7 +29,22 @@ class ClienteReferencia extends Model
     // Relación con el modelo Cliente
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'id');
+       // return $this->belongsTo(Cliente::class, 'id');
+       return $this->belongsTo(Cliente::class, 'idCliente', 'id'); // Clave foránea: idCliente
+    }
+
+    // Propiedad para regresar el nombre completo del cliente
+    public function getNombreCompletoAttribute()
+    {
+        $nombre = $this->nombre ?? ''; // Si es null, usar una cadena vacía
+        $paterno = $this->paterno ?? ''; // Si es null, usar una cadena vacía
+        $materno = $this->materno ?? ''; // Si es null, usar una cadena vacía
+
+        // Concatenar los valores, eliminando espacios extras
+        $nombreCompleto = trim("$nombre $paterno $materno");
+
+        // Si el nombre completo está vacío, regresar "Sin Referencias"
+        return $nombreCompleto !== '' ? $nombreCompleto : 'Sin registro';
     }
 
 }

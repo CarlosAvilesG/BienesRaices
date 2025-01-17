@@ -53,9 +53,9 @@
                                 <td>{{ $contrato->id }}</td>
                                 <td>{{ $contrato->cliente->nombre }} {{ $contrato->cliente->paterno }}</td>
                                 <td>{{ $contrato->lote->descripcion }}</td>
-                                <td>{{ $contrato->NoContrato }}</td>
-                                <td>${{ number_format($contrato->PrecioPredio, 2) }}</td>
-                                <td>{{ \Carbon\Carbon::parse($contrato->FechaCelebracion)->format('d/m/Y') }}</td>
+                                <td>{{ $contrato->noContrato }}</td>
+                                <td>${{ number_format($contrato->precioPredio, 2) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($contrato->fechaCelebracion)->format('d/m/Y') }}</td>
                                 <td>
                                     <span class="badge
                                         @if($contrato->estatus == 'Activo') badge-primary
@@ -73,7 +73,7 @@
                                      <a href="{{ route('pagos-lote.index', ['idContrato' => $contrato->id]) }}" class="btn btn-success btn-sm">
                                         Pagos
                                     </a>
-                                    
+
                                     <!-- Si el contrato no está cancelado, mostrar el botón de cancelar -->
                                     @if ($contrato->estatus == 'Activo')
                                         <form action="{{ route('contrato.cancelar', $contrato->id) }}" method="get" class="d-inline">

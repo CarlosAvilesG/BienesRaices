@@ -69,6 +69,14 @@
     </div> --}}
 
     <!-- Detalles del Contrato y Cliente -->
+    <div class="card-header">
+        <h3 class="card-title">Lista de Contratos</h3>
+        <div class="card-tools">
+            @if($contratoActivo)
+                <a href="{{ route('pagos-lote.createByContrato', $contratoActivo->id) }}" class="btn btn-block bg-gradient-primary btn-sm">Nuevo Pago</a>
+            @endif
+        </div>
+    </div>
     @if ($pagos->isNotEmpty())
         <div class="card">
             <div class="card-header">
@@ -87,8 +95,9 @@
             </div>
             <div class="card-body" id="detalle-contrato">
                 @if ($contratoActivo)
-                    <h5>Contrato: {{ $contratoActivo->noContrato }}</h5>
+                    <h5>Folio Contrato: {{ $contratoActivo->id }}</h5>
                     <p>
+                        <strong>No. Contrato:</strong> {{ $contratoActivo->noContrato ?? 'N/A' }}<br>
                         <strong>Convenio:</strong> {{ $contratoActivo->noConvenio ?? 'N/A' }}<br>
                         <strong>Precio del Predio:</strong> ${{ number_format($contratoActivo->precioPredio, 2) }}<br>
                         <strong>Fecha de Celebración:</strong> {{ \Carbon\Carbon::parse($contratoActivo->fechaCelebracion)->format('d/m/Y') }}<br>
@@ -122,6 +131,7 @@
                             <th>Manzana</th>
                             <th>Lote</th>
                             <th>Cliente</th>
+                            <th>Motivo</th>
                             <th>Monto</th>
                             <th>Referencia Bancaria</th>
                             <th>No. Pago</th>
@@ -137,6 +147,7 @@
                                 <td>{{ $pago->lote->manzana ?? 'N/A' }}</td>
                                 <td>{{ $pago->lote->lote ?? 'N/A' }}</td>
                                 <td>{{ $pago->cliente->nombre ?? 'N/A' }} {{ $pago->cliente->paterno ?? '' }} {{ $pago->cliente->materno ?? '' }}</td>
+                                <td>{{ $pago->motivo }}</td>
                                 <td>{{ number_format($pago->monto, 2) }}</td>
                                 <td>{{ $pago->referenciaBancaria ?? 'N/A' }}</td>
                                 <td>{{ $pago->pagoNumero ?? 'N/A' }}</td>

@@ -37,7 +37,7 @@ class PagoLoteController extends Controller
     // Mostrar una lista de todos los pagos de lotes
     public function index(Request $request)
     {
-      
+
             // Construir la consulta inicial
             $query = PagoLote::query();
 
@@ -71,11 +71,38 @@ class PagoLoteController extends Controller
             // return view('sistema.pago_lotes.index', compact('pagos', 'predios', 'lotes', 'contratos'));
     }
 
+    public function create()
+    {
+        return view('sistema.contratos.index');
+    }
+
+    public function createByContrato( $contratoId)
+    {
+        // Obtener el contrato seleccionado
+        $contrato = $this->contratoRepo->findById($contratoId);
+        // Verificar si el contrato existe
+        if (!$contrato) {
+            return redirect()->route('pagos-lote.index')->withErrors(['Contrato no encontrado.']);
+        }
+        // Obtener el lote y cliente asociados al contrato
+        $lote = $this->loteRepo->show($contrato->idLote);
+        $cliente = $this->clienteRepo->find($contrato->idCliente);
+
+        return view('sistema.pago_lotes.create', compact('contrato', 'lote', 'cliente'));
+    }
+
     // Almacenar un nuevo pago en la base de datos
     public function store(StorePagoLoteRequest $request)
     {
-        $pagoLote = $this->pagoLoteRepo->create($request->validated());
-        return response()->json($pagoLote, 201);
+        $contrato = $this->contratoRepo->findById($request->contrato_id);
+
+        if (!$contrato) {
+            return redirect()->back()->withErrors(['Contrato no encontrado']);
+        }
+
+        $pagoLote = $this->pagoLoteRepo->store($request->validated());
+
+        return redirect()->route('pagos-lote.index')->with('success', 'Pago registrado correctamente');
     }
 
     // Mostrar un pago específico
