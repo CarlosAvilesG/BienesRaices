@@ -133,7 +133,9 @@ class Contrato extends Model
         return $this->belongsTo(User::class, 'idUsuCancela');
     }
 
-    // Propiedad para calcular la suma de los pagos validos
+    // / TODOS PAGOS
+
+    // Propiedad para calcular la suma de de TODOS los pagos validos
     public function getTotalPagosValidadosAttribute()
     {
         return $this->pago_lote()
@@ -141,11 +143,8 @@ class Contrato extends Model
                 ->where('pagoValidado', 1)  // Solo pagos validados
                 ->sum('monto');             // Calcular la suma de los montos
     }
-    public function getTotalPagosValidadosFormateadoAttribute()
-    {
-        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalPagosValidadosAttribute());
-    }
-    // Propiedad para calcular la suma de los pagos
+
+    // Propiedad para calcular la suma de TODOS los pagos
     public function getTotalPagosPorValidarAttribute()
     {
         return $this->pago_lote()
@@ -153,10 +152,16 @@ class Contrato extends Model
                 ->where('pagoValidado', 0)  // Solo pagos validados
                 ->sum('monto');             // Calcular la suma de los montos
     }
-    public function getTotalPagosPorValidarFormateadoAttribute()
+
+    // propiedad para obtener deuda total
+    public function getDeudaTotalAttribute()
     {
-        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalPagosPorValidarAttribute());
+        return $this->precioPredio - $this->getTotalPagosValidadosAttribute();
     }
+
+    // / TODOS PAGOS fin
+
+/// Letras
 
     // Propiedad para calcular letras pagadas
     public function getLetrasValidadasAttribute()
@@ -164,6 +169,7 @@ class Contrato extends Model
         return $this->pago_lote()
                 ->where('cancelar', 0)       // Solo pagos no cancelados
                 ->where('pagoValidado', 1)  // Solo pagos validados
+                ->where('motivo', 'Mensualidad')  // Solo pagos validados
                 ->count();             // Contar los registros
     }
     // Propiedad para calcular letras pendientes
@@ -171,8 +177,25 @@ class Contrato extends Model
     {
         return max(($this->noLetras ?? 0) - ($this->letras_validadas ?? 0), 0);
     }
+    // Propiedad para calcular ultima letra pagada de mensualidad
+    public function getUltimaLetraPagadaAttribute()
+    {
+        return $this->pago_lote()
+                ->where('cancelar', 0)       // Solo pagos no cancelados
+                ->where('pagoValidado', 1)  // Solo pagos validados
+                ->where('motivo', 'Mensualidad')  // Solo pagos validados
+                ->max('pagoNumero');             // Calcular la suma de los montos
+    }
+    // propiedad para obtener letra proxima a pagar de mensaulidades
+    public function getLetraProximaPagarAttribute()
+    {
+        return $this->getUltimaLetraPagadaAttribute() + 1;
+    }
+/// Letras FIN
+
+//Enganche
         // Propiedad para calcular enganche pagadas
-    public function getTotalEngancheAttribute()
+    public function getTotalEnganchePagadoAttribute()
     {
         return $this->pago_lote
                 ? $this->pago_lote
@@ -182,9 +205,9 @@ class Contrato extends Model
                     ->sum('monto')
                 : 0;
     }
-    public function getTotalEngancheFormateadoAttribute()
+    public function getTotalEnganchePagadoFormateadoAttribute()
     {
-        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalEngancheAttribute());
+        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalEnganchePagadoAttribute());
     }
 
     // Propiedad para calcular enganche pagadas
@@ -196,8 +219,12 @@ class Contrato extends Model
                 ->where('motivo', 'Enganche')  // Solo pagos validados
                 ->count();             // Contar los registros
     }
+
+//Enganche FIN
+
+// Anualidad
     // Propiedad para calcular Anualidad pagadas
-    public function getTotalAnualidadAttribute()
+    public function getTotalAnualidadPagadasAttribute()
     {
         return $this->pago_lote()
                 ->where('cancelar', 0)       // Solo pagos no cancelados
@@ -218,8 +245,12 @@ class Contrato extends Model
                  ->where('motivo', 'Anualidad')  // Solo pagos validados
                  ->count();             // Contar los registros
      }
+
+// Anualidad FIN
+
+// Mensualidad
     // Propiedad para calcular Mensualidad pagadas
-    public function getTotalMensualidadAttribute()
+    public function getTotalMensualidadPagadoAttribute()
     {
         return $this->pago_lote()
                 ->where('cancelar', 0)       // Solo pagos no cancelados
@@ -227,13 +258,13 @@ class Contrato extends Model
                 ->where('motivo', 'Mensualidad')  // Solo pagos validados
                 ->sum('monto');            // Calcular la suma de los montos
     }
-    public function getTotalMensualidadFormateadoAttribute()
+    public function getTotalMensualidadPagadoFormateadoAttribute()
     {
-        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalMensualidadAttribute());
+        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalMensualidadPagadoAttribute());
     }
 
      // Propiedad para calcular Mensualidad pagadas
-     public function getNoPagosMensualidadAttribute()
+     public function getNoPagosMensualidadPagadoAttribute()
      {
          return $this->pago_lote()
                  ->where('cancelar', 0)       // Solo pagos no cancelados
@@ -241,15 +272,73 @@ class Contrato extends Model
                  ->where('motivo', 'Mensualidad')  // Solo pagos validados
                  ->count();             // Contar los registros
      }
+// Mensualidad FIN
 
+// Valores Formateados
      public function getPrecioPredioFormateadoAttribute()
     {
         return GeneralHelper::convertirNumeroAMoneda($this->precioPredio);
     }
-    public function getEnganceFormateadoAttribute()
+    public function getEngancheFormateadoAttribute()
     {
         return GeneralHelper::convertirNumeroAMoneda($this->enganche);
     }
+    public function getTotalPagosPorValidarFormateadoAttribute()
+    {
+        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalPagosPorValidarAttribute());
+    }
+    public function getTotalPagosValidadosFormateadoAttribute()
+    {
+        return  GeneralHelper::convertirNumeroAMoneda($this->getTotalPagosValidadosAttribute());
+    }
+    public function getMontoMensualidadCalculadoFormateadoAttribute()
+    {
+        return GeneralHelper::convertirNumeroAMoneda($this->calcularMontoPagoMensual());
+    }
+// Valores Formateados FIN
 
+// Calcular saldos
+    // Propiedad para calcular el saldo total
+    public function getCalcularSaldoPendienteTotalAttribute()
+    {
+        return $this->precioPredio - $this->getTotalPagosValidadosAttribute();
+    }
+
+
+    // Método para calcular el monto del pago - sin engance y anualidades
+    private function calcularMontoPagoMensual()
+    {
+        $precioPredio = $this->precioPredio;
+
+        $enganche = $this->enganche ?? 0;
+         //  $enganchePagado = $this->getTotalEnganchePagadoAttribute();
+
+        $pagoAnualidad = $this->pagoAnualidad ?? 0;
+        //    $pagoAnualidadPagado = $this->getTotalAnualidadPagadoAttribute();
+
+        $anualidades = $this->anualidades ?? 0;
+         //     $noAnios = $this->noAnios;
+        $noLetras = $this->noLetras;
+        $noLetrasPagadas = $this->getLetrasValidadasAttribute();
+
+        $totalMensualidadesPagadas = $this->getTotalMensualidadPagadoAttribute();
+
+       // $SaltoPendiente = $this->getCalcularSaldoPendienteTotalAttribute();
+
+        $TotalBrutoMensual = ($precioPredio - ($enganche + ($pagoAnualidad * $anualidades))) ;
+
+
+        $SaldoRealPendienteMensual = ($TotalBrutoMensual  - $totalMensualidadesPagadas ) / ($noLetras - $noLetrasPagadas);
+
+      //  dd($TotalBrutoMensual, $precioPredio, $enganche, $pagoAnualidad , $noLetras, $anualidades, $noLetrasPagadas , $totalMensualidadesPagadas, $SaldoRealPendienteMensual);
+
+        return $SaldoRealPendienteMensual;
+    }
+    public function getMontoMensualidadCalculadoAttribute()
+    {
+        return $this->calcularMontoPagoMensual();
+    }
+
+// Calcular saldos fin
 
 }

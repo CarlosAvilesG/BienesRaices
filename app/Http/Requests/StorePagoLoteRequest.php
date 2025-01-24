@@ -13,14 +13,20 @@ class StorePagoLoteRequest extends FormRequest
 
     public function rules()
     {
+        $this->merge([
+            'monto' => str_replace(['$', ','], '', $this->monto), // Convierte a número decimal
+
+        ]);
+
         return [
-            'contrato_id' => 'required|exists:contratos,id',
-            'idPredio' => 'required|exists:predio,idPredio',
-            'idLote' => 'required|exists:lotes,idLote',
+          //  'contrato_id' => 'required|exists:contratos,id',
+            'idPredio' => 'required|exists:predios,id',
+            'idLote' => 'required|exists:lotes,id',
             'folio' => 'nullable|integer',
-            'idContrato' => 'nullable|integer',
-            'idCliente' => 'required|exists:clientes,idCliente',
-            'tipoPago' => 'required|string|max:50',
+            'idContrato' => 'required|integer',
+            'idCliente' => 'required|exists:clientes,id',
+            'motivo' => 'required|string| in:Enganche,Mensualidad,Anualidad',
+            'tipoPago' => 'required|string| in:Efectivo,Cheque,Transferencia',
             'referenciaBancaria' => 'nullable|string|max:100',
             'monto' => 'required|numeric|min:0',
             'pagoNumero' => 'nullable|integer',
@@ -29,11 +35,11 @@ class StorePagoLoteRequest extends FormRequest
             'horaPago' => 'required|string|max:8',
             'idUsuario' => 'required|exists:users,id',
             'observacion' => 'nullable|string',
-            'cancelar' => 'boolean',
-            'idUsuarioCancela' => 'nullable|exists:users,id',
-            'pagoValidado' => 'boolean',
-            'idUsuarioValidaPago' => 'nullable|exists:users,id',
-            'historico' => 'boolean',
+           // 'cancelar' => 'boolean',
+           // 'idUsuarioCancela' => 'nullable|exists:users,id',
+           // 'pagoValidado' => 'boolean',
+           // 'idUsuarioValidaPago' => 'nullable|exists:users,id',
+           // 'historico' => 'boolean',
         ];
     }
 }

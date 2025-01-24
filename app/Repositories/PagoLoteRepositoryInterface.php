@@ -9,4 +9,7 @@ interface PagoLoteRepositoryInterface
     public function store(array $data);
     public function update(array $data, $id);
     public function delete($id);
+
+    // 4. Métodos auxiliares
+    public function getPagosByContrato($idContrato);
 }

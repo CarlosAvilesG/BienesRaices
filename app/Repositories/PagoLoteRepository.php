@@ -35,4 +35,10 @@ class PagoLoteRepository implements PagoLoteRepositoryInterface
         $pagoLote = PagoLote::findOrFail($id);
         return $pagoLote->delete();
     }
+    // 4. Métodos auxiliares
+    //obter pagos por idcontrato
+    public function getPagosByContrato($idContrato, $perPage = 10)
+    {
+        return PagoLote::where('idContrato', $idContrato)->orderBy('fechaPago', 'asc')->paginate($perPage);
+    }
 }

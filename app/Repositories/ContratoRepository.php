@@ -43,4 +43,16 @@ class ContratoRepository implements ContratoRepositoryInterface
         $contrato = Contrato::findOrFail($id);
         $contrato->delete();
     }
+
+    // 4. Métodos auxiliares
+    // obtener contratos por cliente
+    public function getContratosByCliente($idCliente)
+    {
+        return Contrato::where('idCliente', $idCliente)->orderBy('fechaCelebracion', 'asc')->get();
+    }
+    // obtener contratos por lote
+    public function getContratosByLote($idLote)
+    {
+        return Contrato::where('idLote', $idLote)->orderBy('estatus', 'asc')->get();
+    }
 }

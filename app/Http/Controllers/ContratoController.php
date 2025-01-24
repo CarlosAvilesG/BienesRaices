@@ -63,6 +63,7 @@ class ContratoController extends Controller
         $lotes = $this->loteRepository->getAvailableLotes(); // Obtener lotes disponibles (sin contrato)
         $predios = $this->predioRepository->getAll(); // Obtener todos los predios
 
+
         return view('sistema.contratos.create', compact('clientes', 'lotes', 'predios'));
     }
 
@@ -282,53 +283,53 @@ class ContratoController extends Controller
     }
 
     private function generarTablaAmortizacion($monto, $interesAnual, $numPagos, $anualidades = 0, $pagoAnualidad = 0)
-{
-    $amortizacion = [];
-    $saldo = $monto;
-    $interesMensual = $interesAnual / 12 / 100;
+    {
+        $amortizacion = [];
+        $saldo = $monto;
+        $interesMensual = $interesAnual / 12 / 100;
 
-    // Si no hay interés, dividir el monto en cuotas iguales
-    $cuotaMensual = ($interesAnual > 0)
-        ? ($saldo * $interesMensual) / (1 - pow(1 + $interesMensual, -$numPagos))
-        : $monto / $numPagos;
+        // Si no hay interés, dividir el monto en cuotas iguales
+        $cuotaMensual = ($interesAnual > 0)
+            ? ($saldo * $interesMensual) / (1 - pow(1 + $interesMensual, -$numPagos))
+            : $monto / $numPagos;
 
-    $contadorAnualidades = 0;  // Para controlar cuántas anualidades se han aplicado
+        $contadorAnualidades = 0;  // Para controlar cuántas anualidades se han aplicado
 
-    for ($i = 1; $i <= $numPagos; $i++) {
-        $interes = $saldo * $interesMensual;
-        $capital = $cuotaMensual - $interes;
-        $saldo -= $capital;
+        for ($i = 1; $i <= $numPagos; $i++) {
+            $interes = $saldo * $interesMensual;
+            $capital = $cuotaMensual - $interes;
+            $saldo -= $capital;
 
-        // Guardar la cuota mensual normal primero
-        $amortizacion[] = [
-            'numero' => $i,
-            'fecha' => now()->addMonths($i)->format('d/m/Y'),
-            'cuota' => $cuotaMensual,
-            'interes' => $interes,
-            'capital' => $capital,
-            'saldo' => $saldo > 0 ? $saldo : 0,
-        ];
-
-        // Aplicar la anualidad si corresponde, y si aún quedan anualidades por aplicar
-        if ($anualidades > 0 && $contadorAnualidades < $anualidades && $i % 12 == 0) {
-            $saldo -= $pagoAnualidad;  // Reducir el saldo con el pago de anualidad
-
-            // Añadir el pago de la anualidad
+            // Guardar la cuota mensual normal primero
             $amortizacion[] = [
-                'numero' => "$i (Anualidad)",  // Indicar que es la anualidad
-                'fecha' => now()->addMonths($i)->format('d/m/Y'),  // La misma fecha que el mes de la cuota
-                'cuota' => $pagoAnualidad,
-                'interes' => 0,  // No hay interés en el pago de la anualidad
-                'capital' => $pagoAnualidad,
+                'numero' => $i,
+                'fecha' => now()->addMonths($i)->format('d/m/Y'),
+                'cuota' => $cuotaMensual,
+                'interes' => $interes,
+                'capital' => $capital,
                 'saldo' => $saldo > 0 ? $saldo : 0,
             ];
 
-            $contadorAnualidades++;  // Incrementar el contador de anualidades aplicadas
-        }
-    }
+            // Aplicar la anualidad si corresponde, y si aún quedan anualidades por aplicar
+            if ($anualidades > 0 && $contadorAnualidades < $anualidades && $i % 12 == 0) {
+                $saldo -= $pagoAnualidad;  // Reducir el saldo con el pago de anualidad
 
-    return $amortizacion;
-}
+                // Añadir el pago de la anualidad
+                $amortizacion[] = [
+                    'numero' => "$i (Anualidad)",  // Indicar que es la anualidad
+                    'fecha' => now()->addMonths($i)->format('d/m/Y'),  // La misma fecha que el mes de la cuota
+                    'cuota' => $pagoAnualidad,
+                    'interes' => 0,  // No hay interés en el pago de la anualidad
+                    'capital' => $pagoAnualidad,
+                    'saldo' => $saldo > 0 ? $saldo : 0,
+                ];
+
+                $contadorAnualidades++;  // Incrementar el contador de anualidades aplicadas
+            }
+        }
+
+        return $amortizacion;
+    }
 
 
 }

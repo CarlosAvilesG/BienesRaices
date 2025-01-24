@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Auditable;
+use PhpParser\Node\Expr\AssignOp\Concat;
 
 class ClienteReferencia extends Model
 {
@@ -40,8 +41,10 @@ class ClienteReferencia extends Model
         $paterno = $this->paterno ?? ''; // Si es null, usar una cadena vacía
         $materno = $this->materno ?? ''; // Si es null, usar una cadena vacía
 
-        // Concatenar los valores, eliminando espacios extras
-        $nombreCompleto = trim("$nombre $paterno $materno");
+        // Concatenar los valores
+        $nombreCompleto = "$nombre  $paterno $materno";
+
+        //$nombreCompleto = Concat ("$nombre $paterno $materno");
 
         // Si el nombre completo está vacío, regresar "Sin Referencias"
         return $nombreCompleto !== '' ? $nombreCompleto : 'Sin registro';

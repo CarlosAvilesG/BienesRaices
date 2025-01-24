@@ -126,6 +126,9 @@ return [
     // 'aliases' => [
     //     'Image' => Intervention\Image\Facades\Image::class,
     // ],
+    // 'aliases' => [
+    //     'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+    // ],
 
 
 ];

@@ -50,10 +50,10 @@ class Cliente extends Model
         $materno = $this->materno ?? ''; // Si es null, usar una cadena vacía
 
         // Concatenar los valores, eliminando espacios extras
-        $nombreCompleto = trim("$nombre $paterno $materno");
+        $nombreCompleto = "$nombre $paterno $materno";
 
         // Si el nombre completo está vacío, regresar "Sin Referencias"
         return $nombreCompleto !== '' ? $nombreCompleto : 'Sin registro';
     }
-    
+
 }

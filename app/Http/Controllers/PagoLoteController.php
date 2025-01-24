@@ -16,6 +16,8 @@ use App\Models\Contrato;
 use App\Models\PagoLote;
 use Illuminate\Http\Request;
 use Termwind\Components\Dd;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\Auth;
 
 class PagoLoteController extends Controller
 {
@@ -25,6 +27,7 @@ class PagoLoteController extends Controller
     protected $loteRepo;
     protected $clienteRepo;
 
+// 1. Constructor para inyectar dependencias
     public function __construct(PagoLoteRepositoryInterface $pagoLoteRepo, PredioRepositoryInterface $predioRepo, ContratoRepositoryInterface $contratoRepo, LoteRepositoryInterface $loteRepo, ClienteRepositoryInterface $clienteRepo)
     {
         $this->pagoLoteRepo = $pagoLoteRepo;
@@ -33,42 +36,22 @@ class PagoLoteController extends Controller
         $this->loteRepo = $loteRepo;
         $this->clienteRepo = $clienteRepo;
     }
-
+// 2. Métodos relacionados con la vista
     // Mostrar una lista de todos los pagos de lotes
     public function index(Request $request)
     {
+        //obtiene el idcontrato y guarda en la variable contratoReq
+        $contratoActivo = $this->contratoRepo->findById($request->idContrato);
 
-            // Construir la consulta inicial
-            $query = PagoLote::query();
+        // pagoLoteRepo selecciona solo los pagos de lotes que tengan el idContrato con paginacion de 10
+        $pagos = $this->pagoLoteRepo->getPagosByContrato($request->idContrato, 10);
 
-            // Filtrar por predio si se selecciona
-            if ($request->filled('idPredio')) {
-                $query->where('idPredio', $request->idPredio);
-            }
+         // verificar si en  $this->contratoRepo existen mas contratos con el  $contratoReq->idlote y ordenarlo por fechaPago
+        $contratos = $this->contratoRepo->getContratosByLote($contratoActivo->idLote);
 
-            // Filtrar por lote si se selecciona
-            if ($request->filled('idLote')) {
-                $query->where('idLote', $request->idLote);
-            }
 
-            // Filtrar por contrato si se selecciona
-            if ($request->filled('idContrato')) {
-                $query->where('idContrato', $request->idContrato);
-            }
+        return view('sistema.pago_lotes.index', compact('pagos', 'contratoActivo', 'contratos'));
 
-            // Cargar los pagos con las relaciones necesarias
-            $pagos = $query->with(['predio', 'lote', 'cliente', 'contrato'])->paginate(10);
-
-             // Si existe algún pago, obtener el contrato asociado al primer pago
-            $contratoActivo = $pagos->isNotEmpty() ? $pagos->items()[0]->contrato : null;
-
-            // Obtener todos los contratos del lote del primer pago (si existen)
-            $contratos = $contratoActivo
-                ? Contrato::where('idLote', $contratoActivo->idLote)->orderBy('estatus', 'asc')->get()
-                : collect();
-
-            return view('sistema.pago_lotes.index', compact('pagos', 'contratoActivo', 'contratos'));
-            // return view('sistema.pago_lotes.index', compact('pagos', 'predios', 'lotes', 'contratos'));
     }
 
     public function create()
@@ -80,6 +63,7 @@ class PagoLoteController extends Controller
     {
         // Obtener el contrato seleccionado
         $contrato = $this->contratoRepo->findById($contratoId);
+
         // Verificar si el contrato existe
         if (!$contrato) {
             return redirect()->route('pagos-lote.index')->withErrors(['Contrato no encontrado.']);
@@ -88,13 +72,18 @@ class PagoLoteController extends Controller
         $lote = $this->loteRepo->show($contrato->idLote);
         $cliente = $this->clienteRepo->find($contrato->idCliente);
 
-        return view('sistema.pago_lotes.create', compact('contrato', 'lote', 'cliente'));
+        $fechaActual = now()->format('Y-m-d');
+        $horaActual = now()->format('H:i');
+
+        return view('sistema.pago_lotes.create', compact('contrato', 'lote', 'cliente', 'fechaActual', 'horaActual'));
     }
 
     // Almacenar un nuevo pago en la base de datos
     public function store(StorePagoLoteRequest $request)
     {
-        $contrato = $this->contratoRepo->findById($request->contrato_id);
+        // Asignar el ID del usuario autenticado
+      //  $request->merge(['idUsuario' => Auth::id() ]); //Auth::user()->id]);
+        $contrato = $this->contratoRepo->findById($request->idContrato);
 
         if (!$contrato) {
             return redirect()->back()->withErrors(['Contrato no encontrado']);
@@ -102,7 +91,10 @@ class PagoLoteController extends Controller
 
         $pagoLote = $this->pagoLoteRepo->store($request->validated());
 
-        return redirect()->route('pagos-lote.index')->with('success', 'Pago registrado correctamente');
+
+
+        // return view('sistema.pago_lotes.index', compact('contrato'))->with('success', 'Pago registrado correctamente');
+         return redirect()->route('pagos-lote.index', compact('contrato'))->with('success', 'Pago registrado correctamente');
     }
 
     // Mostrar un pago específico
@@ -126,6 +118,35 @@ class PagoLoteController extends Controller
         return response()->json(null, 204);
     }
 
+ // 4. Métodos auxiliares
+ // cancelar pago
+    public function cancelarPago(Request $request, $id )
+    {
+        $pagoLote = PagoLote::find($id);
+
+
+
+        if (!$pagoLote) {
+            return redirect()->back()->withErrors(['El pago no fue encontrado.']);
+        }
+
+       // Verificar si se envió la observación antes de asignarla
+        if ($request->has('canceladoObservacion')) {
+            $pagoLote->cancelar = 1;
+            $pagoLote->observacion = $pagoLote->observacion . "\n" . "Cancelado:".$request->canceladoObservacion;
+            $pagoLote->idUsuarioCancela = Auth::id();
+
+
+            $pagoLote->save();
+
+            return redirect()->route('pagos-lote.index',  ['idContrato' => $pagoLote->idContrato ])->with('success', 'El pago ha sido cancelado correctamente.');
+
+
+        }
+
+        return redirect()->back()->withErrors(['Debes ingresar una observación.']);
+    }
+    // Filtrar pagos por predio, lote, o contrato
 
     public function filter(Request $request)
     {
@@ -149,6 +170,21 @@ class PagoLoteController extends Controller
         $pagos = $query->with(['predio', 'lote', 'cliente', 'usuario'])->paginate(10);
 
         return view('pago_lotes.index', compact('pagos'));
+    }
+
+    // Generar un archivo PDF del recibo de pago
+    public function generarReciboPagoPDF($id)
+    {
+        $pago = $this->pagoLoteRepo->findById($id);
+
+       // dd($pagoLote);
+
+        if (!$pago) {
+            return redirect()->back()->withErrors(['El pago no fue encontrado.']);
+        }
+
+        $pdf = PDF::loadView('sistema.pago_lotes.recibo', compact('pago'));
+        return $pdf->download('recibo_pago_' . $pago->id . '.pdf');
     }
 
 

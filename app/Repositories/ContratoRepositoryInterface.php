@@ -10,4 +10,8 @@ interface ContratoRepositoryInterface
     public function create(array $data);
     public function update($id, array $data);
     public function delete($id);
+
+    // 4. Métodos auxiliares
+    public function getContratosByCliente($idCliente);
+    public function getContratosByLote($idLote);
 }

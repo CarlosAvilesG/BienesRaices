@@ -34,44 +34,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-// Página de bienvenida pública
-// Route::get('/', function () {
-//     if (Auth::check()) {
-//         return redirect('/dashboard'); // Redirigir al panel si está autenticado
-//     }
-//     return view('guest.welcome'); // Vista para usuarios no autenticados
-// });
 
-
-
-
-// // Middleware para rutas autenticadas
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-
-//     // Dashboard principal
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
-
-//     // Rutas para pagos de lotes
-//     Route::get('/pagos-lote/filter', [Ctrl::$pagoLoteController, 'filter'])->name('pagos-lote.filter'); // Filtro de pagos por predio, lote, o contrato
-//     Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
-
-//     // Rutas para predios y lotes
-//     Route::get('/lotes-by-predio', [Ctrl::$loteController, 'getLotesByPredio'])->name('lotes.byPredio'); // Lotes por predio (AJAX)
-//     Route::get('/lotes/{id}/get', [Ctrl::$loteController, 'getLoteById'])->name('lotes.get'); // Lote por ID
-//     Route::resource('/lotes', Ctrl::$loteController)->names('lotes');
-//     Route::resource('/predios', Ctrl::$predioController)->names('predios');
-
-//     // Rutas para contratos
-//     Route::get('/contrato/{id}/cancelar', [Ctrl::$contratoController, 'cancelarContrato'])->name('contrato.cancelar'); // Cancelar contrato
-//     Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contrato.promesa-pdf'); // Promesa PDF
-//     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
-// });
 
 Route::middleware('auth')->get('/terms', function () {
     return view('terms');
@@ -135,9 +98,17 @@ Route::middleware([
     Route::resource('/negocios', Ctrl::$negocioController)->names('negocios');
 
 
-    Route::get('/pagos-lote/filter', [Ctrl::$pagoLoteController, 'filter'])->name('pagos-lote.filter');
-    Route::get('/pagos-lote/create/{contrato}', [Ctrl::$pagoLoteController, 'createByContrato'])->name('pagos-lote.createByContrato');
-    Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
+    Route::prefix('pagos-lote')->name('pagos-lote.')->group(function () {
+        Route::get('/filter', [Ctrl::$pagoLoteController, 'filter'])->name('filter');
+        Route::get('/create/{contrato}', [Ctrl::$pagoLoteController, 'createByContrato'])->name('createByContrato');
+        Route::post('/cancelar/{id}', [Ctrl::$pagoLoteController, 'cancelarPago'])->name('cancelarPago');
+        // ruta para impresion de recibo de pago
+        Route::get('/{id}/recibo-pdf', [Ctrl::$pagoLoteController, 'generarReciboPagoPDF'])->name('reciboPdf');
+        Route::resource('/', Ctrl::$pagoLoteController)->parameters(['' => 'pago_lote']);
+    });
+    // Route::get('/pagos-lote/filter', [Ctrl::$pagoLoteController, 'filter'])->name('pagos-lote.filter');
+    // Route::get('/pagos-lote/create/{contrato}', [Ctrl::$pagoLoteController, 'createByContrato'])->name('pagos-lote.createByContrato');
+    // Route::resource('/pagos-lote', Ctrl::$pagoLoteController)->names('pagos-lote');
 
 
 
