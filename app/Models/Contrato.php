@@ -105,13 +105,14 @@ class Contrato extends Model
         'precioPredio' => 'decimal:2',
         'interesMoroso' => 'decimal:1',
         'engache' => 'decimal:2',
+        'fechaCelebracion' => 'datetime', // Convierte a objeto Carbon
 
     ];
 
     // Definir las relaciones con otros modelos
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'idCliente', 'id');
+        return $this->belongsTo(Cliente::class, 'idCliente', 'id')->withTrashed(); // ← Esto incluirá clientes eliminados;
     }
 
     public function lote()
@@ -338,6 +339,31 @@ class Contrato extends Model
     {
         return $this->calcularMontoPagoMensual();
     }
+
+    // calcular mes y año de la mensaudlidad basado en pagoNumero , segun la tabla de amortizacion de la mensualidad
+    public function getMesAnioMensualidadAttribute()
+    {
+        $meses = [
+            1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio',
+            7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+        ];
+
+        $pagoNumero = $this->getUltimaLetraPagadaAttribute();
+        $anio = $this->fechaCelebracion->year;
+        $mes = $this->fechaCelebracion->month;
+
+        $mesesPagados = $pagoNumero % 12;
+        $aniosPagados = floor($pagoNumero / 12);
+
+        $mes = $mes + $mesesPagados;
+        if ($mes > 12) {
+            $mes = $mes - 12;
+            $anio++;
+        }
+
+        return "{$meses[$mes]} de $anio";
+    }
+
 
 // Calcular saldos fin
 

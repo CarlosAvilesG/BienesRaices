@@ -11,6 +11,12 @@ class ClienteRepository implements ClienteRepositoryInterface
         return Cliente::all();
     }
 
+    // ver todos los clientes incluyendo los eliminados
+    public function getAllWithTrashed()
+    {
+        return Cliente::withTrashed()->get();
+    }
+
     public function store(array $data)
     {
         return Cliente::create($data);
@@ -32,6 +38,12 @@ class ClienteRepository implements ClienteRepositoryInterface
     {
         $cliente = Cliente::findOrFail($id);
         $cliente->delete();
+        return true;
+    }
+    public function restore($id)
+    {
+        $cliente = Cliente::withTrashed()->findOrFail($id);
+        $cliente->restore();
         return true;
     }
 }

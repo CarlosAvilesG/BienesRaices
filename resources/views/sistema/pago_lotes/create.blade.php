@@ -138,74 +138,24 @@
 
             <div class="card-body">
                 <div class="row">
-                    <!-- Motivo del Pago -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="motivo"><i class="fas fa-question-circle"></i> Motivo del Pago</label>
-                            <select name="motivo" id="motivo" class="form-control @error('motivo') is-invalid @enderror" required>
-                                <option value="">-- Seleccione el motivo --</option>
-                                <option value="Enganche">Enganche</option>
-                                <option value="Mensualidad">Mensualidad</option>
-                                <option value="Anualidad">Anualidad</option>
-                            </select>
-                            @error('motivo')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Tipo de Pago -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="tipoPago"><i class="fas fa-credit-card"></i> Tipo de Pago</label>
-                            <select name="tipoPago" id="tipoPago" class="form-control @error('tipoPago') is-invalid @enderror" required>
-                                <option value="">-- Seleccione el tipo --</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Transferencia">Transferencia</option>
-                            </select>
-                            @error('tipoPago')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Monto del Pago -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="monto"><i class="fas fa-dollar-sign"></i> Monto del Pago</label>
-                            <input
-                                step="0.01"
-                                name="monto"
-                                id="monto"
-                                class="form-control @error('monto') is-invalid @enderror"
-                                value="{{ old('monto', $contrato->getMontoMensualidadCalculadoFormateadoAttribute()) }}"
-                                placeholder="Ingrese el monto"
-                                required
-                                autofocus>
-                            @error('monto')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Referencia Bancaria -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="referenciaBancaria"><i class="fas fa-receipt"></i> Referencia Bancaria</label>
+                    {{-- Ingresar el Folio externo --}}
+                    <div class="col-md-3">
+                        <div class="form-group
+                            @error('folioExterno') is-invalid @enderror">
+                            <label for="folioExterno"><i class="fas fa-barcode"></i> Folio Externo</label>
                             <input
                                 type="text"
-                                name="referenciaBancaria"
-                                id="referenciaBancaria"
+                                name="folioExterno"
+                                id="folioExterno"
                                 class="form-control"
-                                placeholder="Número de referencia bancaria (opcional)">
+                                placeholder="Ingrese el folio externo (opcional)">
+                            @error('folioExterno')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
-
-                    <!-- Fecha de Pago -->
-                    <div class="col-md-3">
+                      <!-- Fecha de Pago -->
+                      <div class="col-md-3">
                         <div class="form-group">
                             <label for="fechaPago"><i class="fas fa-calendar-day"></i> Fecha del Pago</label>
                             <input
@@ -231,6 +181,76 @@
                                 required>
                         </div>
                     </div>
+
+
+                </div>
+
+
+                <div class="row">
+                      <!-- Motivo del Pago -->
+                      <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="motivo"><i class="fas fa-question-circle"></i> Motivo del Pago</label>
+                            <select name="motivo" id="motivo" class="form-control @error('motivo') is-invalid @enderror" required>
+                                <option value="">-- Seleccione el motivo --</option>
+                                <option value="Enganche">Enganche</option>
+                                <option value="Mensualidad">Mensualidad</option>
+                                <option value="Anualidad">Anualidad</option>
+                            </select>
+                            @error('motivo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Pago -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tipoPago"><i class="fas fa-credit-card"></i> Tipo de Pago</label>
+                            <select name="tipoPago" id="tipoPago" class="form-control @error('tipoPago') is-invalid @enderror" required>
+                                <option value="">-- Seleccione el tipo --</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="Transferencia">Transferencia</option>
+                            </select>
+                            @error('tipoPago')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Monto del Pago -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="monto"><i class="fas fa-dollar-sign"></i> Monto del Pago</label>
+                            <input
+                                step="0.01"
+                                name="monto"
+                                id="monto"
+                                class="form-control @error('monto') is-invalid @enderror"
+                                value="{{ old('monto', $contrato->getMontoMensualidadCalculadoFormateadoAttribute()) }}"
+                                placeholder="Ingrese el monto"
+                                required
+                                autofocus>
+                            @error('monto')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <!-- Referencia Bancaria -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="referenciaBancaria"><i class="fas fa-receipt"></i> Referencia Bancaria</label>
+                            <input
+                                type="text"
+                                name="referenciaBancaria"
+                                id="referenciaBancaria"
+                                class="form-control"
+                                placeholder="Número de referencia bancaria (opcional)">
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <!-- Observaciones -->

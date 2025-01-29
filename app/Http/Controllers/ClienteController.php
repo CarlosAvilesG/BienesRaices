@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
+
 use Illuminate\Support\Facades\Storage; // Para manejar el almacenamiento de
 class ClienteController extends Controller
 {
     protected $clienteRepository;
+
 
     public function __construct(ClienteRepositoryInterface $clienteRepository)
     {
@@ -32,11 +34,17 @@ class ClienteController extends Controller
     // Mostrar una lista de todos los clientes
     public function index()
     {
-        //return 'entro a index';
 
-        //return view('clientes.index');
+        // crea la validacion si el usuario es administrador
+        if (Auth::user()->roles->contains('name', 'Administrador'))
+         {
+            // puede ver todos los clientes incluyendo los eliminados
+            $clientes = $this->clienteRepository->getAllWithTrashed();
 
-         $clientes = $this->clienteRepository->getAll();
+        } else {
+
+            $clientes = $this->clienteRepository->getAll();
+        }
         //return response()->json($clientes);
 
         return view('sistema.clientes.index', compact('clientes'));
@@ -57,6 +65,8 @@ class ClienteController extends Controller
         $validatedData['idUsuario'] = Auth::id();
         $validatedData['fechaRegistro'] = now();
 
+        // Encriptar la contraseña antes de guardarla
+        $validatedData['pass'] = bcrypt($validatedData['pass']);
 
         // Crear el cliente en la base de datos
         $cliente = $this->clienteRepository->store($validatedData);
@@ -74,7 +84,7 @@ class ClienteController extends Controller
 
 
          // Redirigir a la página de edición con un mensaje de éxito
-         return redirect()->route('sistema.clientes.show', $cliente->id)->with('success', 'Cliente creado exitosamente.');
+         return redirect()->route('clientes.show', $cliente->id)->with('success', 'Cliente creado exitosamente.');
 
         //return response()->json($cliente, 201);
     }
@@ -86,7 +96,7 @@ class ClienteController extends Controller
 
         // Verifica si el cliente fue encontrado
         if (!$cliente) {
-            return redirect()->route('sistema.clientes.index')->with('error', 'Cliente no encontrado');
+            return redirect()->route('clientes.index')->with('error', 'Cliente no encontrado');
         }
 
         return view('sistema.clientes.edit', compact('cliente'));
@@ -140,7 +150,13 @@ class ClienteController extends Controller
     {
         $this->clienteRepository->delete($id);
         //return response()->json(null, 204);
-        return redirect()->route('sistema.clientes.index')->with('success', 'Cliente eliminado exitosamente.');
+        return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente.');
+    }
+    //RESTAURAR CLIENTE
+    public function restore($id)
+    {
+        $this->clienteRepository->restore($id);
+        return redirect()->route('clientes.index')->with('success', 'Cliente restaurado exitosamente.');
     }
 
     // Subir una imagen de perfil para un cliente específico

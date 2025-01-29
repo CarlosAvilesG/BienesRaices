@@ -59,8 +59,8 @@
                         </h3>
                     </div>
                     <div class="col-md-6 text-right">
-                        @if($contratoActivo)
-                            <a href="{{ route('pagos-lote.createByContrato', $contratoActivo->id) }}"
+                        @if($contrato)
+                            <a href="{{ route('pagos-lote.createByContrato', $contrato->id) }}"
                                class="btn btn-sm btn-success btn-flat shadow-sm font-weight-bold">
                                 <i class="fas fa-plus"></i> Nuevo Pago
                             </a>

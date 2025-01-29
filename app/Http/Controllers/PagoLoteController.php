@@ -7,6 +7,7 @@ use App\Repositories\PredioRepositoryInterface;
 use App\Repositories\ContratoRepositoryInterface;
 use App\Repositories\LoteRepositoryInterface;
 use App\Repositories\ClienteRepositoryInterface;
+use App\Repositories\NegocioRepositoryInterface;
 
 use App\Http\Requests\StorePagoLoteRequest;
 use App\Http\Requests\UpdatePagoLoteRequest;
@@ -26,31 +27,33 @@ class PagoLoteController extends Controller
     protected $contratoRepo;
     protected $loteRepo;
     protected $clienteRepo;
+    protected $negocioRepo;
 
 // 1. Constructor para inyectar dependencias
-    public function __construct(PagoLoteRepositoryInterface $pagoLoteRepo, PredioRepositoryInterface $predioRepo, ContratoRepositoryInterface $contratoRepo, LoteRepositoryInterface $loteRepo, ClienteRepositoryInterface $clienteRepo)
+    public function __construct(PagoLoteRepositoryInterface $pagoLoteRepo, PredioRepositoryInterface $predioRepo, ContratoRepositoryInterface $contratoRepo, LoteRepositoryInterface $loteRepo, ClienteRepositoryInterface $clienteRepo, NegocioRepositoryInterface $negocioRepo)
     {
         $this->pagoLoteRepo = $pagoLoteRepo;
         $this->predioRepo = $predioRepo;
         $this->contratoRepo = $contratoRepo;
         $this->loteRepo = $loteRepo;
         $this->clienteRepo = $clienteRepo;
+        $this->negocioRepo = $negocioRepo;
     }
 // 2. Métodos relacionados con la vista
     // Mostrar una lista de todos los pagos de lotes
     public function index(Request $request)
     {
         //obtiene el idcontrato y guarda en la variable contratoReq
-        $contratoActivo = $this->contratoRepo->findById($request->idContrato);
+        $contrato = $this->contratoRepo->findById($request->idContrato);
 
         // pagoLoteRepo selecciona solo los pagos de lotes que tengan el idContrato con paginacion de 10
         $pagos = $this->pagoLoteRepo->getPagosByContrato($request->idContrato, 10);
 
          // verificar si en  $this->contratoRepo existen mas contratos con el  $contratoReq->idlote y ordenarlo por fechaPago
-        $contratos = $this->contratoRepo->getContratosByLote($contratoActivo->idLote);
+        $contratos = $this->contratoRepo->getContratosByLote($contrato->idLote);
 
 
-        return view('sistema.pago_lotes.index', compact('pagos', 'contratoActivo', 'contratos'));
+        return view('sistema.pago_lotes.index', compact('pagos', 'contrato', 'contratos'));
 
     }
 
@@ -183,8 +186,27 @@ class PagoLoteController extends Controller
             return redirect()->back()->withErrors(['El pago no fue encontrado.']);
         }
 
-        $pdf = PDF::loadView('sistema.pago_lotes.recibo', compact('pago'));
-        return $pdf->download('recibo_pago_' . $pago->id . '.pdf');
+        $datosEmpresa = $this->negocioRepo->findById(1);
+
+       // dd($datosEmpresa);
+
+        return view('sistema.pago_lotes.recibo', compact('pago', 'datosEmpresa'));
+
+        // Generar el PDF
+
+        // $pdf = PDF::loadView('sistema.pago_lotes.recibo', compact('pago', 'datosEmpresa'))->setPaper('letter', 'portrait'); // También puedes usar 'landscape';
+
+        // abiri pdf en el navegador
+         return $pdf->stream('recibo_pago_' . $pago->id . '.pdf');
+       // return $pdf->download('recibo_pago_' . $pago->id . '.pdf');
+
+
+        // Generar el PDF con la vista y los datos
+        // $pdf = PDF::loadView('sistema.contratos.promesa_venta_pdf', compact('contratoData', 'clienteData', 'loteData', 'predioData', 'amortizacion'));
+
+        // // Retornar el PDF generado para descarga o vista previa
+        // return $pdf->download('Promesa_Compra_Venta.pdf');
+
     }
 
 

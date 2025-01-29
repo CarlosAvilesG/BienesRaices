@@ -51,7 +51,11 @@
                                 @endif
                             ">
                                 <td>{{ $contrato->id }}</td>
-                                <td>{{ $contrato->cliente->nombre }} {{ $contrato->cliente->paterno }}</td>
+
+                                <td>
+                                    {{ $contrato->cliente->nombre_completo }}
+                                </td>
+
                                 <td>{{ $contrato->lote->descripcion }}</td>
                                 <td>{{ $contrato->noContrato }}</td>
                                 <td>${{ number_format($contrato->precioPredio, 2) }}</td>

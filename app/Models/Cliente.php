@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Auditable;
 
+
 class Cliente extends Model
 {
     use HasFactory, SoftDeletes, Auditable;
 
-    // Especificar la tabla si es diferente a la convención plural de Laravel
-  //  protected $table = 'clientes';
 
-    // Especificar la clave primaria si es diferente de 'id'
-   // protected $primaryKey = 'idCliente';
 
     // Definir los campos que pueden ser asignados en masa
     protected $fillable = [
