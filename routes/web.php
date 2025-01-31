@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controllers as Ctrl;
-
+use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -22,7 +22,9 @@ Route::get('/', function () {
 });
 
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
+});
 
 Route::middleware([
     'auth:sanctum',

@@ -2,27 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; // Importar si vas a usar verificación de correo
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles; // Descomenta si vas a usar roles y permisos
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Auth\Notifications\VerifyEmail;
-//use App\Models\PersonalAccessToken;
-use Laravel\Sanctum\PersonalAccessToken;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail // Implementar si usas verificación de correo
+class User extends Authenticatable
 {
     use HasApiTokens;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-     use HasRoles; // Descomenta si vas a usar roles y permisos
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -31,9 +29,6 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
      */
     protected $fillable = [
         'name',
-        'paterno',
-        'materno',
-        'nombre',
         'email',
         'password',
     ];
@@ -60,44 +55,15 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    /**
-     * Method to send the email verification notification.
-     */
-    public function sendEmailVerificationNotification()
+    protected function casts(): array
     {
-        $this->notify(new VerifyEmail);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-
-    /**
-     * Method to send the password reset notification.
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
-    }
-
-    /**
-     * Relación con otros modelos, por ejemplo, los tokens de acceso personal.
-     */
-    public function personalAccessTokens()
-    {
-        return $this->hasMany(PersonalAccessToken::class);
-    }
-
-    /**
-     * Relación con un perfil u otro modelo relacionado, si aplica.
-     */
-    // public function profile()
-    // {
-    //     return $this->hasOne(Profile::class);
-    // }
 }
