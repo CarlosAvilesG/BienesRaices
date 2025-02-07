@@ -134,11 +134,19 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_image' => true,
+    'usermenu_desc' =>  function () {
+        return fn () => \Illuminate\Support\Facades\Auth::check()
+        ? implode(', ', \Illuminate\Support\Facades\Auth::user()->roles->pluck('name')->toArray())
+        : 'Sin rol';
+    },
+    //true, //function () { return auth()->user()->getRoleName(); },
+    // 'usermenu_desc' => function () {
+    //     return \Illuminate\Support\Facades\Auth::user()->roles->pluck('name')->first();
+    // },
+    'usermenu_profile_url' =>   'profile.show',
 
     /*
     |--------------------------------------------------------------------------
@@ -263,7 +271,7 @@ return [
     'register_url' => 'register',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
-    'profile_url' => false,
+    'profile_url' => false, //'user/profile',
 
     /*
     |--------------------------------------------------------------------------
@@ -322,6 +330,7 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
+
         // ['header' => 'account_settings'],
         // [
         //     'text' => 'profile',

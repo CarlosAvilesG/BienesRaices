@@ -59,6 +59,29 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
         'profile_photo_url',
     ];
 
+    public function getRoleName()
+    {
+        return $this->roles->pluck('name')->first() ?? 'Sin rol';
+    }
+    // Imagen de perfil en AdminLTE
+    public function adminlte_image()
+    {
+        return $this->profile_photo_path
+            ? asset('storage/' . $this->profile_photo_path)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    }
+
+    // URL del perfil en AdminLTE
+    public function adminlte_profile_url()
+    {
+        return route('profile.show');
+    }
+    public function adminlte_desc()
+    {
+        return $this->getRoleNames()->implode(', ') ?? 'Sin rol';
+    }
+
+
     /**
      * The attributes that should be cast to native types.
      *

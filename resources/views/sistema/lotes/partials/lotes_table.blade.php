@@ -70,11 +70,13 @@
                     <a href="{{ route('lotes.show', $lote->id) }}" class="btn btn-info btn-sm">Ver</a>
                     <a href="{{ route('lotes.edit', $lote->id) }}" class="btn btn-warning btn-sm">Editar</a>
 
-                    <form action="{{ route('lotes.destroy', $lote->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
+                    @if (auth()->user()->hasRole('superusuario') || auth()->user()->id === $lote->propietario_id)
+                        <form action="{{ route('lotes.destroy', $lote->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
         @endforeach

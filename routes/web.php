@@ -10,7 +10,21 @@ use App\Http\Controllers\Controllers as Ctrl;
 //     return view('welcome');
 // });
 
+Route::get('/test-auth', function () {
+    return Auth::user(); // Usar Auth::user() en lugar de auth()->user()
+});
 
+Route::get('/force-login', function () {
+    $user =  Auth::user(); // Obtener el primer usuario
+    Auth::login($user); // Iniciar sesión
+
+    return redirect('/test-auth'); // Redirigir a la prueba
+});
+
+Route::get('/test-session', function () {
+    session(['test' => 'Funciona']);
+    return session('test');
+});
 
 // Página de bienvenida pública
 Route::get('/', function () {
