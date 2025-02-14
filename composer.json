@@ -15,7 +15,7 @@
         "jeroennoten/laravel-adminlte": "^3.13",
         "laravel-lang/lang": "^15.7",
         "laravel/framework": "^11.0",
-        "laravel/jetstream": "^5.1",
+        "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",

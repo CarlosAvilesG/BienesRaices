@@ -4,11 +4,33 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controllers as Ctrl;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
 
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified', // <-- Esto evita acceso sin verificación de email
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+Route::get('/password/reset', function () {
+    return redirect()->route('password.request');
+});
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
 
 Route::get('/test-auth', function () {
     return Auth::user(); // Usar Auth::user() en lugar de auth()->user()
@@ -36,6 +58,11 @@ Route::get('/', function () {
 });
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/profile', function () {
+        return view('profile.show');
+    })->name('profile.show');
+});
 
 
 Route::middleware([

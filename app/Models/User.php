@@ -2,27 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; // Importar si vas a usar verificación de correo
+ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles; // Descomenta si vas a usar roles y permisos
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Auth\Notifications\VerifyEmail;
-//use App\Models\PersonalAccessToken;
-use Laravel\Sanctum\PersonalAccessToken;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail // Implementar si usas verificación de correo
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
-    use HasFactory;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, HasApiTokens;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-     use HasRoles; // Descomenta si vas a usar roles y permisos
+    use Notifiable, HasRoles; // ✅ Usar el Trait HasRoles
 
     /**
      * The attributes that are mass assignable.
@@ -31,11 +29,12 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
      */
     protected $fillable = [
         'name',
-        'paterno',
-        'materno',
-        'nombre',
+        // 'paterno',
+        // 'materno',
+        // 'nombre',
         'email',
         'password',
+        'profile_photo_path',
     ];
 
     /**
@@ -50,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
         'two_factor_secret',
     ];
 
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -59,68 +59,51 @@ class User extends Authenticatable implements MustVerifyEmail // Implementar si 
         'profile_photo_url',
     ];
 
-    public function getRoleName()
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        return $this->roles->pluck('name')->first() ?? 'Sin rol';
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-    // Imagen de perfil en AdminLTE
+
+     /**
+     * Retorna la URL de la imagen de perfil en AdminLTE
+     */
+    public function adminlte_profile_url()
+    {
+        return url('user/profile');
+        // return $this->profile_photo_path
+        //     ? asset('storage/' . $this->profile_photo_path)
+        //     : 'https://ui-avatars.com/api/?name=' . urlencode($this->name);
+       // return route('profile.show');
+    }
+
+    /**
+     * Retorna la descripción del usuario (Ejemplo: Rol del usuario)
+     */
+    public function adminlte_desc()
+    {
+        return implode(', ', $this->getRoleNames()->toArray());
+    }
+
+    /**
+     * Retorna la URL de la página de perfil
+     */
+    public function adminlte_profile_link()
+    {
+        return route('profile.show');
+    }
     public function adminlte_image()
     {
         return $this->profile_photo_path
             ? asset('storage/' . $this->profile_photo_path)
-            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+            : 'https://ui-avatars.com/api/?name='.urlencode($this->name);
     }
 
-    // URL del perfil en AdminLTE
-    public function adminlte_profile_url()
-    {
-        return route('profile.show');
-    }
-    public function adminlte_desc()
-    {
-        return $this->getRoleNames()->implode(', ') ?? 'Sin rol';
-    }
-
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    /**
-     * Method to send the email verification notification.
-     */
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new VerifyEmail);
-    }
-
-    /**
-     * Method to send the password reset notification.
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
-    }
-
-    /**
-     * Relación con otros modelos, por ejemplo, los tokens de acceso personal.
-     */
-    public function personalAccessTokens()
-    {
-        return $this->hasMany(PersonalAccessToken::class);
-    }
-
-    /**
-     * Relación con un perfil u otro modelo relacionado, si aplica.
-     */
-    // public function profile()
-    // {
-    //     return $this->hasOne(Profile::class);
-    // }
 }

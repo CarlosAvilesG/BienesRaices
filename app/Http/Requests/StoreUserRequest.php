@@ -17,9 +17,9 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'paterno' => 'required|string|max:255',
-            'materno' => 'required|string|max:255',
-            'nombre' => 'required|string|max:255',
+            // 'paterno' => 'required|string|max:255',
+            // 'materno' => 'required|string|max:255',
+            // 'nombre' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',rules\Password::defaults(),
         ];

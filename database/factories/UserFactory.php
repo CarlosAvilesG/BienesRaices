@@ -15,14 +15,12 @@ use Laravel\Jetstream\Features;
 class UserFactory extends Factory
 {
     /**
-     * Define el modelo de usuario que está usando esta fábrica.
-     *
-     * @var string
+     * The current password being used by the factory.
      */
-    protected $model = User::class;
+    protected static ?string $password;
 
     /**
-     * Define el estado predeterminado del modelo.
+     * Define the model's default state.
      *
      * @return array<string, mixed>
      */
@@ -30,12 +28,9 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'paterno' => fake()->lastName(),
-            'materno' => fake()->lastName(),
-            'nombre' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => Hash::make('password'), // Hash de la contraseña predeterminada
+            'password' => static::$password ??= Hash::make('password'),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -45,7 +40,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indica que la dirección de correo electrónico no debe estar verificada.
+     * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static
     {
@@ -55,7 +50,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indica que el usuario debe tener un equipo personal.
+     * Indicate that the user should have a personal team.
      */
     public function withPersonalTeam(?callable $callback = null): static
     {
@@ -66,7 +61,7 @@ class UserFactory extends Factory
         return $this->has(
             Team::factory()
                 ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name . "'s Team",
+                    'name' => $user->name.'\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])

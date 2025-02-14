@@ -18,9 +18,9 @@ class UsersTableSeeder extends Seeder
                 'paterno' => 'Perez',
                 'materno' => 'Gomez',
                 'nombre' => 'Juan',
-                'email' => 'juan.perez@example.com',
+                'email' => 'ing.josecarlos.empresa@gmail.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password123'), // Puedes usar Hash::make() para encriptar la contraseña
+                'password' => Hash::make('12345678'), // Puedes usar Hash::make() para encriptar la contraseña
                 'remember_token' => Str::random(10),
                 'current_team_id' => null,
                 'profile_photo_path' => null,
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
                 'paterno' => 'Rodriguez',
                 'materno' => 'Lopez',
                 'nombre' => 'Maria',
-                'email' => 'maria.rodriguez@example.com',
+                'email' => 'ing.josecarlos@gmail.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password123'),
                 'remember_token' => Str::random(10),

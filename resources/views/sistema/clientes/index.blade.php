@@ -53,7 +53,7 @@
                     </button>';
 
                     $config = [
-                        'language' => ['url' => '//cdn.datatables.net/plug-ins/2.1.7/i18n/es-MX.json'],
+                        'language' => ['url' => 'js/es-MX.json'],
                         'paging' => true,
                         'searching' => true,
                         'info' => true,

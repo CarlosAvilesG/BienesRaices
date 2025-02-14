@@ -137,16 +137,8 @@ return [
     'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
-    'usermenu_desc' =>  function () {
-        return fn () => \Illuminate\Support\Facades\Auth::check()
-        ? implode(', ', \Illuminate\Support\Facades\Auth::user()->roles->pluck('name')->toArray())
-        : 'Sin rol';
-    },
-    //true, //function () { return auth()->user()->getRoleName(); },
-    // 'usermenu_desc' => function () {
-    //     return \Illuminate\Support\Facades\Auth::user()->roles->pluck('name')->first();
-    // },
-    'usermenu_profile_url' =>   'profile.show',
+    'usermenu_desc' => true,
+    'usermenu_profile_url' => true,  /*  'user/profile',*/
 
     /*
     |--------------------------------------------------------------------------
@@ -161,10 +153,10 @@ return [
     */
 
     'layout_topnav' => null,
-    'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
-    'layout_fixed_footer' => null,
+    'layout_boxed' => false,
+    'layout_fixed_sidebar' => true,
+    'layout_fixed_navbar' => true,
+    'layout_fixed_footer' => false,
     'layout_dark_mode' => null,
 
     /*
@@ -265,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'login',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -608,5 +600,5 @@ return [
     |
     */
 
-    'livewire' => false,
+    'livewire' => true,
 ];

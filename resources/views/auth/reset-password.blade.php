@@ -1,4 +1,51 @@
-<x-guest-layout>
+{{-- @extends('adminlte::auth.reset-password') --}}
+@extends('adminlte::auth.auth-page', ['auth_type' => 'login'])
+
+@section('title', 'Restablecer Contraseña')
+
+@section('content')
+    <p class="login-box-msg">Ingresa tu nueva contraseña</p>
+
+    <form method="POST" action="{{ route('password.update') }}">
+        @csrf
+        <input type="hidden" name="token" value="{{ request()->route('token') }}">
+
+        <div class="input-group mb-3">
+            <input type="email" name="email" class="form-control" value="{{ request()->email }}" placeholder="Correo Electrónico" required autofocus>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="password" name="password" class="form-control" placeholder="Nueva Contraseña" required>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirmar Contraseña" required>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-block">Restablecer Contraseña</button>
+            </div>
+        </div>
+    </form>
+@stop
+
+{{-- <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
@@ -33,4 +80,4 @@
             </div>
         </form>
     </x-authentication-card>
-</x-guest-layout>
+</x-guest-layout> --}}
