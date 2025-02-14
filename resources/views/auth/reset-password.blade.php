@@ -1,4 +1,6 @@
-{{-- @extends('adminlte::auth.reset-password') --}}
+@extends('adminlte::auth.passwords.reset')
+
+{{-- @extends('adminlte::auth.reset-password')
 @extends('adminlte::auth.auth-page', ['auth_type' => 'login'])
 
 @section('title', 'Restablecer Contraseña')
@@ -43,7 +45,7 @@
             </div>
         </div>
     </form>
-@stop
+@stop --}}
 
 {{-- <x-guest-layout>
     <x-authentication-card>
