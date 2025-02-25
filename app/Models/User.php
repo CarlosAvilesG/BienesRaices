@@ -78,10 +78,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function adminlte_profile_url()
     {
         return url('user/profile');
-        // return $this->profile_photo_path
-        //     ? asset('storage/' . $this->profile_photo_path)
-        //     : 'https://ui-avatars.com/api/?name=' . urlencode($this->name);
-       // return route('profile.show');
     }
 
     /**
@@ -92,15 +88,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return implode(', ', $this->getRoleNames()->toArray());
     }
 
+
     /**
      * Retorna la URL de la página de perfil
      */
     public function adminlte_profile_link()
     {
-        return route('profile.show');
+        // return route('profile.show');
+        return url('user/profile');
     }
     public function adminlte_image()
     {
+       // return $this->profile_photo_url;
         return $this->profile_photo_path
             ? asset('storage/' . $this->profile_photo_path)
             : 'https://ui-avatars.com/api/?name='.urlencode($this->name);

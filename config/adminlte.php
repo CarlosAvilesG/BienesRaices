@@ -138,7 +138,7 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => true,  /*  'user/profile',*/
+    'usermenu_profile_url' => true , //  'user/profile',
 
     /*
     |--------------------------------------------------------------------------
@@ -264,6 +264,27 @@ return [
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false, //'user/profile',
+    'disable_darkmode_routes' => false,
+
+        /*
+    |--------------------------------------------------------------------------
+    | Laravel Asset Bundling
+    |--------------------------------------------------------------------------
+    |
+    | Here we can enable the Laravel Asset Bundling option for the admin panel.
+    | Currently, the next modes are supported: 'mix', 'vite' and 'vite_js_only'.
+    | When using 'vite_js_only', it's expected that your CSS is imported using
+    | JavaScript. Typically, in your application's 'resources/js/app.js' file.
+    | If you are not using any of these, leave it as 'false'.
+    |
+    | For detailed instructions you can look the asset bundling section here:
+    | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Other-Configuration
+    |
+    */
+
+    // 'laravel_asset_bundling' => false,
+    // 'laravel_css_path' => 'css/app.css',
+    // 'laravel_js_path' => 'js/app.js',
 
     /*
     |--------------------------------------------------------------------------
@@ -600,5 +621,5 @@ return [
     |
     */
 
-    'livewire' => true,
+    'livewire' => false,
 ];

@@ -58,7 +58,7 @@ return [
     */
 
     'features' => [
-        Features::profilePhotos(),       
+        Features::profilePhotos(),
       //  Features::twoFactorAuthentication(),
         Features::accountDeletion(),
         // Features::termsAndPrivacyPolicy(),

@@ -1,27 +1,47 @@
-@extends('adminlte::page')
 
-@section('title', 'Dashboard')
 
-@section('content_header')
-    <h1>Dashboard</h1>
-@stop
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('content')
-    <p>Bienvenido al panel de administración.</p>
-@stop
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-@section('css')
-    {{-- Estilos personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('js/datatables.min.css') }}">
-    @livewireStyles
-@stop
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-@section('js')
-    {{-- Scripts personalizados --}}
-    <script src="{{ asset('js/datatables.min.js') }}"></script>
-    <script src="{{ asset('js/datatables.js') }}"></script>
-    
-    <script> console.log("AdminLTE cargado correctamente!"); </script>
-    @livewireScripts
-@stop
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Styles -->
+        @livewireStyles
+    </head>
+    <body class="font-sans antialiased">
+        <x-banner />
+
+        <div class="min-h-screen bg-gray-100">
+            @livewire('navigation-menu')
+
+            <!-- Page Heading -->
+            @if (isset($header))
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endif
+
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
+
+        @stack('modals')
+
+        @livewireScripts
+    </body>
+</html>

@@ -5,66 +5,18 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controllers as Ctrl;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController;
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified', // <-- Esto evita acceso sin verificación de email
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
-Route::get('/password/reset', function () {
-    return redirect()->route('password.request');
-});
-Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->name('password.reset');
-
-    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->middleware('guest')
-    ->name('password.reset');
-
-
-Route::get('/test-auth', function () {
-    return Auth::user(); // Usar Auth::user() en lugar de auth()->user()
-});
-
-Route::get('/force-login', function () {
-    $user =  Auth::user(); // Obtener el primer usuario
-    Auth::login($user); // Iniciar sesión
-
-    return redirect('/test-auth'); // Redirigir a la prueba
-});
-
-Route::get('/test-session', function () {
-    session(['test' => 'Funciona']);
-    return session('test');
-});
-
-// Página de bienvenida pública
+    // Página de bienvenida pública
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect('/dashboard'); // Si el usuario está autenticado, redirígelo al panel de control (cambia la ruta según lo necesites)
-    }
-
+        return redirect('dashboard'); // Si el usuario está autenticado, redirígelo al panel de control (cambia la ruta según lo necesites)
+   }
     return view('guest.welcome'); // Si no está autenticado, muestra la vista de bienvenida
 });
 
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/profile', function () {
-        return view('profile.show');
-    })->name('profile.show');
-});
-
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -76,24 +28,9 @@ Route::middleware([
 });
 
 
-
-Route::middleware('auth')->get('/terms', function () {
-    return view('terms');
-})->name('terms');
-
-
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
 });
-
-
 
 Route::middleware([
     'auth:sanctum',
@@ -156,3 +93,14 @@ Route::middleware([
     Route::resource('/predios', Ctrl::$predioController)->names('predios');
     Route::resource('/users', Ctrl::$userController)->names('users');
 });
+
+
+Route::get('/password/reset', function () {
+    return redirect()->route('password.request');
+});
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
