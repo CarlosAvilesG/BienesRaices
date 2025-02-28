@@ -16,11 +16,17 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
-    use Notifiable, HasRoles; // ✅ Usar el Trait HasRoles
+    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable, HasProfilePhoto, HasRoles;
+
+   // protected $with = ['roles.permissions']; // 🔹 Cargar roles y permisos   automáticamente
+
+   protected $appends = ['all_permissions', 'profile_photo_url'];  // ✅ Lista combinada
+
+
+   public function getAllPermissionsAttribute()
+   {
+       return $this->getAllPermissions();
+   }
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_path',
     ];
 
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -50,14 +58,14 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    // /**
+    //  * The accessors to append to the model's array form.
+    //  *
+    //  * @var array<int, string>
+    //  */
+    // protected $appends = [
+    //     'profile_photo_url',
+    // ];
 
     /**
      * Get the attributes that should be cast.

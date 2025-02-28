@@ -1,5 +1,29 @@
-@extends('layouts.app') {{-- Usa la plantilla de Jetstream en lugar de AdminLTE --}}
+@extends('adminlte::page')
+
+@section('title', 'Dashboard')
+
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
 
 @section('content')
-    <h1>Hola, esta es una prueba con Jetstream</h1>
-@endsection
+    <p>Prueba de TEST - roles t permisos.</p>
+
+    @if (Auth::user()->hasRole('SuperUsuario'))
+    <p>Acceso como administrador</p>
+    @else
+        <p>Acceso como usuario</p>
+    @endif
+
+
+@stop
+
+@section('css')
+     <link rel="stylesheet" href="/css/admin_custom.css">
+
+@stop
+
+@section('js')
+
+@stop
+

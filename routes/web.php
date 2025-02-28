@@ -32,6 +32,31 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
 });
 
+// ruta TEST
+// Route::get('/test', function () {
+//     return view('test');
+// });
+
+// Route::get('/test', function () {
+//     return view('test');
+//   //  return "Tienes acceso porque tienes el rol correcto.";
+// })->middleware(['auth', 'role:SuperUsuario']);
+
+
+//rutas para el administrador con prefix admin
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::resource('users', Ctrl::$userController);
+        Route::resource('roles', Ctrl::$roleController);
+        Route::resource('permissions', Ctrl::$permissionController);
+
+        // Ruta para asignar permisos a roles
+        Route::get('permissions/assign', [Ctrl::$permissionController, 'assign'])->name('permissions.assign');
+        Route::post('permissions/assign', [Ctrl::$permissionController, 'assignStore'])->name('permissions.assign.store');
+    });
+});
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

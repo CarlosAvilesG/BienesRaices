@@ -74,11 +74,14 @@
                             <td>
                                 <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
                                 <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="formEliminar" style="display: inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-                                </form>
+                                @if (Auth::user()->hasRole('SuperUsuario'))
+                                    <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="formEliminar" style="display: inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                                    </form>
+                                @endif
+
                             </td>
                         </tr>
                     @endforeach

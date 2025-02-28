@@ -4,46 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;  // Usar el modelo Role de Spatie
+use App\Repositories\UserRepositoryInterface;
 use Spatie\Permission\Models\Permission;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleController extends Controller
 {
+    use AuthorizesRequests;
     // Mostrar una lista de todos los roles
     public function index()
     {
         $roles = Role::all();  // Obtener todos los roles
-        return view('roles.index', compact('roles'));
+        return view('sistema.admin.roles.index', compact('roles'));
     }
 
     // Mostrar el formulario para crear un nuevo rol
     public function create()
     {
         $permissions = Permission::all();  // Obtener todos los permisos disponibles
-        return view('roles.create', compact('permissions'));
+        return view('sistema.admin.roles.create', compact('permissions'));
     }
 
     // Almacenar un nuevo rol en la base de datos
     public function store(Request $request)
     {
-        // Validar el formulario con reglas personalizadas
+       // Validar que el nombre del rol sea único
         $request->validate([
-            'name' => 'required|unique:roles|max:255',
-            'permissions' => 'array|nullable',  // Validar que permisos sea un array
+            'name' => 'required|unique:roles,name',
+            'description' => 'required',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
         ], [
             'name.required' => 'El nombre del rol es obligatorio.',
-            'name.unique' => 'Este rol ya existe.',
-            'permissions.array' => 'Los permisos deben ser un arreglo válido.',
+            'name.unique' => 'Este rol ya existe en el sistema.',
+            'description.required' => 'La descripción es obligatoria.',
+            'permissions.*.exists' => 'Uno o más permisos seleccionados no existen.',
         ]);
 
-        // Crear el rol
-        $role = Role::create(['name' => $request->name]);
+        // Crear el nuevo rol
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
 
-        // Asignar permisos al rol (si se seleccionaron permisos)
+        // Asignar permisos al rol
         if ($request->has('permissions')) {
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('roles.index')->with('success', 'Rol creado con éxito.');
+        return redirect()->route('roles.index')->with('success', 'Rol creado correctamente.');
     }
 
     // Mostrar un rol específico
@@ -51,7 +62,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);  // Buscar el rol por su ID
         $permissions = $role->permissions;  // Obtener los permisos del rol
-        return view('roles.show', compact('role', 'permissions'));
+        return view('sistema.admin.roles.show', compact('role', 'permissions'));
     }
 
     // Mostrar el formulario para editar un rol
@@ -61,43 +72,51 @@ class RoleController extends Controller
         $permissions = Permission::all();  // Obtener todos los permisos disponibles
         $rolePermissions = $role->permissions->pluck('id')->toArray();  // Obtener los permisos actuales del rol
 
-        return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
+        return view('sistema.admin.roles.edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
     // Actualizar un rol en la base de datos
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        // Validar el formulario de actualización
+         // Autoriza usando la policy
+        $this->authorize('update', $role);
+
+        // Validar los datos
         $request->validate([
-            'name' => 'required|unique:roles,name,' . $id . '|max:255',
-            'permissions' => 'array|nullable',
-        ], [
-            'name.required' => 'El nombre del rol es obligatorio.',
-            'name.unique' => 'Este rol ya existe.',
-            'permissions.array' => 'Los permisos deben ser un arreglo válido.',
+            'description' => 'required',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,name',
         ]);
 
-        // Buscar y actualizar el rol
-        $role = Role::findOrFail($id);
-        $role->name = $request->name;
-        $role->save();
+        // Actualizar solo la descripción y permisos
+        $role->update([
+            'description' => $request->description,
+        ]);
 
-        // Actualizar permisos (sincronizarlos)
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
-        } else {
-            $role->syncPermissions([]);  // Remover todos los permisos si no se selecciona ninguno
-        }
+        $permissions = Permission::whereIn('name', $request->permissions)->get();
+        $role->syncPermissions($permissions);
 
-        return redirect()->route('roles.index')->with('success', 'Rol actualizado con éxito.');
+        return redirect()->route('roles.index')->with('success', 'Rol actualizado correctamente.');
     }
+
+
+
 
     // Eliminar un rol
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
-        $role->delete();  // Eliminar el rol
+        $permission = Permission::findOrFail($id);
 
-        return redirect()->route('roles.index')->with('success', 'Rol eliminado con éxito.');
+        // Verificar si el permiso está asignado a algún rol
+        if ($permission->roles()->count() > 0) {
+            return redirect()->route('permissions.index')
+                ->with('error', 'No puedes eliminar este permiso porque está asignado a uno o más roles.');
+        }
+
+        // Soft delete (o eliminación permanente si decides hacerlo así)
+        $permission->delete();
+
+        return redirect()->route('permissions.index')
+            ->with('success', 'Permiso eliminado correctamente.');
     }
 }

@@ -459,6 +459,41 @@ return [
         //     'icon' => 'fas fa-fw fa-newclient',
         // ],
 
+        [
+            'text' => 'Usuarios',
+            'icon' => 'fas fa-users',
+            'can' => 'users.index', // Solo usuarios con este permiso pueden ver este menú
+            'submenu' => [
+                [
+                    'text' => 'Lista de Usuarios',
+                    'route' => 'users.index',
+                    'can' => 'users.index',
+                ],
+                [
+                    'text' => 'Nuevo Usuario',
+                    'route' => 'users.create',
+                    'can' => 'users.create',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Roles y Permisos',
+            'icon' => 'fas fa-user-shield',
+            'can' => 'roles.index',
+            'submenu' => [
+                [
+                    'text' => 'Lista de Roles',
+                    'route' => 'roles.index',
+                    'can' => 'roles.index',
+                ],
+                [
+                    'text' => 'Lista de Permisos',
+                    'route' => 'permissions.index',
+                    'can' => 'roles.index',
+                ],
+            ],
+        ],
+
 
         [
             'text' => 'Términos y Condiciones',

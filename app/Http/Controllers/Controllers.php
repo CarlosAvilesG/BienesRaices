@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 class Controllers
 {
     public static $bitacoraController = BitacoraController::class;
@@ -20,4 +21,6 @@ class Controllers
     public static $pagoLoteController = PagoLoteController::class;
     public static $predioController = PredioController::class;
     public static $userController = UserController::class;
+    public static $roleController = RoleController::class;
+    public static $permissionController = PermissionController::class;
 }
