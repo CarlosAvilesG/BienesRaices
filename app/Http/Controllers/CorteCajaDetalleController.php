@@ -25,14 +25,14 @@ class CorteCajaDetalleController extends Controller
     // Almacenar un nuevo detalle de corte de caja en la base de datos
     public function store(StoreCorteCajaDetalleRequest $request)
     {
-        $detalle = $this->corteCajaDetalleRepo->store($request->validated());
+        $detalle = $this->corteCajaDetalleRepo->create($request->validated());
         return response()->json($detalle, 201);
     }
 
     // Mostrar un detalle de corte de caja específico
     public function show($id)
     {
-        $detalle = $this->corteCajaDetalleRepo->show($id);
+        $detalle = $this->corteCajaDetalleRepo->findById($id);
         return response()->json($detalle);
     }
 

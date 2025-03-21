@@ -105,6 +105,8 @@ class RolesAndPermissionsSeeder extends Seeder
         ['name' => 'contratos.edit', 'description' => 'Editar contratos'],
         ['name' => 'contratos.delete', 'description' => 'Eliminar contratos'],
 
+
+
         // ✅ Corte de caja
         ['name' => 'cortedecaja.index', 'description' => 'Ver cortes de caja'],
         ['name' => 'cortedecaja.create', 'description' => 'Crear cortes de caja'],
@@ -143,7 +145,6 @@ class RolesAndPermissionsSeeder extends Seeder
         ['name' => 'predios.edit', 'description' => 'Editar predios'],
         ['name' => 'predios.delete', 'description' => 'Eliminar predios'],
 
-
        // ✅ Caja
         ['name' => 'cashdesk.view', 'description' => 'Ver caja'],
         ['name' => 'cashdesk.process', 'description' => 'Procesar transacciones'],
@@ -166,11 +167,11 @@ class RolesAndPermissionsSeeder extends Seeder
     // Crear roles con descripciones
     $roles = [
         'SuperUsuario' => 'Tiene acceso a todo el sistema',
+        'Propietario' => 'Puede ver y gestionar sus propios lotes o propiedades',
         'AdminGeneral' => 'Puede administrar usuarios, roles y configuraciones generales',
-        'Admin' => 'Puede gestionar clientes, propiedades y ventas',
+        // 'Admin' => 'Puede gestionar clientes, propiedades y ventas',
         'GerenteCaja' => 'Puede supervisar y administrar transacciones financieras',
         'OperadorCaja' => 'Puede realizar transacciones como cobros y pagos',
-        'Propietario' => 'Puede ver y gestionar sus propios lotes o propiedades',
         'Cliente' => 'Solo puede ver su información y realizar pagos',
     ];
 
@@ -185,20 +186,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
     $rolesWithPermissions = [
         'SuperUsuario' => Permission::pluck('name')->toArray(), // SuperUsuario tiene todos los permisos
+        'Propietario' => ['predios.index','predios.index', 'predios.create', 'predios.edit', 'predios.delete'],
         'AdminGeneral' => ['users.index', 'users.create', 'users.edit', 'users.delete', 'roles.index', 'roles.create', 'roles.edit', 'roles.delete'],
-        'Admin' => ['properties.index', 'properties.create', 'properties.edit', 'properties.delete'],
-        'GerenteCaja' => ['payments.view', 'cashdesk.open', 'cashdesk.close'],
-        'OperadorCaja' => ['payments.process', 'payments.view'],
-        'Propietario' => ['properties.index'],
-        'Cliente' => ['payments.view'],
-    
-        // 'SuperUsuario' => Permission::pluck('name')->toArray(), // SuperUsuario tiene todos los permisos
-        // 'AdminGeneral' => ['users.index', 'users.create', 'users.edit', 'users.delete', 'roles.index', 'roles.create', 'roles.edit', 'roles.delete'],
-        // 'Admin' => ['properties.index', 'properties.create', 'properties.edit', 'properties.delete'],
-        // 'GerenteCaja' => ['payments.view', 'cashdesk.open', 'cashdesk.close'],
-        // 'OperadorCaja' => ['payments.process', 'payments.view'],
-        // 'Propietario' => ['properties.index'],
-        // 'Cliente' => ['payments.view'],
+        'GerenteCaja' => ['cashdesk.view', 'cashdesk.open', 'cashdesk.close'],
+        'OperadorCaja' => ['cashdesk.process', 'cashdesk.view'],
+        'Cliente' => ['pagos.Ver'],
     ];
 
     foreach ($rolesWithPermissions as $role => $perms) {
@@ -213,8 +205,7 @@ class RolesAndPermissionsSeeder extends Seeder
         1 => 'SuperUsuario',
         2 => 'Propietario',
         3 => 'AdminGeneral',
-        4 => 'Admin',
-        5 => 'GerenteCaja',
+        4 => 'GerenteCaja',
     ];
 
     foreach ($usersWithRoles as $userId => $roleName) {

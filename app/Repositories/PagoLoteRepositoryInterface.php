@@ -12,4 +12,6 @@ interface PagoLoteRepositoryInterface
 
     // 4. Métodos auxiliares
     public function getPagosByContrato($idContrato);
+    public function getPagosByUser($idUsuario, $fechaInicio, $fechaFin);
+    public function getFirstPagoByUser($idUsuario);
 }

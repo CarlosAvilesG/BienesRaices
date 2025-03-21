@@ -1,13 +1,23 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Panel de Control')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Panel de Control</h1>
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+
+    {{-- @dd(auth()->user()->hasRole('SuperUsuario')); --}}
+    {{-- Dependiendo del rol, se carga el partial adecuado --}}
+    @if(auth()->user()->hasAnyRole(['OperadorCaja', 'GerenteCaja']))
+        @include('dashboard.partials.basico')
+    @elseif(auth()->user()->hasAnyRole(['AdminGeneral','GerenteCaja']))
+        @include('dashboard.partials.completo')
+    @elseif(auth()->user()->hasAnyRole(['SuperUsuario', 'Propietario']))
+        @include('dashboard.partials.propetario')
+    @endif
+
 @stop
 
 @section('css')

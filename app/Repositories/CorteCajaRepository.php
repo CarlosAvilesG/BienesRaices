@@ -34,4 +34,11 @@ class CorteCajaRepository implements CorteCajaRepositoryInterface
         $corte = CorteCaja::findOrFail($id);
         $corte->delete();
     }
+
+    public function getCorteByUser($userId)
+    {
+        return CorteCaja::where('idUsuario', $userId)
+                        ->latest('fechaFin')
+                        ->first();
+    }
 }

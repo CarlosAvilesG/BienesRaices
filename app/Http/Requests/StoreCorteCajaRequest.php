@@ -14,8 +14,8 @@ class StoreCorteCajaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fechaInicio' => 'required|date',
-            'fechaFin' => 'required|date',
+            'fechaInicio' => 'required|datetime',
+            'fechaFin' => 'required|datetime',
             'totalIngresosFisicos' => 'required|numeric|min:0',
             'totalIngresosBancarios' => 'required|numeric|min:0',
             'totalEgresos' => 'required|numeric|min:0',

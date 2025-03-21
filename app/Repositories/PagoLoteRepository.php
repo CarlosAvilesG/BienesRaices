@@ -41,4 +41,21 @@ class PagoLoteRepository implements PagoLoteRepositoryInterface
     {
         return PagoLote::where('idContrato', $idContrato)->orderBy('fechaPago', 'asc')->paginate($perPage);
     }
+
+    //obtener pagos por idusuario
+    public function getPagosByUser($idUsuario, $fechaInicio, $fechaFin)
+    {
+        return PagoLote::where('idUsuario', $idUsuario)
+                        ->whereBetween('fechaPago', [$fechaInicio, $fechaFin])
+                        ->get()
+                        ->sortBy('fechaPago');
+    }
+    // obtener el primer registro de idusuario
+    public function getFirstPagoByUser($idUsuario)
+    {
+        return PagoLote::where('idUsuario', $idUsuario)
+        ->orderBy('fechaPago', 'asc')
+        ->orderBy('horaPago', 'asc') // Para asegurar precisión
+        ->first();
+    }
 }

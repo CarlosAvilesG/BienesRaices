@@ -11,12 +11,12 @@ class CorteCajaDetalleRepository implements CorteCajaDetalleRepositoryInterface
         return CorteCajaDetalle::all();
     }
 
-    public function store(array $data)
+    public function create(array $data)
     {
         return CorteCajaDetalle::create($data);
     }
 
-    public function show($id)
+    public function findById($id)
     {
         return CorteCajaDetalle::findOrFail($id);
     }

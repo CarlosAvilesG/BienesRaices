@@ -32,4 +32,11 @@ class EgresoRepository implements EgresoRepositoryInterface
     {
         return Egreso::destroy($id);
     }
+
+    public function getEgresosByUser($idUsuario, $fechaInicio, $fechaFin)
+    {
+        return Egreso::where('idUsuario', $idUsuario)
+                        ->whereBetween('fecha', [$fechaInicio, $fechaFin])
+                        ->get();
+    }
 }

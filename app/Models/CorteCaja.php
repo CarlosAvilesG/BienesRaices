@@ -9,7 +9,9 @@ use App\Traits\Auditable;
 
 class CorteCaja extends Model
 {
-    use HasFactory, SoftDeletes, Auditable;
+    use HasFactory,
+    //SoftDeletes,
+     Auditable;
 
      // Definir el nombre de la tabla si es diferente al plural del modelo
      //protected $table = 'corte_caja';
@@ -30,6 +32,8 @@ class CorteCaja extends Model
 
      // Casts para asegurar que los tipos sean correctos
      protected $casts = [
+         'fechaInicio' => 'datetime',
+         'fechaFin' => 'datetime',
          'totalIngresosFisicos' => 'decimal:2',
          'totalIngresosBancarios' => 'decimal:2',
          'totalEgresos' => 'decimal:2',

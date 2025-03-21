@@ -446,6 +446,19 @@ return [
             ],
         ],
 
+        [
+            'text' => 'Corte de Caja',
+            'icon' => 'fas fa-money-check-alt',
+            'can' => '', // 'cortedecaja.index',
+            'route' => 'corte_caja.index',
+        ],
+
+        [
+            'text' => 'Gastos o Egresos',
+            'icon' => 'fas fa-money-bill-wave',
+            'can' => '', // 'cortedecaja.index',
+            'route' => 'egresos.index',
+        ],
 
         // ['header' => 'Cliente'],
         // [

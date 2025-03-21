@@ -79,7 +79,9 @@ Route::middleware([
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
 
 
-    Route::resource('/cortes-caja', Ctrl::$corteCajaController)->names('cortes-caja');
+    Route::post('/corte_caja/cerrar', [Ctrl::$corteCajaController, 'cerrarCorte'])->name('corte_caja.cerrar_corte');
+
+    Route::resource('/corte_caja', Ctrl::$corteCajaController)->names('corte_caja');
     Route::resource('/corte-caja-detalles', Ctrl::$corteCajaDetalleController)->names('corte-caja-detalles');
     Route::resource('/egresos', Ctrl::$egresoController)->names('egresos');
     Route::resource('/frases-eticas', Ctrl::$fraseEticaController)->names('frases-eticas');

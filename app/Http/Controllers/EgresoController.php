@@ -49,4 +49,7 @@ class EgresoController extends Controller
         $this->egresoRepo->delete($id);
         return response()->json(null, 204);
     }
+
+
+  
 }
