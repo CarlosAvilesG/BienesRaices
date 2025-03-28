@@ -78,10 +78,13 @@ Route::middleware([
     Route::get('/contrato/{id}/promesa-pdf', [Ctrl::$contratoController, 'generarPromesaVentaPDF'])->name('contratoPromesaPdf');
     Route::resource('/contratos', Ctrl::$contratoController)->names('contratos');
 
+    // Personalizada: para cerrar el corte (manual, especial, confirmación)
+    // Route::post('/corte_caja/cerrar_corte', [Ctrl::$corteCajaController, 'cerrarCorte'])->name('corte_caja.cerrar_corte');
+    Route::get('/corte_caja/{id}/imprimir', [Ctrl::$corteCajaController, 'imprimir'])->name('corte_caja.imprimir');
 
-    Route::post('/corte_caja/cerrar', [Ctrl::$corteCajaController, 'cerrarCorte'])->name('corte_caja.cerrar_corte');
 
     Route::resource('/corte_caja', Ctrl::$corteCajaController)->names('corte_caja');
+
     Route::resource('/corte-caja-detalles', Ctrl::$corteCajaDetalleController)->names('corte-caja-detalles');
     Route::resource('/egresos', Ctrl::$egresoController)->names('egresos');
     Route::resource('/frases-eticas', Ctrl::$fraseEticaController)->names('frases-eticas');

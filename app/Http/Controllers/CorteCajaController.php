@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class CorteCajaController extends Controller
 {
@@ -41,12 +42,38 @@ class CorteCajaController extends Controller
     {
         $usuario = Auth::user(); // 🔹 Obtener el usuario autenticado
 
-        // 🔹 Último corte registrado por este usuario
-        $ultimoCorte = $this->corteCaja->getCorteByUser($usuario->id);
+          // 👇 Nuevo: leer si se seleccionó un corte (GET)
+        $corte_id = request('corte_id');
+        // Obtener todos los cortes del usuario
+        $cortes = $this->corteCaja->getCortesByUser($usuario->id);
 
-        // 🔹 Definir el rango de fechas del corte
-        $fechaInicio = $ultimoCorte ? Carbon::parse($ultimoCorte->fechaFin)->addSecond() : Carbon::now()->startOfWeek();
-        $fechaFin = Carbon::now()->endOfWeek();
+        // ⚙️ Si se seleccionó un corte anterior
+        if ($corte_id) {
+            $corteSeleccionado = $cortes->firstWhere('id', $corte_id);
+
+            if (!$corteSeleccionado) {
+                return redirect()->route('corte_caja.index')->with('error', 'Corte no válido.');
+            }
+
+            $fechaInicio = Carbon::parse($corteSeleccionado->fechaInicio);
+            $fechaFin = Carbon::parse($corteSeleccionado->fechaFin);
+
+            // ✅ El usuario NO está viendo el corte actual
+            $esCorteActual = false;
+        } else {
+            // Corte actual (no cerrado aún)
+            $ultimoCorte = $this->corteCaja->getCorteByUser($usuario->id);
+            $fechaInicio = $ultimoCorte ? Carbon::parse($ultimoCorte->fechaFin)->addSecond() : Carbon::now()->startOfWeek();
+            $fechaFin = Carbon::now();
+
+            $esCorteActual = true; // ✅ Corte que se puede cerrar
+        }
+
+        // // 🔹 Último corte registrado por este usuario
+        // $ultimoCorte = $this->corteCaja->getCorteByUser($usuario->id);
+        // // 🔹 Definir el rango de fechas del corte
+        // $fechaInicio = $ultimoCorte ? Carbon::parse($ultimoCorte->fechaFin)->addSecond() : Carbon::now()->startOfWeek();
+        // $fechaFin = Carbon::now()->endOfWeek();
 
         // 🔹 Filtrar pagos solo del usuario autenticado
         $ingresos = $this->pagoLotes->getPagosByUser($usuario->id, $fechaInicio, $fechaFin);
@@ -74,17 +101,19 @@ class CorteCajaController extends Controller
             'totalIngresosTransferencia',
             'totalIngresosCheques',
             'totalEgresos',
-            'usuario'
+            'usuario',
+            'cortes',
+            'corte_id',           // 👈 IMPORTANTE
+            'esCorteActual'       // 👈 También lo necesitabas
         ));
     }
 
     // Almacenar un nuevo corte de caja en la base de datos
-    public function store(StoreCorteCajaRequest $request)
+    public function store(Request  $request)
     {
-        dd('entro a store');
+
         try {
 
-            dd('entro a store');
             DB::beginTransaction(); // Iniciar transacción
 
             $usuario = Auth::user(); // 🔹 Obtener el usuario autenticado
@@ -96,7 +125,10 @@ class CorteCajaController extends Controller
             $fechaInicio = $ultimoCorte ? Carbon::parse($ultimoCorte->fechaFin)->addSecond()
                                         : ($primerPago ? Carbon::parse($primerPago->fechaPago)->startOfDay() : Carbon::now()->startOfWeek());
 
+
+
             $fechaFin = now(); // La fecha de cierre será el momento actual
+           // dd($fechaInicio , $fechaFin);
 
             // 🔹 Obtener ingresos usando el repositorio
             $ingresos = $this->pagoLotes->getPagosByUser($usuario->id, $fechaInicio, $fechaFin);
@@ -107,7 +139,7 @@ class CorteCajaController extends Controller
             $egresos = $this->egresos->getEgresosByUser($usuario->id, $fechaInicio, $fechaFin);
             $totalEgresos = $egresos->sum('monto');
 
-dd ($ingresos, $egresos,  $ultimoCorte, $fechaInicio);
+
 
             // 💾 Guardar el corte de caja con el repositorio
             $corteCaja = $this->corteCaja->create([
@@ -174,16 +206,89 @@ dd ($ingresos, $egresos,  $ultimoCorte, $fechaInicio);
     }
 
 // METODOS
-    public function cerrarCorte(StoreCorteCajaRequest $request)
+    // importar corte de caja
+    public function imprimir($id)
     {
-        dd('Entro a cerrar_corte');
-        try {
-            // Puedes agregar validaciones extra aquí si es necesario
 
-            // ✅ Llamar internamente a store()
-            return $this->store($request);
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al cerrar el corte: ' . $e->getMessage());
+        if ($id === 'actual') {
+            $usuario = Auth::user();
+            $ultimoCorte = $this->corteCaja->getCorteByUser($usuario->id);
+            $fechaInicio = $ultimoCorte ? Carbon::parse($ultimoCorte->fechaFin)->addSecond() : Carbon::now()->startOfWeek();
+            $fechaFin = now();
+            $esPreliminar = true;
+        } else {
+            $corte = $this->corteCaja->findById($id);
+            $usuario = $corte->usuario;
+            $fechaInicio = $corte->fechaInicio;
+            $fechaFin = $corte->fechaFin;
+            $esPreliminar = false;
         }
+
+
+        $ingresos = $this->pagoLotes->getPagosByUser($usuario->id, $fechaInicio, $fechaFin);
+        $totalIngresosFisicos = $ingresos->where('tipoPago', 'Efectivo')->sum('monto');
+        $totalIngresosTransferencia = $ingresos->where('tipoPago', 'Transferencia')->sum('monto');
+        $totalIngresosCheques = $ingresos->where('tipoPago', 'Cheque')->sum('monto');
+
+        $egresos = $this->egresos->getEgresosByUser($usuario->id, $fechaInicio, $fechaFin);
+
+// dd($egresos, $egresos->usuarioRecibe);
+
+        $totalEgresos = $egresos->sum('monto');
+
+        $detalles = $esPreliminar
+            ? $this->corteCajaDetalle->getPreliminar($usuario->id, $fechaInicio, $fechaFin)
+            : $corte->detalles;
+
+        return view('sistema.corte_caja.imprimir_corte_caja', compact(
+            'usuario',
+            'fechaInicio',
+            'fechaFin',
+            'totalIngresosFisicos',
+            'totalIngresosTransferencia',
+            'totalIngresosCheques',
+            'totalEgresos',
+            'detalles',
+            'esPreliminar'
+        ));
+
+        // $corte = $this->corteCaja->findById($id);
+
+        // $usuario = $corte->usuario;
+        // $fechaInicio = $corte->fechaInicio;
+        // $fechaFin = $corte->fechaFin;
+
+
+        // // Cargar detalles con relaciones (pagoLote y egreso)
+        // $detalles = $corte->detalles()->with(['pagoLote', 'egreso'])->get();
+
+        // // Calcular ingresos por tipo de pago desde los detalles
+        // $totalIngresosFisicos = $detalles->where('tipoMovimiento', 'Ingreso')
+        //                                   ->filter(fn($d) => optional($d->pagoLote)->tipoPago === 'Efectivo')
+        //                                   ->sum('monto');
+
+        // $totalIngresosTransferencia = $detalles->where('tipoMovimiento', 'Ingreso')
+        //                                        ->filter(fn($d) => optional($d->pagoLote)->tipoPago === 'Transferencia')
+        //                                        ->sum('monto');
+
+        // $totalIngresosCheques = $detalles->where('tipoMovimiento', 'Ingreso')
+        //                                  ->filter(fn($d) => optional($d->pagoLote)->tipoPago === 'Cheque')
+        //                                  ->sum('monto');
+
+        // $totalEgresos = $detalles->where('tipoMovimiento', 'Egreso')
+        //                          ->sum('monto');
+
+        // return view('sistema.corte_caja.imprimir_corte_caja', [
+        //     'usuario' => $usuario,
+        //     'fechaInicio' => $fechaInicio,
+        //     'fechaFin' => $fechaFin,
+        //     'totalIngresosFisicos' => $totalIngresosFisicos,
+        //     'totalIngresosTransferencia' => $totalIngresosTransferencia,
+        //     'totalIngresosCheques' => $totalIngresosCheques,
+        //     'totalEgresos' => $totalEgresos,
+        //     'detalles' => $detalles
+        // ]);
     }
+
+
 }

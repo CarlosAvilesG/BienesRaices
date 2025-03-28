@@ -46,4 +46,10 @@ class CorteCaja extends Model
          return $this->belongsTo(User::class, 'idUsuario');
      }
 
+        // Relación con los detalles del corte de caja
+    public function detalles()
+    {
+        return $this->hasMany(CorteCajaDetalle::class, 'idCorteCaja');
+    }
+
 }

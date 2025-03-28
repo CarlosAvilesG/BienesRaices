@@ -9,7 +9,9 @@ use App\Traits\Auditable;
 
 class CorteCajaDetalle extends Model
 {
-    use HasFactory, SoftDeletes, Auditable;
+    use HasFactory
+    //, SoftDeletes
+    , Auditable;
 
 
     // Definir el nombre de la tabla si es diferente al plural del modelo

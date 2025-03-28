@@ -37,8 +37,18 @@ class CorteCajaRepository implements CorteCajaRepositoryInterface
 
     public function getCorteByUser($userId)
     {
+        // 🔹 Último corte registrado por este usuario
         return CorteCaja::where('idUsuario', $userId)
                         ->latest('fechaFin')
                         ->first();
+    }
+    public function getCortesByUser($userId)
+    {
+        // 🔹 obtener los ultimos 10 cortes de un usuario
+
+        return CorteCaja::where('idUsuario', $userId)
+                        ->latest('fechaFin')
+                        ->limit(10)
+                        ->get();
     }
 }
