@@ -23,4 +23,5 @@ class Controllers
     public static $userController = UserController::class;
     public static $roleController = RoleController::class;
     public static $permissionController = PermissionController::class;
+    public static $chatBotController = ChatBotController::class;
 }

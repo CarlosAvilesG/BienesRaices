@@ -18,14 +18,16 @@
         @include('dashboard.partials.propetario')
     @endif
 
+    @include('vendor.adminlte.components.chatbot-widget')
+
 @stop
 
 @section('css')
-     <link rel="stylesheet" href="/css/admin_custom.css">
+     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
-
+    {{-- <script src="{{ asset('js/chatbot.js') }}"></script> --}}
 @stop
 
 

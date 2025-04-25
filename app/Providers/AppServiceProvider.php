@@ -36,6 +36,9 @@ use App\Repositories\PredioRepository;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 
+use App\Repositories\DeepSeekRepository;
+ use App\Repositories\DeepSeekRepositoryInterface; 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -60,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PagoLoteRepositoryInterface::class, PagoLoteRepository::class);
         $this->app->bind(PredioRepositoryInterface::class, PredioRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        // Repositorio de DeepSeek
+        $this->app->bind(DeepSeekRepositoryInterface::class, DeepSeekRepository::class);
     }
 
     /**

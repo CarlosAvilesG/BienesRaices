@@ -56,6 +56,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 });
 
+// Rutas para el chatbot
+
+Route::post('/chatbot/ask', [Ctrl::$chatBotController,'respond'])->name('chatbot.ask');
+Route::post('/chatbot/ask', [Ctrl::$chatBotController,'history'])->name('chatbot.history');
+
+
 
 Route::middleware([
     'auth:sanctum',
